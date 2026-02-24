@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق الدردشة الصوتية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #1A0B2E; color: white; font-family: sans-serif; }
+        .purple-gradient { background: linear-gradient(180deg, #2D1B4E 0%, #1A0B2E 100%); }
+    </style>
+</head>
+<body class="purple-gradient min-height-screen flex flex-col items-center p-6">
+
+    <div class="text-center mt-10 mb-12">
+        <h1 class="text-4xl font-black mb-2 tracking-tight">24,520,605</h1>
+        <p class="text-gray-400 text-lg">مستخدم يلتقون هنا</p>
+        <p class="text-sm text-purple-400 mt-2 italic">أهلاً بك في عالم الدردشة الصوتية</p>
+    </div>
+
+    <div class="w-full max-w-xs space-y-4">
+        <button class="w-full py-4 bg-white text-black font-bold rounded-full flex items-center justify-center gap-2 hover:bg-gray-200 transition">
+            <span>تسجيل الدخول بواسطة Google</span>
+        </button>
+        <button class="w-full py-4 bg-[#1877F2] text-white font-bold rounded-full flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+            <span>تسجيل الدخول بواسطة Facebook</span>
+        </button>
+        <button class="w-full py-4 bg-black border border-cyan-400 text-white font-bold rounded-full flex items-center justify-center gap-2 hover:bg-gray-900 transition shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+            <span>تسجيل الدخول بواسطة TikTok</span>
+        </button>
+    </div>
+
+    <div class="mt-auto mb-10 flex items-start gap-3 text-[11px] text-gray-500 max-w-xs">
+        <input type="checkbox" class="mt-1 rounded border-gray-700 bg-transparent">
+        <p>بالنقر فوق تسجيل الدخول، فإنك توافق على <span class="text-purple-400 underline cursor-pointer font-bold">شروط الاستخدام</span> و <span class="text-purple-400 underline cursor-pointer font-bold">سياسة الخصوصية</span>.</p>
+    </div>
+
+</body>
+</html>
