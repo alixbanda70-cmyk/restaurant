@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Futuristic Multi-Step Auth 2026</title>
+    <title>SIMOMi - Futuristic Multi-Step Auth & Gold Card 2026</title>
     <style>
         /* Base Reset */
         * {
@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
@@ -84,7 +84,7 @@
         .glass-card {
             position: relative;
             z-index: 2;
-            background: rgba(13, 17, 23, 0.85);
+            background: rgba(13, 17, 23, 0.88);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-radius: 26px;
@@ -105,11 +105,11 @@
 
         .brand {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
         .logo-title {
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 900;
             letter-spacing: 4px;
             background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
@@ -121,7 +121,7 @@
         .subtitle {
             font-size: 13px;
             color: #9CA3AF;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         /* View Step Transitions */
@@ -145,7 +145,7 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Form Floating Inputs */
+        /* Form Inputs */
         .input-box {
             position: relative;
             margin-bottom: 22px;
@@ -200,7 +200,7 @@
             opacity: 0.6;
         }
 
-        /* Gender & Step Titles */
+        /* Gender Grid */
         .gender-title, .step-title {
             text-align: center;
             font-size: 20px;
@@ -271,7 +271,7 @@
             color: #FFF;
         }
 
-        /* Name Input UI */
+        /* Name Input */
         .name-field-wrapper {
             position: relative;
             margin-bottom: 12px;
@@ -327,7 +327,7 @@
             padding-left: 6px;
         }
 
-        /* 4. DATE PICKER STEP UI & LIQUID GLASS DROPDOWNS */
+        /* Date Picker */
         .date-picker-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr 1fr;
@@ -352,20 +352,12 @@
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
         }
 
         .date-select-wrapper select option {
             background: #0D1117;
             color: #FFFFFF;
-            padding: 10px;
-        }
-
-        .date-select-wrapper select:focus {
-            border-color: #EF4444;
-            background: rgba(239, 68, 68, 0.08);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
         }
 
         .date-label {
@@ -398,12 +390,185 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .age-badge.show {
-            opacity: 1;
-            transform: scale(1);
+        .age-badge.show { opacity: 1; transform: scale(1); }
+
+        /* Avatar Upload */
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
         }
 
-        /* Shake Error Animation */
+        .avatar-upload-zone {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px dashed rgba(245, 158, 11, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .avatar-upload-zone:hover {
+            transform: scale(1.05);
+            border-color: #EF4444;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .avatar-upload-zone img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .upload-placeholder-content { text-align: center; pointer-events: none; }
+        .upload-icon { font-size: 28px; margin-bottom: 4px; display: block; }
+        .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
+        #avatarInput { display: none; }
+
+        /* 6. PREMIUM GOLD CARD UI (LUXURY ID DESIGN) */
+        .gold-card-wrapper {
+            perspective: 1000px;
+            margin-bottom: 24px;
+        }
+
+        .gold-id-card {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            padding: 22px;
+            box-shadow: 0 20px 50px rgba(170, 119, 28, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Shimmer Shine Effect Animation */
+        .gold-id-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 70%
+            );
+            transform: rotate(30deg);
+            animation: shimmerMove 4s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerMove {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-chip {
+            width: 38px;
+            height: 28px;
+            background: linear-gradient(135deg, #E6C687 0%, #99742B 100%);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .card-brand-tag {
+            font-size: 14px;
+            font-weight: 900;
+            color: #382506;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+        }
+
+        .card-body-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-avatar-box {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 2px solid #FFF;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: #222;
+            flex-shrink: 0;
+        }
+
+        .card-avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-name {
+            font-size: 19px;
+            font-weight: 900;
+            color: #2b1c03;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .card-info-grid {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #4a3307;
+            font-weight: 700;
+        }
+
+        .card-footer-row {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: #5c4109;
+            font-weight: 800;
+            border-top: 1px solid rgba(110, 78, 13, 0.2);
+            padding-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Shake Animation */
         .shake {
             animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
@@ -449,7 +614,7 @@
 
         @keyframes ripple { to { transform: scale(4); opacity: 0; } }
 
-        .footer-tag { text-align: center; margin-top: 22px; font-size: 12px; color: #4B5563; }
+        .footer-tag { text-align: center; margin-top: 20px; font-size: 12px; color: #4B5563; }
     </style>
 </head>
 <body>
@@ -551,7 +716,6 @@
                 <div class="step-subtitle">حدد تاريخ ميلادك لتخصيص تجربتك</div>
 
                 <div class="date-picker-grid" id="dateGrid">
-                    <!-- Day Dropdown -->
                     <div class="date-select-wrapper">
                         <span class="date-label">اليوم</span>
                         <select id="dobDay" onchange="calculateAge()">
@@ -560,7 +724,6 @@
                         <span class="date-icon-tag">▼</span>
                     </div>
 
-                    <!-- Month Dropdown -->
                     <div class="date-select-wrapper">
                         <span class="date-label">الشهر</span>
                         <select id="dobMonth" onchange="calculateAge()">
@@ -569,7 +732,6 @@
                         <span class="date-icon-tag">▼</span>
                     </div>
 
-                    <!-- Year Dropdown -->
                     <div class="date-select-wrapper">
                         <span class="date-label">السنة</span>
                         <select id="dobYear" onchange="calculateAge()">
@@ -584,8 +746,72 @@
                 </div>
 
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="finishProfile()">
-                        انضم إلى SIMOMi 🚀
+                    <button type="button" class="magnetic-btn mag-btn" onclick="goToAvatarStep()">
+                        متابعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Avatar Upload View -->
+            <div id="avatarView" class="view-step hidden-view">
+                <div class="step-title">صورة البروفيل 📸</div>
+                <div class="step-subtitle">أضف صورة شخصية لكي يراها الأصدقاء</div>
+
+                <div class="upload-container">
+                    <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
+                        <div class="upload-placeholder-content" id="uploadPlaceholder">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">اختر صورة</span>
+                        </div>
+                        <img id="avatarPreview" src="" alt="Avatar Preview">
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="generateGoldCard()">
+                        إنشاء البطاقة الذهبية ✨
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 6: Premium Gold Card View -->
+            <div id="goldCardView" class="view-step hidden-view">
+                <div class="step-title">بطاقة العضوية الذهبية 🌟</div>
+                <div class="step-subtitle">هذه هي بطاقتك التعريفية الرسمية في SIMOMi</div>
+
+                <div class="gold-card-wrapper">
+                    <div class="gold-id-card" id="goldCard">
+                        <div class="card-header-row">
+                            <div class="card-chip"></div>
+                            <div class="card-brand-tag">SIMOMi VIP</div>
+                        </div>
+
+                        <div class="card-body-row">
+                            <div class="card-avatar-box">
+                                <img id="cardAvatarImg" src="" alt="Avatar">
+                            </div>
+                            <div class="card-details">
+                                <div class="card-name" id="cardNameDisplay">اسم المستخدم</div>
+                                <div class="card-info-grid">
+                                    <span id="cardGenderDisplay">👦 ولد</span>
+                                    <span>•</span>
+                                    <span id="cardAgeDisplay">0 سنة</span>
+                                </div>
+                                <div style="font-size: 11px; color: #5a400b; margin-top: 2px;" id="cardDobDisplay">11/10/2000</div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer-row">
+                            <span>ID: #2026-SIMO</span>
+                            <span>SECURE AI MEMBER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="finalLaunch()">
+                        الدخول إلى الغرف الصوتية 🎙️
                     </button>
                 </div>
             </div>
@@ -599,6 +825,7 @@
 
     <script>
         let selectedGenderValue = null;
+        let uploadedAvatarUrl = null;
 
         // Mouse Spotlight
         const card = document.getElementById('card');
@@ -652,20 +879,17 @@
             }, 350);
         }
 
-        // Step 1 -> Step 2
         function handleLoginSubmit(e) {
             e.preventDefault();
             switchView('loginView', 'genderView');
         }
 
-        // Gender Selection Physics
         function selectGender(gender) {
             selectedGenderValue = gender;
             document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
             document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
         }
 
-        // Step 2 -> Step 3
         function goToNameStep() {
             if (!selectedGenderValue) {
                 alert('المرجو اختيار الجنس أولاً (ولد أو بنت)');
@@ -675,7 +899,6 @@
             setTimeout(() => document.getElementById('userName').focus(), 400);
         }
 
-        // Step 3 Input Validation & Counter
         function validateNameInput() {
             const input = document.getElementById('userName');
             const wrapper = document.getElementById('nameWrapper');
@@ -690,7 +913,6 @@
             }
         }
 
-        // Step 3 -> Step 4
         function goToDateStep() {
             const input = document.getElementById('userName');
             const wrapper = document.getElementById('nameWrapper');
@@ -703,15 +925,13 @@
             switchView('nameView', 'dateView');
         }
 
-        // Step 4 Populate Dropdowns
         function populateDateSelects() {
             const daySel = document.getElementById('dobDay');
             const monthSel = document.getElementById('dobMonth');
             const yearSel = document.getElementById('dobYear');
 
-            if (daySel.options.length > 1) return; // Prevent duplicating
+            if (daySel.options.length > 1) return;
 
-            // Populate Days (1-31)
             for (let i = 1; i <= 31; i++) {
                 let opt = document.createElement('option');
                 opt.value = i;
@@ -719,7 +939,6 @@
                 daySel.appendChild(opt);
             }
 
-            // Populate Months
             const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو', 'يوليو', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'];
             months.forEach((m, idx) => {
                 let opt = document.createElement('option');
@@ -728,7 +947,6 @@
                 monthSel.appendChild(opt);
             });
 
-            // Populate Years (1950 - Current Year)
             const currentYear = new Date().getFullYear();
             for (let y = currentYear; y >= 1950; y--) {
                 let opt = document.createElement('option');
@@ -738,7 +956,6 @@
             }
         }
 
-        // Age Calculation & Display
         function calculateAge() {
             const day = document.getElementById('dobDay').value;
             const month = document.getElementById('dobMonth').value;
@@ -761,8 +978,7 @@
             }
         }
 
-        // Final Submit
-        function finishProfile() {
+        function goToAvatarStep() {
             const day = document.getElementById('dobDay').value;
             const month = document.getElementById('dobMonth').value;
             const year = document.getElementById('dobYear').value;
@@ -773,12 +989,70 @@
                 setTimeout(() => dateGrid.classList.remove('shake'), 500);
                 return;
             }
+            switchView('dateView', 'avatarView');
+        }
 
-            const nameVal = document.getElementById('userName').value.trim();
-            const genderText = selectedGenderValue === 'male' ? 'ولد 👦' : 'بنت 👧';
-            const ageText = document.getElementById('calculatedAge').innerText;
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedAvatarUrl = e.target.result;
+                    const preview = document.getElementById('avatarPreview');
+                    const placeholder = document.getElementById('uploadPlaceholder');
+                    preview.src = uploadedAvatarUrl;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
 
-            alert(`🎉 مرحباً بك يا ${nameVal} فـ SIMOMi!\nالهوية: ${genderText}\nتاريخ الميلاد: ${day}/${month}/${year} (${ageText} سنة)`);
+        // Generate Gold Card & Populate Data
+        function generateGoldCard() {
+            const name = document.getElementById('userName').value.trim();
+            const day = document.getElementById('dobDay').value;
+            const month = document.getElementById('dobMonth').value;
+            const year = document.getElementById('dobYear').value;
+            const age = document.getElementById('calculatedAge').innerText;
+
+            if (!uploadedAvatarUrl) {
+                alert('المرجو اختيار صورة البروفيل أولاً!');
+                return;
+            }
+
+            // Fill Card Data
+            document.getElementById('cardNameDisplay').innerText = name;
+            document.getElementById('cardGenderDisplay').innerText = selectedGenderValue === 'male' ? '👦 ولد' : '👧 بنت';
+            document.getElementById('cardAgeDisplay').innerText = `${age} سنة`;
+            document.getElementById('cardDobDisplay').innerText = `تاريخ الميلاد: ${day}/${month}/${year}`;
+            document.getElementById('cardAvatarImg').src = uploadedAvatarUrl;
+
+            switchView('avatarView', 'goldCardView');
+        }
+
+        // 3D Tilt Effect on Gold Card
+        const goldCard = document.getElementById('goldCard');
+        const cardWrapper = document.querySelector('.gold-card-wrapper');
+
+        cardWrapper.addEventListener('mousemove', (e) => {
+            const rect = cardWrapper.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = -(y - centerY) / 8;
+            const rotateY = (x - centerX) / 8;
+
+            goldCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+        });
+
+        cardWrapper.addEventListener('mouseleave', () => {
+            goldCard.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
+
+        function finalLaunch() {
+            alert('🚀 تهانينا! تم الدخول بنجاح إلى الغرف الصوتية في SIMOMi.');
         }
     </script>
 </body>
