@@ -578,9 +578,7 @@
 
         .footer-tag { text-align: center; margin-top: 20px; font-size: 12px; color: #4B5563; }
 
-        /* ========================================================
-           7. HALAME STYLE HOMEPAGE UI DESIGN
-           ======================================================== */
+        /* HALAME HOMEPAGE UI */
         .halame-header {
             display: flex;
             justify-content: space-between;
@@ -617,11 +615,8 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .planet-icon {
-            font-size: 22px;
-        }
+        .planet-icon { font-size: 22px; }
 
-        /* Top Grid Menu Cards */
         .top-menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -654,7 +649,6 @@
         .menu-title { font-size: 14px; font-weight: 800; color: #FFF; }
         .menu-icon-3d { font-size: 28px; }
 
-        /* Secondary 4 Grid Buttons */
         .mini-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -674,7 +668,6 @@
         .mini-card .mini-icon { font-size: 20px; margin-bottom: 4px; display: block; }
         .mini-card .mini-text { font-size: 10px; color: #D1D5DB; font-weight: 700; }
 
-        /* Avatar Carousel */
         .avatar-carousel {
             display: flex;
             gap: 14px;
@@ -714,7 +707,6 @@
 
         .avatar-label { font-size: 11px; color: #E5E7EB; font-weight: 700; }
 
-        /* Category Tabs */
         .category-tabs {
             display: flex;
             justify-content: space-around;
@@ -749,7 +741,6 @@
             border-radius: 2px;
         }
 
-        /* Banner Carousel Card */
         .banner-card {
             width: 100%;
             height: 140px;
@@ -786,6 +777,69 @@
             color: #F59E0B;
             text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
         }
+
+        /* PROFILE VIEW STYLES */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0 60px 0;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #EC4899;
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+            overflow: hidden;
+            margin-bottom: 14px;
+            background: #222;
+        }
+
+        .profile-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #FFF;
+            margin-bottom: 4px;
+        }
+
+        .profile-email-sub {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-bottom: 20px;
+        }
+
+        .profile-info-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .profile-info-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-label { color: #9CA3AF; font-weight: 700; }
+        .info-val { color: #F59E0B; font-weight: 800; }
 
         /* Bottom Floating Bar & FAB */
         .bottom-bar {
@@ -1008,7 +1062,6 @@
 
             <!-- STEP 7: HALAME STYLE HOMEPAGE VIEW -->
             <div id="homeView" class="view-step hidden-view">
-                <!-- Header -->
                 <div class="halame-header">
                     <div class="header-bell">
                         🔔
@@ -1018,7 +1071,6 @@
                     <div class="planet-icon">🪐</div>
                 </div>
 
-                <!-- Top Menu Cards -->
                 <div class="top-menu-grid">
                     <div class="top-menu-card card-purple">
                         <span class="menu-title">ابحث عن أصدقاء</span>
@@ -1030,7 +1082,6 @@
                     </div>
                 </div>
 
-                <!-- 4 Mini Grid Icons -->
                 <div class="mini-grid">
                     <div class="mini-card">
                         <span class="mini-icon">🎲</span>
@@ -1050,7 +1101,6 @@
                     </div>
                 </div>
 
-                <!-- Avatars Carousel -->
                 <div class="avatar-carousel">
                     <div class="avatar-item">
                         <div class="neon-ring"><img src="https://i.pravatar.cc/100?img=5" alt="User"></div>
@@ -1070,7 +1120,6 @@
                     </div>
                 </div>
 
-                <!-- Category Tabs -->
                 <div class="category-tabs">
                     <div class="tab-item active">الشائعة</div>
                     <div class="tab-item">متاح</div>
@@ -1079,37 +1128,75 @@
                     <div class="tab-item">العائلة</div>
                 </div>
 
-                <!-- Banner Card -->
                 <div class="banner-card">
                     <div class="banner-overlay-tag">
                         <span>👤 76961</span> • <span>مستخدم متاح</span>
                     </div>
                     <div class="banner-title">فعاليات الأبراج 2026<br>برج الحوت ♓</div>
                 </div>
+            </div>
 
-                <!-- Bottom Floating Nav Bar -->
-                <div class="bottom-bar">
-                    <div class="nav-item active">
-                        <span class="nav-icon">🌙</span>
-                        <span>الرئيسية</span>
+            <!-- STEP 8: PROFILE VIEW (حسابي) -->
+            <div id="profileView" class="view-step hidden-view">
+                <div class="halame-header">
+                    <div class="app-title-logo">الملف الشخصي</div>
+                    <div class="planet-icon">⚙️</div>
+                </div>
+
+                <div class="profile-container">
+                    <div class="profile-avatar-large">
+                        <img id="profileViewAvatar" src="" alt="Profile">
                     </div>
-                    <div class="nav-item">
-                        <span class="nav-icon">🏮</span>
-                        <span>الفعاليات</span>
+                    <div class="profile-name-title" id="profileViewName">الاسم</div>
+                    <div class="profile-email-sub" id="profileViewEmail">email@domain.com</div>
+
+                    <div class="profile-info-card">
+                        <div class="profile-info-row">
+                            <span class="info-label">الجنس</span>
+                            <span class="info-val" id="profileViewGender">-</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="info-label">العمر</span>
+                            <span class="info-val" id="profileViewAge">-</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="info-label">حالة الحساب</span>
+                            <span class="info-val" style="color: #10B981;">موثق VIP ✓</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="info-label">معرف المستخدم (ID)</span>
+                            <span class="info-val">2026-9981</span>
+                        </div>
                     </div>
-                    <div class="fab-button">+</div>
-                    <div class="nav-item">
-                        <span class="nav-icon">💬</span>
-                        <span>الدردشة</span>
-                    </div>
-                    <div class="nav-item">
-                        <span class="nav-icon">🏰</span>
-                        <span>حسابي</span>
+
+                    <div class="btn-wrapper" style="width: 100%;">
+                        <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('homeView')" style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);">
+                            العودة للرئيسية 🏠
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="footer-tag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
+            <!-- Bottom Floating Nav Bar (Common for Home & Profile) -->
+            <div class="bottom-bar" id="bottomNav">
+                <div class="nav-item active" id="navHome" onclick="switchNav('home')">
+                    <span class="nav-icon">🌙</span>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">🏮</span>
+                    <span>الفعاليات</span>
+                </div>
+                <div class="fab-button">+</div>
+                <div class="nav-item">
+                    <span class="nav-icon">💬</span>
+                    <span>الدردشة</span>
+                </div>
+                <div class="nav-item" id="navProfile" onclick="switchNav('profile')">
+                    <span class="nav-icon">🏰</span>
+                    <span>حسابي</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1142,6 +1229,7 @@
     <!-- APP SCRIPT LOGIC -->
     <script>
         const userData = {
+            email: '',
             gender: 'male',
             name: '',
             dob: { day: 1, month: 1, year: 2000 },
@@ -1169,12 +1257,45 @@
             const target = document.getElementById(stepId);
             target.classList.remove('hidden-view');
             target.classList.add('active-view');
+
+            // Toggle Bottom Nav visibility based on step
+            const bottomNav = document.getElementById('bottomNav');
+            if(stepId === 'homeView' || stepId === 'profileView') {
+                bottomNav.style.display = 'flex';
+            } else if(stepId === 'cardResultView') {
+                bottomNav.style.display = 'none'; // Will show when they click enter platform
+            } else {
+                bottomNav.style.display = 'none';
+            }
+        }
+
+        function switchNav(dest) {
+            if(dest === 'home') {
+                document.getElementById('navHome').classList.add('active');
+                document.getElementById('navProfile').classList.remove('active');
+                goToStep('homeView');
+            } else if(dest === 'profile') {
+                document.getElementById('navProfile').classList.add('active');
+                document.getElementById('navHome').classList.remove('active');
+                
+                // Populate Profile View data
+                document.getElementById('profileViewName').innerText = userData.name || 'مستخدم جديد';
+                document.getElementById('profileViewEmail').innerText = userData.email || 'user@vlymax.app';
+                document.getElementById('profileViewGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+                document.getElementById('profileViewAge').innerText = userData.age + ' سنة';
+                if(userData.avatarSrc) {
+                    document.getElementById('profileViewAvatar').src = userData.avatarSrc;
+                }
+
+                goToStep('profileView');
+            }
         }
 
         async function handleLoginSubmit(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            userData.email = email;
             const errorDiv = document.getElementById('authError');
             const loginBtn = document.getElementById('loginBtn');
 
