@@ -200,6 +200,14 @@
             opacity: 0.6;
         }
 
+        .auth-error {
+            color: #EF4444;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            display: none;
+        }
+
         /* Gender Grid */
         .gender-title, .step-title {
             text-align: center;
@@ -369,16 +377,6 @@
             margin-bottom: 6px;
         }
 
-        .date-icon-tag {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-size: 10px;
-            color: #6B7280;
-        }
-
         .age-badge {
             text-align: center;
             margin-bottom: 20px;
@@ -436,7 +434,7 @@
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
         #avatarInput { display: none; }
 
-        /* 6. PREMIUM GOLD CARD UI (LUXURY ID DESIGN) */
+        /* PREMIUM GOLD CARD UI */
         .gold-card-wrapper {
             perspective: 1000px;
             margin-bottom: 24px;
@@ -456,7 +454,6 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* Shimmer Shine Effect Animation */
         .gold-id-card::before {
             content: '';
             position: absolute;
@@ -568,18 +565,6 @@
             z-index: 2;
         }
 
-        /* Shake Animation */
-        .shake {
-            animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-        }
-
-        @keyframes shakeAnim {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
-        }
-
         /* Magnetic Buttons */
         .btn-wrapper { position: relative; margin-top: 10px; }
 
@@ -602,17 +587,6 @@
         .magnetic-btn:hover {
             box-shadow: 0 15px 35px rgba(239, 68, 68, 0.6), 0 0 15px rgba(245, 158, 11, 0.4);
         }
-
-        .ripple-wave {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
 
         .footer-tag { text-align: center; margin-top: 20px; font-size: 12px; color: #4B5563; }
     </style>
@@ -646,9 +620,11 @@
                         <span class="password-toggle" onclick="togglePassword()">👁️</span>
                     </div>
 
+                    <div id="authError" class="auth-error"></div>
+
                     <div class="btn-wrapper">
-                        <button type="submit" class="magnetic-btn mag-btn">
-                            تسجيل الدخول
+                        <button type="submit" id="loginBtn" class="magnetic-btn mag-btn">
+                            تسجيل الدخول / إنشيء حسابك
                         </button>
                     </div>
                 </form>
@@ -662,110 +638,85 @@
                 <div class="gender-grid">
                     <div class="gender-card" id="cardMale" onclick="selectGender('male')">
                         <div class="checkmark">✓</div>
-                        <span class="avatar">👦</span>
-                        <div class="gender-label">ولد</div>
+                        <span class="avatar">👨‍💻</span>
+                        <div style="font-weight: 800; color: #FFF;">ذكر</div>
                     </div>
-
                     <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
                         <div class="checkmark">✓</div>
-                        <span class="avatar">👧</span>
-                        <div class="gender-label">بنت</div>
+                        <span class="avatar">👩‍💻</span>
+                        <div style="font-weight: 800; color: #FFF;">أنثى</div>
                     </div>
                 </div>
 
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToNameStep()">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('nameView')">
                         متابعة
                     </button>
                 </div>
             </div>
 
-            <!-- STEP 3: Name Input View -->
+            <!-- STEP 3: Name Entry View -->
             <div id="nameView" class="view-step hidden-view">
-                <div class="step-title">ما هو اسمك؟</div>
-                <div class="step-subtitle">سيظهر هذا الاسم لأصدقائك في الغرف الصوتية</div>
+                <div class="step-title">الاسم الشخصي</div>
+                <div class="step-subtitle">أدخل اسمك ليظهر في بطاقتك الخاصة</div>
 
                 <div class="name-field-wrapper" id="nameWrapper">
+                    <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
                     <span class="name-icon">👤</span>
-                    <input 
-                        type="text" 
-                        id="userName" 
-                        class="name-input" 
-                        placeholder="اكتب اسمك هنا..." 
-                        maxlength="20"
-                        autocomplete="off"
-                        oninput="validateNameInput()"
-                    >
                     <span class="status-check">✓</span>
                 </div>
-
-                <div class="counter-tag">
-                    <span id="charCount">0</span>/20 حرف
-                </div>
+                <div class="counter-tag" id="charCounter">0 / 20 حرف</div>
 
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToDateStep()">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="saveNameAndNext()">
                         متابعة
                     </button>
                 </div>
             </div>
 
             <!-- STEP 4: Date of Birth View -->
-            <div id="dateView" class="view-step hidden-view">
-                <div class="step-title">تاريخ الميلاد 🎂</div>
-                <div class="step-subtitle">حدد تاريخ ميلادك لتخصيص تجربتك</div>
+            <div id="dobView" class="view-step hidden-view">
+                <div class="step-title">تاريخ الميلاد</div>
+                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر الفعلي</div>
 
-                <div class="date-picker-grid" id="dateGrid">
+                <div class="date-picker-grid">
                     <div class="date-select-wrapper">
                         <span class="date-label">اليوم</span>
-                        <select id="dobDay" onchange="calculateAge()">
-                            <option value="">اليوم</option>
-                        </select>
-                        <span class="date-icon-tag">▼</span>
+                        <select id="daySelect" onchange="calculateAge()"></select>
                     </div>
-
                     <div class="date-select-wrapper">
                         <span class="date-label">الشهر</span>
-                        <select id="dobMonth" onchange="calculateAge()">
-                            <option value="">الشهر</option>
-                        </select>
-                        <span class="date-icon-tag">▼</span>
+                        <select id="monthSelect" onchange="calculateAge()"></select>
                     </div>
-
                     <div class="date-select-wrapper">
                         <span class="date-label">السنة</span>
-                        <select id="dobYear" onchange="calculateAge()">
-                            <option value="">السنة</option>
-                        </select>
-                        <span class="date-icon-tag">▼</span>
+                        <select id="yearSelect" onchange="calculateAge()"></select>
                     </div>
                 </div>
 
-                <div class="age-badge" id="ageBadge">
-                    🎉 العمر الحسابي: <span id="calculatedAge">0</span> سنة
-                </div>
+                <div class="age-badge" id="ageBadge">العمر: 0 سنة</div>
 
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToAvatarStep()">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('avatarView')">
                         متابعة
                     </button>
                 </div>
             </div>
 
-            <!-- STEP 5: Avatar Upload View -->
+            <!-- STEP 5: Avatar Selection View -->
             <div id="avatarView" class="view-step hidden-view">
-                <div class="step-title">صورة البروفيل 📸</div>
-                <div class="step-subtitle">أضف صورة شخصية لكي يراها الأصدقاء</div>
+                <div class="step-title">الصورة الشخصية</div>
+                <div class="step-subtitle">اختر صورة بروفايلك أو ارفع واحدة جديدة</div>
 
                 <div class="upload-container">
                     <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
+                        <img id="avatarPreview" src="" alt="Avatar">
                         <div class="upload-placeholder-content" id="uploadPlaceholder">
                             <span class="upload-icon">📷</span>
-                            <span class="upload-text">اختر صورة</span>
+                            <span class="upload-text">رفع صورة</span>
                         </div>
-                        <img id="avatarPreview" src="" alt="Avatar Preview">
                     </div>
-                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewImage(event)">
                 </div>
 
                 <div class="btn-wrapper">
@@ -775,284 +726,214 @@
                 </div>
             </div>
 
-            <!-- STEP 6: Premium Gold Card View -->
-            <div id="goldCardView" class="view-step hidden-view">
-                <div class="step-title">بطاقة العضوية الذهبية 🌟</div>
-                <div class="step-subtitle">هذه هي بطاقتك التعريفية الرسمية في SIMOMi</div>
+            <!-- STEP 6: Gold ID Card Result -->
+            <div id="cardResultView" class="view-step hidden-view">
+                <div class="step-title">بطاقتك الرقمية</div>
+                <div class="step-subtitle">مرحباً بك رسمياً في المنصة الصوتية SIMOMi</div>
 
                 <div class="gold-card-wrapper">
                     <div class="gold-id-card" id="goldCard">
                         <div class="card-header-row">
                             <div class="card-chip"></div>
-                            <div class="card-brand-tag">SIMOMi VIP</div>
+                            <div class="card-brand-tag">SIMOMi PASS</div>
                         </div>
-
                         <div class="card-body-row">
                             <div class="card-avatar-box">
-                                <img id="cardAvatarImg" src="" alt="Avatar">
+                                <img id="finalCardAvatar" src="" alt="Profile">
                             </div>
                             <div class="card-details">
-                                <div class="card-name" id="cardNameDisplay">اسم المستخدم</div>
+                                <div class="card-name" id="finalCardName">الاسم</div>
                                 <div class="card-info-grid">
-                                    <span id="cardGenderDisplay">👦 ولد</span>
-                                    <span>•</span>
-                                    <span id="cardAgeDisplay">0 سنة</span>
+                                    <span id="finalCardGender">الجنس</span> • 
+                                    <span id="finalCardAge">العمر</span>
                                 </div>
-                                <div style="font-size: 11px; color: #5a400b; margin-top: 2px;" id="cardDobDisplay">11/10/2000</div>
                             </div>
                         </div>
-
                         <div class="card-footer-row">
-                            <span>ID: #2026-SIMO</span>
-                            <span>SECURE AI MEMBER</span>
+                            <span>ID: 2026-9981-VIP</span>
+                            <span>VERIFIED USER ✓</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="finalLaunch()">
-                        الدخول إلى الغرف الصوتية 🎙️
+                    <button type="button" class="magnetic-btn mag-btn" onclick="alert('مرحباً بك في عالم SIMOMi!')">
+                        دخول المنصة 🚀
                     </button>
                 </div>
             </div>
 
-            <div class="footer-tag">
-                🔒 نظام محمي بتشفير AI الذكي
-            </div>
-
+            <div class="footer-tag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
         </div>
     </div>
 
+    <!-- FIREBASE MODULE SYSTEM -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoPrnf3HXH8zipsJ5ROXApWu20Vm56QhY",
+            authDomain: "vlymax.firebaseapp.com",
+            projectId: "vlymax",
+            storageBucket: "vlymax.firebasestorage.app",
+            messagingSenderId: "825269785341",
+            appId: "1:825269785341:web:74b34d4f6366a1f594e494"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.firebaseAuth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    </script>
+
+    <!-- APP SCRIPT LOGIC -->
     <script>
-        let selectedGenderValue = null;
-        let uploadedAvatarUrl = null;
+        // App State
+        const userData = {
+            gender: 'male',
+            name: '',
+            dob: { day: 1, month: 1, year: 2000 },
+            age: 0,
+            avatarSrc: 'https://via.placeholder.com/150'
+        };
 
-        // Mouse Spotlight
-        const card = document.getElementById('card');
-        const spotlight = document.getElementById('spotlight');
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            spotlight.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-            spotlight.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-        });
+        // Date Select Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            const daySel = document.getElementById('daySelect');
+            const monthSel = document.getElementById('monthSelect');
+            const yearSel = document.getElementById('yearSelect');
 
-        // Magnetic Buttons & Ripple
-        document.querySelectorAll('.mag-btn').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                btn.style.transform = `translate(${(e.clientX - rect.left - rect.width/2) * 0.2}px, ${(e.clientY - rect.top - rect.height/2) * 0.2}px)`;
-            });
-            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0px, 0px)');
+            for(let i=1; i<=31; i++) daySel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=1; i<=12; i++) monthSel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=2026; i>=1950; i--) yearSel.innerHTML += `<option value="${i}">${i}</option>`;
             
-            btn.addEventListener('click', function(e) {
-                const rect = this.getBoundingClientRect();
-                const circle = document.createElement('span');
-                const diameter = Math.max(rect.width, rect.height);
-                circle.style.width = circle.style.height = `${diameter}px`;
-                circle.style.left = `${e.clientX - rect.left - diameter/2}px`;
-                circle.style.top = `${e.clientY - rect.top - diameter/2}px`;
-                circle.classList.add('ripple-wave');
-                if (this.querySelector('.ripple-wave')) this.querySelector('.ripple-wave').remove();
-                this.appendChild(circle);
-            });
+            calculateAge();
         });
+
+        // Navigation
+        function goToStep(stepId) {
+            document.querySelectorAll('.view-step').forEach(el => {
+                el.classList.remove('active-view');
+                el.classList.add('hidden-view');
+            });
+            const target = document.getElementById(stepId);
+            target.classList.remove('hidden-view');
+            target.classList.add('active-view');
+        }
+
+        // Handle Real Firebase Authentication
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('authError');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorDiv.style.display = 'none';
+            loginBtn.innerText = "جاري التحقق...";
+
+            try {
+                // محاولة تسجيل الدخول
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                goToStep('genderView');
+            } catch (err) {
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                    // إذا كان الحساب غير موجود يتم إنشاؤه تلقائياً
+                    try {
+                        await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                        goToStep('genderView');
+                    } catch (createErr) {
+                        errorDiv.innerText = "كلمة المرور ضعيفة أو الإيميل غير صحيح!";
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.innerText = "حدث خطأ: " + err.message;
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
+            }
+        }
 
         function togglePassword() {
-            const input = document.getElementById('password');
-            input.type = input.type === 'password' ? 'text' : 'password';
-        }
-
-        // View Switcher Helper
-        function switchView(fromId, toId) {
-            const fromView = document.getElementById(fromId);
-            const toView = document.getElementById(toId);
-
-            fromView.style.opacity = '0';
-            fromView.style.transform = 'scale(0.9) translateY(-20px)';
-
-            setTimeout(() => {
-                fromView.classList.remove('active-view');
-                fromView.classList.add('hidden-view');
-
-                toView.classList.remove('hidden-view');
-                toView.classList.add('active-view');
-            }, 350);
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            switchView('loginView', 'genderView');
+            const passInput = document.getElementById('password');
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
         }
 
         function selectGender(gender) {
-            selectedGenderValue = gender;
+            userData.gender = gender;
             document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
             document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
         }
 
-        function goToNameStep() {
-            if (!selectedGenderValue) {
-                alert('المرجو اختيار الجنس أولاً (ولد أو بنت)');
-                return;
-            }
-            switchView('genderView', 'nameView');
-            setTimeout(() => document.getElementById('userName').focus(), 400);
-        }
-
-        function validateNameInput() {
-            const input = document.getElementById('userName');
+        function validateNameInput(input) {
             const wrapper = document.getElementById('nameWrapper');
-            const counter = document.getElementById('charCount');
-            const val = input.value.trim();
-
-            counter.innerText = input.value.length;
-            if (val.length >= 3) {
+            const counter = document.getElementById('charCounter');
+            const val = input.value;
+            counter.innerText = `${val.length} / 20 حرف`;
+            if (val.trim().length >= 3) {
                 wrapper.classList.add('valid');
             } else {
                 wrapper.classList.remove('valid');
             }
         }
 
-        function goToDateStep() {
-            const input = document.getElementById('userName');
-            const wrapper = document.getElementById('nameWrapper');
-            if (input.value.trim().length < 3) {
-                wrapper.classList.add('shake');
-                setTimeout(() => wrapper.classList.remove('shake'), 500);
-                return;
-            }
-            populateDateSelects();
-            switchView('nameView', 'dateView');
-        }
-
-        function populateDateSelects() {
-            const daySel = document.getElementById('dobDay');
-            const monthSel = document.getElementById('dobMonth');
-            const yearSel = document.getElementById('dobYear');
-
-            if (daySel.options.length > 1) return;
-
-            for (let i = 1; i <= 31; i++) {
-                let opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = i;
-                daySel.appendChild(opt);
-            }
-
-            const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو', 'يوليو', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'];
-            months.forEach((m, idx) => {
-                let opt = document.createElement('option');
-                opt.value = idx + 1;
-                opt.innerText = m;
-                monthSel.appendChild(opt);
-            });
-
-            const currentYear = new Date().getFullYear();
-            for (let y = currentYear; y >= 1950; y--) {
-                let opt = document.createElement('option');
-                opt.value = y;
-                opt.innerText = y;
-                yearSel.appendChild(opt);
+        function saveNameAndNext() {
+            const input = document.getElementById('userNameInput');
+            if (input.value.trim().length >= 3) {
+                userData.name = input.value.trim();
+                goToStep('dobView');
+            } else {
+                alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل');
             }
         }
 
         function calculateAge() {
-            const day = document.getElementById('dobDay').value;
-            const month = document.getElementById('dobMonth').value;
-            const year = document.getElementById('dobYear').value;
+            const day = parseInt(document.getElementById('daySelect').value);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const year = parseInt(document.getElementById('yearSelect').value);
+
+            const birth = new Date(year, month - 1, day);
+            const today = new Date(2026, 9, 10);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+            userData.age = age;
             const badge = document.getElementById('ageBadge');
-            const ageSpan = document.getElementById('calculatedAge');
-
-            if (day && month && year) {
-                const birthDate = new Date(year, month - 1, day);
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                ageSpan.innerText = age;
-                badge.classList.add('show');
-            } else {
-                badge.classList.remove('show');
-            }
+            badge.innerText = `العمر: ${age} سنة`;
+            badge.classList.add('show');
         }
 
-        function goToAvatarStep() {
-            const day = document.getElementById('dobDay').value;
-            const month = document.getElementById('dobMonth').value;
-            const year = document.getElementById('dobYear').value;
-            const dateGrid = document.getElementById('dateGrid');
-
-            if (!day || !month || !year) {
-                dateGrid.classList.add('shake');
-                setTimeout(() => dateGrid.classList.remove('shake'), 500);
-                return;
-            }
-            switchView('dateView', 'avatarView');
-        }
-
-        function previewAvatar(event) {
-            const file = event.target.files[0];
+        function previewImage(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedAvatarUrl = e.target.result;
-                    const preview = document.getElementById('avatarPreview');
-                    const placeholder = document.getElementById('uploadPlaceholder');
-                    preview.src = uploadedAvatarUrl;
-                    preview.style.display = 'block';
-                    placeholder.style.display = 'none';
-                }
+                reader.onload = function(evt) {
+                    document.getElementById('avatarPreview').src = evt.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
+                    userData.avatarSrc = evt.target.result;
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Generate Gold Card & Populate Data
         function generateGoldCard() {
-            const name = document.getElementById('userName').value.trim();
-            const day = document.getElementById('dobDay').value;
-            const month = document.getElementById('dobMonth').value;
-            const year = document.getElementById('dobYear').value;
-            const age = document.getElementById('calculatedAge').innerText;
-
-            if (!uploadedAvatarUrl) {
-                alert('المرجو اختيار صورة البروفيل أولاً!');
-                return;
+            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
+            document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+            document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            if (userData.avatarSrc) {
+                document.getElementById('finalCardAvatar').src = userData.avatarSrc;
             }
-
-            // Fill Card Data
-            document.getElementById('cardNameDisplay').innerText = name;
-            document.getElementById('cardGenderDisplay').innerText = selectedGenderValue === 'male' ? '👦 ولد' : '👧 بنت';
-            document.getElementById('cardAgeDisplay').innerText = `${age} سنة`;
-            document.getElementById('cardDobDisplay').innerText = `تاريخ الميلاد: ${day}/${month}/${year}`;
-            document.getElementById('cardAvatarImg').src = uploadedAvatarUrl;
-
-            switchView('avatarView', 'goldCardView');
-        }
-
-        // 3D Tilt Effect on Gold Card
-        const goldCard = document.getElementById('goldCard');
-        const cardWrapper = document.querySelector('.gold-card-wrapper');
-
-        cardWrapper.addEventListener('mousemove', (e) => {
-            const rect = cardWrapper.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = -(y - centerY) / 8;
-            const rotateY = (x - centerX) / 8;
-
-            goldCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-        });
-
-        cardWrapper.addEventListener('mouseleave', () => {
-            goldCard.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-        });
-
-        function finalLaunch() {
-            alert('🚀 تهانينا! تم الدخول بنجاح إلى الغرف الصوتية في SIMOMi.');
+            goToStep('cardResultView');
         }
     </script>
 </body>
