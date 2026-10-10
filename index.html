@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - AI Voice Hub</title>
+    <title>SIMOMi - Futuristic Login 2026</title>
     <style>
-        /* Base Reset & Fonts */
+        /* Base Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: #0B0E14;
+            background-color: #07090E;
             color: #FFFFFF;
             min-height: 100vh;
             display: flex;
@@ -24,278 +24,354 @@
             position: relative;
         }
 
-        /* 2026 Futuristic Animated Background Glows */
-        .glow-bg-1 {
+        /* 1. Aurora & Mesh Gradient Background */
+        .aurora-bg {
             position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
-            border-radius: 50%;
-            animation: floatGlow 8s infinite alternate ease-in-out;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(239, 68, 68, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, #07090E 100%);
+            filter: blur(40px);
+            animation: auroraMove 12s ease-in-out infinite alternate;
         }
 
-        .glow-bg-2 {
-            position: absolute;
-            bottom: -100px;
-            left: -100px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
-            border-radius: 50%;
-            animation: floatGlow 10s infinite alternate-reverse ease-in-out;
-            pointer-events: none;
+        @keyframes auroraMove {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(3deg); }
         }
 
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 40px) scale(1.15); }
-        }
-
-        /* Container Card with Glassmorphism */
-        .login-card {
-            background: rgba(18, 24, 38, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 28px;
-            padding: 40px 32px;
-            width: 90%;
-            max-width: 420px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            animation: cardAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* 2. Liquid Glass Card Container & Stagger Entrance */
+        .card-container {
             position: relative;
             z-index: 10;
+            width: 90%;
+            max-width: 420px;
+            padding: 2px; /* For Border Beam */
+            border-radius: 28px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
+                        0 0 40px rgba(239, 68, 68, 0.15);
+            animation: springPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        @keyframes cardAppear {
-            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+        @keyframes springPop {
+            0% { opacity: 0; transform: translateY(50px) scale(0.85); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* App Branding Header */
-        .brand-header {
-            text-align: center;
-            margin-bottom: 32px;
+        /* 3. Animated Border Beam Effect */
+        .border-beam {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent 0 300deg, #EF4444 320deg, #F59E0B 360deg);
+            animation: rotateBeam 4s linear infinite;
+            z-index: 1;
         }
 
-        .app-title {
-            font-size: 42px;
+        @keyframes rotateBeam {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 4. Glassmorphism & Spotlight Inner Card */
+        .glass-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(13, 17, 23, 0.75);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 26px;
+            padding: 40px 32px;
+            overflow: hidden;
+        }
+
+        /* Mouse Spotlight Effect */
+        .spotlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.08), transparent 40%);
+            z-index: 3;
+        }
+
+        /* Branding & Titles */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: staggerFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .stagger-1 { animation-delay: 0.2s; }
+        .stagger-2 { animation-delay: 0.3s; }
+        .stagger-3 { animation-delay: 0.4s; }
+        .stagger-4 { animation-delay: 0.5s; }
+
+        @keyframes staggerFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-title {
+            font-size: 44px;
             font-weight: 900;
-            color: #EF4444;
-            letterSpacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
-            animation: pulseTitle 3s infinite ease-in-out;
-            display: inline-block;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
         }
 
-        @keyframes pulseTitle {
-            0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
-            50% { transform: scale(1.04); text-shadow: 0 0 35px rgba(239, 68, 68, 0.8), 0 0 10px rgba(245, 158, 11, 0.5); }
-        }
-
-        .badge {
-            display: inline-block;
-            margin-top: 6px;
-            padding: 4px 14px;
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 20px;
-            color: #F59E0B;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
-
-        .welcome-text {
-            font-size: 22px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 6px;
-            color: #FFFFFF;
-        }
-
-        .subtitle-text {
+        .subtitle {
             font-size: 13px;
             color: #9CA3AF;
-            text-align: center;
-            margin-bottom: 28px;
-            line-height: 1.5;
+            margin-top: 6px;
         }
 
-        /* Modern Floating Input Group */
-        .input-group {
+        /* 5. Animated Floating Labels & Inputs with Focus Glow */
+        .input-box {
             position: relative;
             margin-bottom: 24px;
         }
 
-        .input-label {
-            display: block;
-            color: #F59E0B;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .input-field {
+        .input-box input {
             width: 100%;
-            background: rgba(11, 14, 20, 0.8);
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            padding: 18px 16px 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 16px 18px;
             color: #FFFFFF;
             font-size: 15px;
             outline: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .input-field::placeholder {
-            color: #4B5563;
+        .input-box label {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .input-field:focus {
+        /* Focus & Floating Label Active States */
+        .input-box input:focus,
+        .input-box input:not(:placeholder-shown) {
             border-color: #EF4444;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
-            background: rgba(15, 20, 30, 0.95);
+            background: rgba(239, 68, 68, 0.04);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
         }
 
-        /* Interactive 2026 Pro Max Button */
-        .submit-btn {
+        .input-box input:focus ~ label,
+        .input-box input:not(:placeholder-shown) ~ label {
+            top: 10px;
+            font-size: 11px;
+            color: #F59E0B;
+            font-weight: 700;
+        }
+
+        /* Password Reveal Toggle */
+        .password-toggle {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 16px;
+            user-select: none;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .password-toggle:hover { opacity: 1; }
+
+        /* 6. Magnetic Button with 3D Press & Ripple */
+        .btn-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .magnetic-btn {
             width: 100%;
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            padding: 18px;
             border: none;
             border-radius: 16px;
-            padding: 18px;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
             color: #FFFFFF;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-            letter-spacing: 0.5px;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(239, 68, 68, 0.6);
-            background: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+        .magnetic-btn:hover {
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.6), 0 0 15px rgba(245, 158, 11, 0.4);
         }
 
-        .submit-btn:active {
-            transform: translateY(1px) scale(0.98);
+        .magnetic-btn:active {
+            transform: scale(0.96) translateY(2px) !important;
             box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
         }
 
-        /* Click Wave Effect (Ripple) */
-        .ripple {
+        /* Ripple Wave Effect */
+        .ripple-wave {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             transform: scale(0);
-            animation: rippleEffect 0.6s linear;
+            animation: ripple 0.6s linear;
             pointer-events: none;
         }
 
-        @keyframes rippleEffect {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
         }
 
-        .security-footer {
-            margin-top: 22px;
+        .footer-tag {
             text-align: center;
+            margin-top: 24px;
             font-size: 12px;
-            color: #6B7280;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .security-footer span {
-            color: #10B981;
+            color: #4B5563;
         }
     </style>
 </head>
 <body>
 
-    <div class="glow-bg-1"></div>
-    <div class="glow-bg-2"></div>
+    <!-- Aurora Background -->
+    <div class="aurora-bg"></div>
 
-    <div class="login-card">
-        <div class="brand-header">
-            <div class="app-title">SIMOMi</div>
-            <br>
-            <div class="badge">AI VOICE PLATFORM</div>
-        </div>
+    <!-- Main Card -->
+    <div class="card-container">
+        <!-- Border Beam Anim -->
+        <div class="border-beam"></div>
 
-        <div class="welcome-text">مرحباً بك مجدداً</div>
-        <div class="subtitle-text">سجل دخولك بالبريد الإلكتروني للوصول إلى الغرف الصوتية</div>
+        <!-- Glass Content Card -->
+        <div class="glass-card" id="card">
+            <div class="spotlight" id="spotlight"></div>
 
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="input-group">
-                <label class="input-label" for="email">البريد الإلكتروني</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    class="input-field" 
-                    placeholder="name@domain.com" 
-                    required
-                    autocomplete="off"
-                >
+            <div class="brand stagger-item stagger-1">
+                <div class="logo-title">SIMOMi</div>
+                <div class="subtitle">AI Voice Hub • 2026 Edition</div>
             </div>
 
-            <button type="submit" class="submit-btn" id="btnSubmit">
-                تسجيل الدخول السريع
-            </button>
-        </form>
+            <form id="loginForm" onsubmit="handleSubmit(event)">
+                
+                <!-- Email Input -->
+                <div class="input-box stagger-item stagger-2">
+                    <input type="email" id="email" placeholder=" " required autocomplete="off">
+                    <label for="email">البريد الإلكتروني</label>
+                </div>
 
-        <div class="security-footer">
-            <span>🔒</span> اتصل آمن ومشفر بالكامل
+                <!-- Password Input + Reveal -->
+                <div class="input-box stagger-item stagger-3">
+                    <input type="password" id="password" placeholder=" " required>
+                    <label for="password">كلمة المرور</label>
+                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                </div>
+
+                <!-- Magnetic Button -->
+                <div class="btn-wrapper stagger-item stagger-4">
+                    <button type="submit" class="magnetic-btn" id="magBtn">
+                        تسجيل الدخول
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="footer-tag stagger-item stagger-4">
+                🔒 نظام محمي بتشفير AI الذكي
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Button Ripple Click Effect (حركة الموجة عند الضغط)
-        const btn = document.getElementById('btnSubmit');
-        btn.addEventListener('click', function (e) {
-            let x = e.clientX - e.target.offsetLeft;
-            let y = e.clientY - e.target.offsetTop;
+        // 1. Mouse Spotlight Tracking
+        const card = document.getElementById('card');
+        const spotlight = document.getElementById('spotlight');
 
-            let ripples = document.createElement('span');
-            ripples.className = 'ripple';
-            ripples.style.left = x + 'px';
-            ripples.style.top = y + 'px';
-            this.appendChild(ripples);
-
-            setTimeout(() => {
-                ripples.remove();
-            }, 600);
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            spotlight.style.setProperty('--mouse-x', `${x}px`);
+            spotlight.style.setProperty('--mouse-y', `${y}px`);
         });
 
-        // Form Submit Function
-        function handleLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            
-            // إضافة أنيميشن بسيطة للزر عند الضغط والتأكيد
-            btn.innerText = 'جاري الاتصال...';
-            btn.style.opacity = '0.8';
+        // 2. Magnetic Button Effect
+        const btn = document.getElementById('magBtn');
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
 
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0px, 0px)';
+        });
+
+        // 3. Ripple Effect on Click
+        btn.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const circle = document.createElement('span');
+            const diameter = Math.max(rect.width, rect.height);
+            
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${e.clientX - rect.left - diameter / 2}px`;
+            circle.style.top = `${e.clientY - rect.top - diameter / 2}px`;
+            circle.classList.add('ripple-wave');
+
+            const ripple = this.getElementsByClassName('ripple-wave')[0];
+            if (ripple) ripple.remove();
+
+            this.appendChild(circle);
+        });
+
+        // 4. Password Reveal Toggle
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                toggleBtn.innerText = '🙈';
+            } else {
+                passInput.type = 'password';
+                toggleBtn.innerText = '👁️';
+            }
+        }
+
+        // 5. Submit Micro-interaction
+        function handleSubmit(e) {
+            e.preventDefault();
+            btn.innerText = 'جاري التحقق...';
+            btn.style.opacity = '0.8';
             setTimeout(() => {
-                alert(`تم تسجيل الدخول بنجاح! \nالبريد: ${email}`);
-                btn.innerText = 'تسجيل الدخول السريع';
+                alert('تم تسجيل الدخول بنجاح فـ SIMOMi!');
+                btn.innerText = 'تسجيل الدخول';
                 btn.style.opacity = '1';
-            }, 800);
+            }, 1000);
         }
     </script>
 </body>
