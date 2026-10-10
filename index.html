@@ -200,7 +200,7 @@
             opacity: 0.6;
         }
 
-        /* Gender Grid */
+        /* Gender & Step Titles */
         .gender-title, .step-title {
             text-align: center;
             font-size: 20px;
@@ -271,7 +271,7 @@
             color: #FFF;
         }
 
-        /* 3. NAME INPUT STEP UI & ANIMATIONS */
+        /* Name Input UI */
         .name-field-wrapper {
             position: relative;
             margin-bottom: 12px;
@@ -290,12 +290,10 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Neon Glow Focus Ring & Animated Underline Gradient */
         .name-input:focus {
             border-color: #EF4444;
             background: rgba(239, 68, 68, 0.05);
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), 
-                        inset 0 -3px 0 #F59E0B;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), inset 0 -3px 0 #F59E0B;
         }
 
         .name-icon {
@@ -307,7 +305,6 @@
             opacity: 0.6;
         }
 
-        /* Success Validation Checkmark Animation */
         .status-check {
             position: absolute;
             left: 18px;
@@ -322,13 +319,88 @@
             transform: translateY(-50%) scale(1);
         }
 
-        /* Character Counter UI */
         .counter-tag {
             text-align: left;
             font-size: 11px;
             color: #6B7280;
             margin-bottom: 24px;
             padding-left: 6px;
+        }
+
+        /* 4. DATE PICKER STEP UI & LIQUID GLASS DROPDOWNS */
+        .date-picker-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .date-select-wrapper {
+            position: relative;
+        }
+
+        .date-select-wrapper select {
+            width: 100%;
+            padding: 16px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .date-select-wrapper select option {
+            background: #0D1117;
+            color: #FFFFFF;
+            padding: 10px;
+        }
+
+        .date-select-wrapper select:focus {
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.08);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+        }
+
+        .date-label {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            color: #F59E0B;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .date-icon-tag {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 10px;
+            color: #6B7280;
+        }
+
+        .age-badge {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #10B981;
+            font-weight: 700;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .age-badge.show {
+            opacity: 1;
+            transform: scale(1);
         }
 
         /* Shake Error Animation */
@@ -467,6 +539,51 @@
                 </div>
 
                 <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="goToDateStep()">
+                        متابعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Date of Birth View -->
+            <div id="dateView" class="view-step hidden-view">
+                <div class="step-title">تاريخ الميلاد 🎂</div>
+                <div class="step-subtitle">حدد تاريخ ميلادك لتخصيص تجربتك</div>
+
+                <div class="date-picker-grid" id="dateGrid">
+                    <!-- Day Dropdown -->
+                    <div class="date-select-wrapper">
+                        <span class="date-label">اليوم</span>
+                        <select id="dobDay" onchange="calculateAge()">
+                            <option value="">اليوم</option>
+                        </select>
+                        <span class="date-icon-tag">▼</span>
+                    </div>
+
+                    <!-- Month Dropdown -->
+                    <div class="date-select-wrapper">
+                        <span class="date-label">الشهر</span>
+                        <select id="dobMonth" onchange="calculateAge()">
+                            <option value="">الشهر</option>
+                        </select>
+                        <span class="date-icon-tag">▼</span>
+                    </div>
+
+                    <!-- Year Dropdown -->
+                    <div class="date-select-wrapper">
+                        <span class="date-label">السنة</span>
+                        <select id="dobYear" onchange="calculateAge()">
+                            <option value="">السنة</option>
+                        </select>
+                        <span class="date-icon-tag">▼</span>
+                    </div>
+                </div>
+
+                <div class="age-badge" id="ageBadge">
+                    🎉 العمر الحسابي: <span id="calculatedAge">0</span> سنة
+                </div>
+
+                <div class="btn-wrapper">
                     <button type="button" class="magnetic-btn mag-btn" onclick="finishProfile()">
                         انضم إلى SIMOMi 🚀
                     </button>
@@ -555,11 +672,10 @@
                 return;
             }
             switchView('genderView', 'nameView');
-            // Typewriter effect trigger focus
             setTimeout(() => document.getElementById('userName').focus(), 400);
         }
 
-        // Step 3 Input Validation & Character Counter
+        // Step 3 Input Validation & Counter
         function validateNameInput() {
             const input = document.getElementById('userName');
             const wrapper = document.getElementById('nameWrapper');
@@ -567,7 +683,6 @@
             const val = input.value.trim();
 
             counter.innerText = input.value.length;
-
             if (val.length >= 3) {
                 wrapper.classList.add('valid');
             } else {
@@ -575,20 +690,95 @@
             }
         }
 
-        // Final Submit & Shake Animation
-        function finishProfile() {
+        // Step 3 -> Step 4
+        function goToDateStep() {
             const input = document.getElementById('userName');
             const wrapper = document.getElementById('nameWrapper');
-            const nameVal = input.value.trim();
-
-            if (nameVal.length < 3) {
+            if (input.value.trim().length < 3) {
                 wrapper.classList.add('shake');
                 setTimeout(() => wrapper.classList.remove('shake'), 500);
                 return;
             }
+            populateDateSelects();
+            switchView('nameView', 'dateView');
+        }
 
+        // Step 4 Populate Dropdowns
+        function populateDateSelects() {
+            const daySel = document.getElementById('dobDay');
+            const monthSel = document.getElementById('dobMonth');
+            const yearSel = document.getElementById('dobYear');
+
+            if (daySel.options.length > 1) return; // Prevent duplicating
+
+            // Populate Days (1-31)
+            for (let i = 1; i <= 31; i++) {
+                let opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = i;
+                daySel.appendChild(opt);
+            }
+
+            // Populate Months
+            const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو', 'يوليو', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'];
+            months.forEach((m, idx) => {
+                let opt = document.createElement('option');
+                opt.value = idx + 1;
+                opt.innerText = m;
+                monthSel.appendChild(opt);
+            });
+
+            // Populate Years (1950 - Current Year)
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear; y >= 1950; y--) {
+                let opt = document.createElement('option');
+                opt.value = y;
+                opt.innerText = y;
+                yearSel.appendChild(opt);
+            }
+        }
+
+        // Age Calculation & Display
+        function calculateAge() {
+            const day = document.getElementById('dobDay').value;
+            const month = document.getElementById('dobMonth').value;
+            const year = document.getElementById('dobYear').value;
+            const badge = document.getElementById('ageBadge');
+            const ageSpan = document.getElementById('calculatedAge');
+
+            if (day && month && year) {
+                const birthDate = new Date(year, month - 1, day);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                ageSpan.innerText = age;
+                badge.classList.add('show');
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+
+        // Final Submit
+        function finishProfile() {
+            const day = document.getElementById('dobDay').value;
+            const month = document.getElementById('dobMonth').value;
+            const year = document.getElementById('dobYear').value;
+            const dateGrid = document.getElementById('dateGrid');
+
+            if (!day || !month || !year) {
+                dateGrid.classList.add('shake');
+                setTimeout(() => dateGrid.classList.remove('shake'), 500);
+                return;
+            }
+
+            const nameVal = document.getElementById('userName').value.trim();
             const genderText = selectedGenderValue === 'male' ? 'ولد 👦' : 'بنت 👧';
-            alert(`🎉 مرحباً بك يا ${nameVal} فـ SIMOMi!\nالهوية: ${genderText}`);
+            const ageText = document.getElementById('calculatedAge').innerText;
+
+            alert(`🎉 مرحباً بك يا ${nameVal} فـ SIMOMi!\nالهوية: ${genderText}\nتاريخ الميلاد: ${day}/${month}/${year} (${ageText} سنة)`);
         }
     </script>
 </body>
