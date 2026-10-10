@@ -1,39 +1,302 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق الدردشة الصوتية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SIMOMi - AI Voice Hub</title>
     <style>
-        body { background-color: #1A0B2E; color: white; font-family: sans-serif; }
-        .purple-gradient { background: linear-gradient(180deg, #2D1B4E 0%, #1A0B2E 100%); }
+        /* Base Reset & Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #0B0E14;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 2026 Futuristic Animated Background Glows */
+        .glow-bg-1 {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            animation: floatGlow 8s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        .glow-bg-2 {
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            animation: floatGlow 10s infinite alternate-reverse ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 40px) scale(1.15); }
+        }
+
+        /* Container Card with Glassmorphism */
+        .login-card {
+            background: rgba(18, 24, 38, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 40px 32px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: cardAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* App Branding Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .app-title {
+            font-size: 42px;
+            font-weight: 900;
+            color: #EF4444;
+            letterSpacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+            animation: pulseTitle 3s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        @keyframes pulseTitle {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.04); text-shadow: 0 0 35px rgba(239, 68, 68, 0.8), 0 0 10px rgba(245, 158, 11, 0.5); }
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 14px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            color: #F59E0B;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .welcome-text {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #FFFFFF;
+        }
+
+        .subtitle-text {
+            font-size: 13px;
+            color: #9CA3AF;
+            text-align: center;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* Modern Floating Input Group */
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            color: #F59E0B;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(11, 14, 20, 0.8);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 16px 18px;
+            color: #FFFFFF;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field::placeholder {
+            color: #4B5563;
+        }
+
+        .input-field:focus {
+            border-color: #EF4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+            background: rgba(15, 20, 30, 0.95);
+        }
+
+        /* Interactive 2026 Pro Max Button */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            color: #FFFFFF;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(239, 68, 68, 0.6);
+            background: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Click Wave Effect (Ripple) */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .security-footer {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .security-footer span {
+            color: #10B981;
+        }
     </style>
 </head>
-<body class="purple-gradient min-height-screen flex flex-col items-center p-6">
+<body>
 
-    <div class="text-center mt-10 mb-12">
-        <h1 class="text-4xl font-black mb-2 tracking-tight">24,520,605</h1>
-        <p class="text-gray-400 text-lg">مستخدم يلتقون هنا</p>
-        <p class="text-sm text-purple-400 mt-2 italic">أهلاً بك في عالم الدردشة الصوتية</p>
+    <div class="glow-bg-1"></div>
+    <div class="glow-bg-2"></div>
+
+    <div class="login-card">
+        <div class="brand-header">
+            <div class="app-title">SIMOMi</div>
+            <br>
+            <div class="badge">AI VOICE PLATFORM</div>
+        </div>
+
+        <div class="welcome-text">مرحباً بك مجدداً</div>
+        <div class="subtitle-text">سجل دخولك بالبريد الإلكتروني للوصول إلى الغرف الصوتية</div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label class="input-label" for="email">البريد الإلكتروني</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    class="input-field" 
+                    placeholder="name@domain.com" 
+                    required
+                    autocomplete="off"
+                >
+            </div>
+
+            <button type="submit" class="submit-btn" id="btnSubmit">
+                تسجيل الدخول السريع
+            </button>
+        </form>
+
+        <div class="security-footer">
+            <span>🔒</span> اتصل آمن ومشفر بالكامل
+        </div>
     </div>
 
-    <div class="w-full max-w-xs space-y-4">
-        <button class="w-full py-4 bg-white text-black font-bold rounded-full flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-            <span>تسجيل الدخول بواسطة Google</span>
-        </button>
-        <button class="w-full py-4 bg-[#1877F2] text-white font-bold rounded-full flex items-center justify-center gap-2 hover:bg-blue-700 transition">
-            <span>تسجيل الدخول بواسطة Facebook</span>
-        </button>
-        <button class="w-full py-4 bg-black border border-cyan-400 text-white font-bold rounded-full flex items-center justify-center gap-2 hover:bg-gray-900 transition shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-            <span>تسجيل الدخول بواسطة TikTok</span>
-        </button>
-    </div>
+    <script>
+        // Button Ripple Click Effect (حركة الموجة عند الضغط)
+        const btn = document.getElementById('btnSubmit');
+        btn.addEventListener('click', function (e) {
+            let x = e.clientX - e.target.offsetLeft;
+            let y = e.clientY - e.target.offsetTop;
 
-    <div class="mt-auto mb-10 flex items-start gap-3 text-[11px] text-gray-500 max-w-xs">
-        <input type="checkbox" class="mt-1 rounded border-gray-700 bg-transparent">
-        <p>بالنقر فوق تسجيل الدخول، فإنك توافق على <span class="text-purple-400 underline cursor-pointer font-bold">شروط الاستخدام</span> و <span class="text-purple-400 underline cursor-pointer font-bold">سياسة الخصوصية</span>.</p>
-    </div>
+            let ripples = document.createElement('span');
+            ripples.className = 'ripple';
+            ripples.style.left = x + 'px';
+            ripples.style.top = y + 'px';
+            this.appendChild(ripples);
 
+            setTimeout(() => {
+                ripples.remove();
+            }, 600);
+        });
+
+        // Form Submit Function
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            
+            // إضافة أنيميشن بسيطة للزر عند الضغط والتأكيد
+            btn.innerText = 'جاري الاتصال...';
+            btn.style.opacity = '0.8';
+
+            setTimeout(() => {
+                alert(`تم تسجيل الدخول بنجاح! \nالبريد: ${email}`);
+                btn.innerText = 'تسجيل الدخول السريع';
+                btn.style.opacity = '1';
+            }, 800);
+        }
+    </script>
 </body>
 </html>
