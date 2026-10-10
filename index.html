@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Futuristic Login 2026</title>
+    <title>SIMOMi - Futuristic Login & Gender Selection 2026</title>
     <style>
         /* Base Reset */
         * {
@@ -50,8 +50,8 @@
             position: relative;
             z-index: 10;
             width: 90%;
-            max-width: 420px;
-            padding: 2px; /* For Border Beam */
+            max-width: 440px;
+            padding: 2px;
             border-radius: 28px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.03);
@@ -86,15 +86,14 @@
         .glass-card {
             position: relative;
             z-index: 2;
-            background: rgba(13, 17, 23, 0.75);
+            background: rgba(13, 17, 23, 0.85);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-radius: 26px;
-            padding: 40px 32px;
+            padding: 40px 30px;
             overflow: hidden;
         }
 
-        /* Mouse Spotlight Effect */
         .spotlight {
             position: absolute;
             top: 0;
@@ -106,17 +105,17 @@
             z-index: 3;
         }
 
-        /* Branding & Titles */
+        /* Stagger Fade Animations */
         .stagger-item {
             opacity: 0;
             transform: translateY(20px);
             animation: staggerFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .stagger-1 { animation-delay: 0.2s; }
-        .stagger-2 { animation-delay: 0.3s; }
-        .stagger-3 { animation-delay: 0.4s; }
-        .stagger-4 { animation-delay: 0.5s; }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
 
         @keyframes staggerFade {
             to { opacity: 1; transform: translateY(0); }
@@ -124,11 +123,11 @@
 
         .brand {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
         .logo-title {
-            font-size: 44px;
+            font-size: 42px;
             font-weight: 900;
             letter-spacing: 4px;
             background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
@@ -143,10 +142,31 @@
             margin-top: 6px;
         }
 
-        /* 5. Animated Floating Labels & Inputs with Focus Glow */
+        /* Views Control & Smooth Form Transition */
+        .view-step {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hidden-view {
+            display: none;
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        .active-view {
+            display: block;
+            animation: viewEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes viewEnter {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Form Controls */
         .input-box {
             position: relative;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
         .input-box input {
@@ -172,7 +192,6 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Focus & Floating Label Active States */
         .input-box input:focus,
         .input-box input:not(:placeholder-shown) {
             border-color: #EF4444;
@@ -188,7 +207,6 @@
             font-weight: 700;
         }
 
-        /* Password Reveal Toggle */
         .password-toggle {
             position: absolute;
             left: 16px;
@@ -203,7 +221,7 @@
 
         .password-toggle:hover { opacity: 1; }
 
-        /* 6. Magnetic Button with 3D Press & Ripple */
+        /* Buttons & Interactions */
         .btn-wrapper {
             position: relative;
             margin-top: 10px;
@@ -234,7 +252,6 @@
             box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
         }
 
-        /* Ripple Wave Effect */
         .ripple-wave {
             position: absolute;
             border-radius: 50%;
@@ -248,9 +265,114 @@
             to { transform: scale(4); opacity: 0; }
         }
 
+        /* 5. GENDER SELECTION CARDS & LIQUID GLASS OPTIONS */
+        .gender-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+        }
+
+        .gender-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #9CA3AF;
+            margin-bottom: 24px;
+        }
+
+        .gender-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .gender-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .gender-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .gender-card .avatar {
+            font-size: 42px;
+            margin-bottom: 10px;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .gender-card:hover .avatar {
+            transform: scale(1.2) rotate(6deg);
+        }
+
+        .gender-card .gender-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #E5E7EB;
+            transition: color 0.3s ease;
+        }
+
+        /* Selection Bouncy Animation & Custom Checkmark */
+        .gender-card .checkmark {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Active Selected State (Neon Glow & Bouncy Scale) */
+        .gender-card.selected {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: #EF4444;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+            transform: scale(1.04);
+            animation: bouncySelect 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes bouncySelect {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1.04); }
+        }
+
+        .gender-card.selected .gender-label {
+            color: #F59E0B;
+        }
+
+        .gender-card.selected .checkmark {
+            opacity: 1;
+            transform: scale(1);
+            background: #EF4444;
+            color: #FFFFFF;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+        }
+
         .footer-tag {
             text-align: center;
-            margin-top: 24px;
+            margin-top: 22px;
             font-size: 12px;
             color: #4B5563;
         }
@@ -261,43 +383,70 @@
     <!-- Aurora Background -->
     <div class="aurora-bg"></div>
 
-    <!-- Main Card -->
+    <!-- Main Card Container -->
     <div class="card-container">
-        <!-- Border Beam Anim -->
         <div class="border-beam"></div>
 
-        <!-- Glass Content Card -->
         <div class="glass-card" id="card">
             <div class="spotlight" id="spotlight"></div>
 
+            <!-- Brand Header -->
             <div class="brand stagger-item stagger-1">
                 <div class="logo-title">SIMOMi</div>
                 <div class="subtitle">AI Voice Hub • 2026 Edition</div>
             </div>
 
-            <form id="loginForm" onsubmit="handleSubmit(event)">
-                
-                <!-- Email Input -->
-                <div class="input-box stagger-item stagger-2">
-                    <input type="email" id="email" placeholder=" " required autocomplete="off">
-                    <label for="email">البريد الإلكتروني</label>
+            <!-- STEP 1: Login View -->
+            <div id="loginView" class="view-step active-view">
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                    
+                    <div class="input-box stagger-item stagger-2">
+                        <input type="email" id="email" placeholder=" " required autocomplete="off">
+                        <label for="email">البريد الإلكتروني</label>
+                    </div>
+
+                    <div class="input-box stagger-item stagger-3">
+                        <input type="password" id="password" placeholder=" " required>
+                        <label for="password">كلمة المرور</label>
+                        <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                    </div>
+
+                    <div class="btn-wrapper stagger-item stagger-4">
+                        <button type="submit" class="magnetic-btn mag-btn">
+                            تسجيل الدخول
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- STEP 2: Gender Selection View -->
+            <div id="genderView" class="view-step hidden-view">
+                <div class="gender-title">تحديد الهوية</div>
+                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك الصوتي</div>
+
+                <div class="gender-grid">
+                    <!-- Male Option -->
+                    <div class="gender-card" id="cardMale" onclick="selectGender('male')">
+                        <div class="checkmark">✓</div>
+                        <span class="avatar">👦</span>
+                        <div class="gender-label">ولد</div>
+                    </div>
+
+                    <!-- Female Option -->
+                    <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
+                        <div class="checkmark">✓</div>
+                        <span class="avatar">👧</span>
+                        <div class="gender-label">بنت</div>
+                    </div>
                 </div>
 
-                <!-- Password Input + Reveal -->
-                <div class="input-box stagger-item stagger-3">
-                    <input type="password" id="password" placeholder=" " required>
-                    <label for="password">كلمة المرور</label>
-                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
-                </div>
-
-                <!-- Magnetic Button -->
-                <div class="btn-wrapper stagger-item stagger-4">
-                    <button type="submit" class="magnetic-btn" id="magBtn">
-                        تسجيل الدخول
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="confirmSelection()">
+                        متابعة الدخول
                     </button>
                 </div>
-
-            </form>
+            </div>
 
             <div class="footer-tag stagger-item stagger-4">
                 🔒 نظام محمي بتشفير AI الذكي
@@ -307,6 +456,8 @@
     </div>
 
     <script>
+        let selectedGenderValue = null;
+
         // 1. Mouse Spotlight Tracking
         const card = document.getElementById('card');
         const spotlight = document.getElementById('spotlight');
@@ -320,36 +471,38 @@
         });
 
         // 2. Magnetic Button Effect
-        const btn = document.getElementById('magBtn');
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        const btns = document.querySelectorAll('.mag-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px)';
+            });
+
+            // Ripple Wave Effect
+            btn.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const circle = document.createElement('span');
+                const diameter = Math.max(rect.width, rect.height);
+                
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - rect.left - diameter / 2}px`;
+                circle.style.top = `${e.clientY - rect.top - diameter / 2}px`;
+                circle.classList.add('ripple-wave');
+
+                const ripple = this.getElementsByClassName('ripple-wave')[0];
+                if (ripple) ripple.remove();
+
+                this.appendChild(circle);
+            });
         });
 
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = 'translate(0px, 0px)';
-        });
-
-        // 3. Ripple Effect on Click
-        btn.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const circle = document.createElement('span');
-            const diameter = Math.max(rect.width, rect.height);
-            
-            circle.style.width = circle.style.height = `${diameter}px`;
-            circle.style.left = `${e.clientX - rect.left - diameter / 2}px`;
-            circle.style.top = `${e.clientY - rect.top - diameter / 2}px`;
-            circle.classList.add('ripple-wave');
-
-            const ripple = this.getElementsByClassName('ripple-wave')[0];
-            if (ripple) ripple.remove();
-
-            this.appendChild(circle);
-        });
-
-        // 4. Password Reveal Toggle
+        // 3. Password Reveal Toggle
         function togglePassword() {
             const passInput = document.getElementById('password');
             const toggleBtn = document.querySelector('.password-toggle');
@@ -362,16 +515,47 @@
             }
         }
 
-        // 5. Submit Micro-interaction
-        function handleSubmit(e) {
+        // 4. Smooth Transition from Login to Gender Selection
+        function handleLoginSubmit(e) {
             e.preventDefault();
-            btn.innerText = 'جاري التحقق...';
-            btn.style.opacity = '0.8';
+            const loginView = document.getElementById('loginView');
+            const genderView = document.getElementById('genderView');
+
+            loginView.style.opacity = '0';
+            loginView.style.transform = 'scale(0.9) translateY(-20px)';
+
             setTimeout(() => {
-                alert('تم تسجيل الدخول بنجاح فـ SIMOMi!');
-                btn.innerText = 'تسجيل الدخول';
-                btn.style.opacity = '1';
-            }, 1000);
+                loginView.classList.remove('active-view');
+                loginView.classList.add('hidden-view');
+
+                genderView.classList.remove('hidden-view');
+                genderView.classList.add('active-view');
+            }, 400);
+        }
+
+        // 5. Gender Card Selection Physics
+        function selectGender(gender) {
+            selectedGenderValue = gender;
+            const maleCard = document.getElementById('cardMale');
+            const femaleCard = document.getElementById('cardFemale');
+
+            if (gender === 'male') {
+                maleCard.classList.add('selected');
+                femaleCard.classList.remove('selected');
+            } else {
+                femaleCard.classList.add('selected');
+                maleCard.classList.remove('selected');
+            }
+        }
+
+        // 6. Confirmation Final Action
+        function confirmSelection() {
+            if (!selectedGenderValue) {
+                alert('المرجو اختيار الجنس أولاً (ولد أو بنت)');
+                return;
+            }
+            const genderText = selectedGenderValue === 'male' ? 'ولد 👦' : 'بنت 👧';
+            alert(`تم إكمال الإعداد بنجاح!\nالجنس المختار: ${genderText}`);
         }
     </script>
 </body>
