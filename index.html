@@ -727,7 +727,8 @@
     <div class="aurora-bg"></div>
 
     <div class="card-container">
-        <div class="border-beam"></div>
+        <!-- الإطار المتحرك (Border Beam) أضفنا له ID للتحكم في ظهوره -->
+        <div class="border-beam" id="borderBeam"></div>
 
         <div class="glass-card" id="card">
             <div class="spotlight" id="spotlight"></div>
@@ -990,7 +991,6 @@
 
     <!-- APP SCRIPT LOGIC -->
     <script>
-        // App State
         const userData = {
             email: '',
             gender: 'male',
@@ -1000,7 +1000,6 @@
             avatarSrc: 'https://via.placeholder.com/150'
         };
 
-        // Date Select Initializer
         window.addEventListener('DOMContentLoaded', () => {
             const daySel = document.getElementById('daySelect');
             const monthSel = document.getElementById('monthSelect');
@@ -1013,7 +1012,7 @@
             calculateAge();
         });
 
-        // Navigation Management
+        // Navigation Management & Border Beam Toggle
         function goToStep(stepId) {
             document.querySelectorAll('.view-step').forEach(el => {
                 el.classList.remove('active-view');
@@ -1024,10 +1023,15 @@
             target.classList.add('active-view');
 
             const navBar = document.getElementById('bottomNav');
+            const borderBeam = document.getElementById('borderBeam');
+
+            // إخفاء أو إظهار الإطار المتحرك والنافذة السفلية بناءً على المرحلة
             if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView') {
                 navBar.style.display = 'flex';
+                if(borderBeam) borderBeam.style.display = 'none'; // إخفاء الإطار في الواجهات الرئيسية
             } else {
                 navBar.style.display = 'none';
+                if(borderBeam) borderBeam.style.display = 'block'; // إظهار الإطار في مراحل التسجيل
             }
         }
 
@@ -1043,7 +1047,6 @@
             } else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
                 
-                // Populate Profile Data
                 document.getElementById('profileNameTxt').innerText = userData.name || 'مستخدم جديد';
                 document.getElementById('profileEmailTxt').innerText = userData.email || 'user@vlymax.app';
                 document.getElementById('profileGenderTxt').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
@@ -1056,7 +1059,6 @@
             }
         }
 
-        // Handle Real Firebase Authentication
         async function handleLoginSubmit(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
