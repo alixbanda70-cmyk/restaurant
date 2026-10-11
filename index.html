@@ -483,12 +483,18 @@
 
         .footer-tag { text-align: center; margin-top: auto; padding: 12px 0; font-size: 11px; color: #4B5563; }
 
-        /* DASHBOARD STYLES & HEADER LOGOUT BUTTON */
+        /* DASHBOARD STYLES & HEADER BUTTONS */
         .home-top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+        }
+
+        .home-top-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .home-title-tag {
@@ -498,6 +504,25 @@
             font-weight: 800;
             font-size: 15px;
             color: #F59E0B;
+        }
+
+        .top-search-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #F59E0B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .top-search-icon-btn:hover {
+            background: #F59E0B;
+            color: #07090E;
         }
 
         .logout-small-btn {
@@ -528,56 +553,86 @@
             color: #FFF;
         }
 
-        /* ID SEARCH BAR STYLES */
-        .id-search-box {
-            display: flex;
-            gap: 8px;
+        /* SEARCH INPUT DIALOG MODAL */
+        .search-input-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 240;
+            display: none;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 18px;
-            width: 100%;
+            padding: 20px;
         }
 
-        .id-search-input-wrapper {
-            position: relative;
-            flex: 1;
+        .search-input-modal-overlay.active {
+            display: flex;
+            animation: fadeInScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .id-search-input {
+        .search-dialog-box {
+            background: #131722;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 20px;
+            padding: 20px;
             width: 100%;
-            padding: 14px 42px 14px 14px;
+            max-width: 330px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+        }
+
+        .search-dialog-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #F59E0B;
+            margin-bottom: 14px;
+        }
+
+        .modal-search-input {
+            width: 100%;
+            padding: 14px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid rgba(245, 158, 11, 0.3);
-            border-radius: 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
             color: #FFFFFF;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             outline: none;
+            text-align: center;
+            margin-bottom: 16px;
         }
 
-        .id-search-input:focus {
+        .modal-search-input:focus {
             border-color: #F59E0B;
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
         }
 
-        .search-icon-inside {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #F59E0B;
+        .modal-search-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        .id-search-btn {
-            padding: 14px 18px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: none;
-            color: #07090E;
-            font-size: 14px;
+        .modal-search-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-            white-space: nowrap;
+            border: none;
+        }
+
+        .modal-search-btn.confirm {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: #07090E;
+        }
+
+        .modal-search-btn.cancel {
+            background: rgba(255, 255, 255, 0.08);
+            color: #9CA3AF;
         }
 
         /* SEARCH RESULT MODAL */
@@ -587,7 +642,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             z-index: 250;
             display: none;
@@ -675,6 +730,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            margin-top: 10px;
             margin-bottom: 20px;
         }
 
@@ -1491,15 +1547,25 @@
                 </div>
             </div>
 
-            <!-- STEP 7: MAIN HOME DASHBOARD WITH ID SEARCH BAR -->
+            <!-- STEP 7: MAIN HOME DASHBOARD WITH TOP SEARCH ICON -->
             <div id="homeMainView" class="view-step hidden-view">
                 <div class="home-top-bar">
-                    <div class="home-title-tag">
-                        <svg class="svg-icon lg" style="stroke: #F59E0B;" viewBox="0 0 24 24">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                        <span>الرئيسية</span>
+                    <div class="home-top-left">
+                        <div class="home-title-tag">
+                            <svg class="svg-icon lg" style="stroke: #F59E0B;" viewBox="0 0 24 24">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <span>الرئيسية</span>
+                        </div>
+
+                        <!-- TOP COMPACT SEARCH BUTTON ICON -->
+                        <button type="button" class="top-search-icon-btn" onclick="openSearchInputDialog()" title="بحث عن مستخدم">
+                            <svg class="svg-icon" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
                     </div>
 
                     <button type="button" class="logout-small-btn" onclick="handleFullLogout()">
@@ -1510,18 +1576,6 @@
                         </svg>
                         <span>تسجيل الخروج</span>
                     </button>
-                </div>
-
-                <!-- NEW SEARCH BAR FOR ID -->
-                <div class="id-search-box">
-                    <div class="id-search-input-wrapper">
-                        <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="أدخل ID المستخدم (7 أرقام)..." autocomplete="off">
-                        <svg class="svg-icon search-icon-inside" viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </div>
-                    <button type="button" class="id-search-btn" onclick="searchUserById()">بحث 🔍</button>
                 </div>
 
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
@@ -1535,7 +1589,19 @@
                 </button>
             </div>
 
-            <!-- SEARCHED USER PROFILE MODAL -->
+            <!-- SEARCH INPUT DIALOG MODAL -->
+            <div class="search-input-modal-overlay" id="searchInputModal">
+                <div class="search-dialog-box">
+                    <div class="search-dialog-title">البحث عن مستخدم بـ ID</div>
+                    <input type="number" id="modalSearchIdInput" class="modal-search-input" placeholder="أدخل ID (7 أرقام)" autocomplete="off">
+                    <div class="modal-search-actions">
+                        <button type="button" class="modal-search-btn confirm" onclick="searchUserById()">بحث 🔍</button>
+                        <button type="button" class="modal-search-btn cancel" onclick="closeSearchInputDialog()">إلغاء</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH RESULT MODAL -->
             <div class="user-profile-modal-overlay" id="searchProfileModal">
                 <div class="searched-profile-card">
                     <img id="searchedAvatarImg" class="searched-avatar" src="https://via.placeholder.com/150" alt="Avatar">
@@ -1941,9 +2007,19 @@
             calculateAge();
         });
 
+        /* SEARCH DIALOG FUNCTIONS */
+        function openSearchInputDialog() {
+            document.getElementById('modalSearchIdInput').value = '';
+            document.getElementById('searchInputModal').classList.add('active');
+        }
+
+        function closeSearchInputDialog() {
+            document.getElementById('searchInputModal').classList.remove('active');
+        }
+
         /* FIRESTORE SEARCH BY ID FEATURE */
         async function searchUserById() {
-            const searchInput = document.getElementById('searchUserIdInput').value.trim();
+            const searchInput = document.getElementById('modalSearchIdInput').value.trim();
             if (!searchInput) {
                 alert('الرجاء إدخال ID مكون من 7 أرقام للبحث');
                 return;
@@ -1953,6 +2029,8 @@
                 const usersRef = window.collection(window.db, "users");
                 const q = window.query(usersRef, window.where("id", "==", searchInput));
                 const querySnapshot = await window.getDocs(q);
+
+                closeSearchInputDialog();
 
                 if (!querySnapshot.empty) {
                     const userDoc = querySnapshot.docs[0].data();
@@ -2225,7 +2303,7 @@
                     const currentUser = window.firebaseAuth.currentUser;
                     if (currentUser) {
                         await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
-                            avatarSrc: userData.avatarSrc
+                            avatarSrc: userData.avatarSrc;
                         });
                     }
                 };
