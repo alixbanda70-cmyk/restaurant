@@ -1346,7 +1346,7 @@
                             </div>
                         </div>
                         <div class="card-footer-row">
-                            <span>ID: 2026-9981-VIP</span>
+                            <span id="finalCardId">ID: 0000000</span>
                             <span>VERIFIED USER ✓</span>
                         </div>
                     </div>
@@ -1583,7 +1583,7 @@
                 <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
             </div>
 
-            <!-- STEP 12: EDITABLE ACCOUNT PROFILE VIEW -->
+            <!-- STEP 12: EDITABLE ACCOUNT PROFILE VIEW WITH 7-DIGIT FIRESTORE ID -->
             <div id="profileView" class="view-step hidden-view">
                 <div class="profile-card">
                     <!-- Avatar Preview & Edit Zone -->
@@ -1597,6 +1597,12 @@
                     <input type="text" id="profileNameInput" class="profile-edit-name-input" placeholder="اسم المستخدم">
 
                     <div class="profile-data-box">
+                        <!-- User 7-Digit ID Row -->
+                        <div class="data-row">
+                            <span class="data-label">معرف الحساب (ID)</span>
+                            <span class="data-val" id="profileUserIdTxt" style="color: #F59E0B; font-size: 15px;">-</span>
+                        </div>
+
                         <!-- Editable Gender Field -->
                         <div class="data-row">
                             <span class="data-label">الجنس</span>
@@ -1684,11 +1690,11 @@
                 </div>
             </div>
 
-            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
+            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Firestore Active</div>
         </div>
     </div>
 
-    <!-- FIREBASE MODULE SYSTEM -->
+    <!-- FIREBASE MODULE SYSTEM WITH FIRESTORE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
@@ -1697,28 +1703,43 @@
             signInWithEmailAndPassword,
             signOut
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            updateDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDoPrnf3HXH8zipsJ5ROXApWu20Vm56QhY",
-            authDomain: "vlymax.firebaseapp.com",
-            projectId: "vlymax",
-            storageBucket: "vlymax.firebasestorage.app",
-            messagingSenderId: "825269785341",
-            appId: "1:825269785341:web:74b34d4f6366a1f594e494"
+            apiKey: "AIzaSyARBm97R3Xu8fuyVvkSYJh5OLbFE0Id1Hs",
+            authDomain: "simoni-85d16.firebaseapp.com",
+            projectId: "simoni-85d16",
+            storageBucket: "simoni-85d16.firebasestorage.app",
+            messagingSenderId: "254262974921",
+            appId: "1:254262974921:web:fe4ba7afd9c4341a8f3018",
+            measurementId: "G-83EZECZVP1"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         window.firebaseAuth = auth;
+        window.db = db;
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.signOut = signOut;
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
     </script>
 
     <!-- APP SCRIPT LOGIC -->
     <script>
         const userData = {
+            id: '', 
             email: '',
             gender: 'male',
             name: '',
@@ -1735,6 +1756,10 @@
 
         const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`;
         const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+
+        function generate7DigitId() {
+            return Math.floor(1000000 + Math.random() * 9000000).toString();
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             const daySel = document.getElementById('daySelect');
@@ -1794,10 +1819,11 @@
             } else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
                 
-                // Populate Profile fields for editing
                 document.getElementById('profileNameInput').value = userData.name || 'مستخدم جديد';
                 document.getElementById('profileGenderSelect').value = userData.gender || 'male';
                 document.getElementById('profileAgeInput').value = userData.age || 0;
+                document.getElementById('profileUserIdTxt').innerText = userData.id || '0000000';
+                
                 if(userData.avatarSrc) {
                     document.getElementById('profileAvatarImg').src = userData.avatarSrc;
                 }
@@ -1818,7 +1844,7 @@
             }
         }
 
-        function saveProfileChanges() {
+        async function saveProfileChanges() {
             const newName = document.getElementById('profileNameInput').value.trim();
             const newGender = document.getElementById('profileGenderSelect').value;
             const newAge = parseInt(document.getElementById('profileAgeInput').value) || 0;
@@ -1832,10 +1858,25 @@
             userData.gender = newGender;
             userData.age = newAge;
 
-            // Update Gold Card
+            // Sync with Firestore if logged in
+            const currentUser = window.firebaseAuth.currentUser;
+            if (currentUser) {
+                try {
+                    await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
+                        name: userData.name,
+                        gender: userData.gender,
+                        age: userData.age,
+                        avatarSrc: userData.avatarSrc
+                    });
+                } catch(e) {
+                    console.log("Firestore update error:", e);
+                }
+            }
+
             document.getElementById('finalCardName').innerText = userData.name;
             document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
             document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            document.getElementById('finalCardId').innerText = 'ID: ' + userData.id;
             if (userData.avatarSrc) {
                 document.getElementById('finalCardAvatar').src = userData.avatarSrc;
             }
@@ -1848,6 +1889,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             userData.email = email;
+            
             const errorDiv = document.getElementById('authError');
             const loginBtn = document.getElementById('loginBtn');
 
@@ -1855,21 +1897,40 @@
             loginBtn.innerText = "جاري التحقق...";
 
             try {
-                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                let userCred;
+                try {
+                    userCred = await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                } catch(signInErr) {
+                    userCred = await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                }
+
+                const uid = userCred.user.uid;
+                const userDocRef = window.doc(window.db, "users", uid);
+                const userSnap = await window.getDoc(userDocRef);
+
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    userData.id = data.id;
+                    userData.name = data.name || '';
+                    userData.gender = data.gender || 'male';
+                    userData.age = data.age || 0;
+                    userData.avatarSrc = data.avatarSrc || 'https://via.placeholder.com/150';
+                } else {
+                    userData.id = generate7DigitId();
+                    await window.setDoc(userDocRef, {
+                        id: userData.id,
+                        email: email,
+                        name: '',
+                        gender: 'male',
+                        age: 0,
+                        avatarSrc: 'https://via.placeholder.com/150'
+                    });
+                }
+
                 goToStep('genderView');
             } catch (err) {
-                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
-                    try {
-                        await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
-                        goToStep('genderView');
-                    } catch (createErr) {
-                        errorDiv.innerText = "كلمة المرور ضعيفة أو الإيميل غير صحيح!";
-                        errorDiv.style.display = 'block';
-                    }
-                } else {
-                    errorDiv.innerText = "حدث خطأ: " + err.message;
-                    errorDiv.style.display = 'block';
-                }
+                errorDiv.innerText = "حدث خطأ في المصادقة: " + err.message;
+                errorDiv.style.display = 'block';
             } finally {
                 loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
             }
@@ -1886,6 +1947,7 @@
                 }
                 document.getElementById('email').value = '';
                 document.getElementById('password').value = '';
+                userData.id = '';
                 goToStep('loginView');
             }
         }
@@ -1913,10 +1975,16 @@
             }
         }
 
-        function saveNameAndNext() {
+        async function saveNameAndNext() {
             const input = document.getElementById('userNameInput');
             if (input.value.trim().length >= 3) {
                 userData.name = input.value.trim();
+                const currentUser = window.firebaseAuth.currentUser;
+                if (currentUser) {
+                    await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
+                        name: userData.name
+                    });
+                }
                 goToStep('dobView');
             } else {
                 alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل');
@@ -1940,15 +2008,22 @@
             badge.classList.add('show');
         }
 
-        function previewImage(e) {
+        async function previewImage(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(evt) {
+                reader.onload = async function(evt) {
                     document.getElementById('avatarPreview').src = evt.target.result;
                     document.getElementById('avatarPreview').style.display = 'block';
                     document.getElementById('uploadPlaceholder').style.display = 'none';
                     userData.avatarSrc = evt.target.result;
+
+                    const currentUser = window.firebaseAuth.currentUser;
+                    if (currentUser) {
+                        await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
+                            avatarSrc: userData.avatarSrc
+                        });
+                    }
                 };
                 reader.readAsDataURL(file);
             }
@@ -2004,7 +2079,6 @@
                 roomContainer.style.backgroundPosition = 'center';
             }
             
-            // Set Dynamic Room Name & Avatar in Live Room
             document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
             if (userData.roomAvatarSrc) {
                 document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc;
@@ -2149,6 +2223,7 @@
             document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
             document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
             document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            document.getElementById('finalCardId').innerText = 'ID: ' + (userData.id || '0000000');
             if (userData.avatarSrc) {
                 document.getElementById('finalCardAvatar').src = userData.avatarSrc;
             }
