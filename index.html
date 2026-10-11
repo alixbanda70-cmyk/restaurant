@@ -88,7 +88,7 @@
 
         .brand {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             margin-top: 10px;
             transition: all 0.3s ease;
         }
@@ -516,13 +516,17 @@
             color: #FFF;
         }
 
-        /* ID SEARCH BAR STYLES (MOVED TO TOP) */
-        .id-search-box {
+        /* TOP GLOBAL ID SEARCH BAR (JUST UNDER SIMOMi LOGO) */
+        .top-global-search-box {
             display: flex;
             gap: 8px;
             align-items: center;
             margin-bottom: 20px;
             width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .id-search-input-wrapper {
@@ -532,12 +536,12 @@
 
         .id-search-input {
             width: 100%;
-            padding: 14px 42px 14px 14px;
+            padding: 12px 40px 12px 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1.5px solid rgba(245, 158, 11, 0.3);
-            border-radius: 14px;
+            border-radius: 12px;
             color: #FFFFFF;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             outline: none;
         }
@@ -549,19 +553,19 @@
 
         .search-icon-inside {
             position: absolute;
-            right: 14px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: #F59E0B;
         }
 
         .id-search-btn {
-            padding: 14px 18px;
-            border-radius: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
             background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
             border: none;
             color: #07090E;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
@@ -1304,9 +1308,23 @@
 
     <div class="card-container" id="cardContainer">
         <div class="glass-card" id="card">
+            
+            <!-- GLOBAL BRAND LOGO -->
             <div class="brand" id="mainBrandHeader">
                 <div class="logo-title">SIMOMi</div>
                 <div class="subtitle">دردشـة صـوتـيـة</div>
+            </div>
+
+            <!-- GLOBAL SEARCH BAR (MOVED TO TOP RIGHT UNDER LOGO) -->
+            <div class="top-global-search-box" id="globalSearchBox">
+                <div class="id-search-input-wrapper">
+                    <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="بحث بـ ID المستخدم (7 أرقام)..." autocomplete="off">
+                    <svg class="svg-icon search-icon-inside" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <button type="button" class="id-search-btn" onclick="searchUserById()">بحث 🔍</button>
             </div>
 
             <!-- STEP 1: Login View -->
@@ -1466,7 +1484,7 @@
                 </div>
             </div>
 
-            <!-- STEP 7: MAIN HOME DASHBOARD (ID SEARCH IS AT THE VERY TOP NOW) -->
+            <!-- STEP 7: MAIN HOME DASHBOARD -->
             <div id="homeMainView" class="view-step hidden-view">
                 <div class="home-top-bar">
                     <div class="home-title-tag">
@@ -1485,18 +1503,6 @@
                         </svg>
                         <span>تسجيل الخروج</span>
                     </button>
-                </div>
-
-                <!-- ID SEARCH BAR PLACED AT THE TOP (ABOVE CREATE ROOM BUTTON) -->
-                <div class="id-search-box">
-                    <div class="id-search-input-wrapper">
-                        <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="أدخل ID المستخدم (7 أرقام)..." autocomplete="off">
-                        <svg class="svg-icon search-icon-inside" viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </div>
-                    <button type="button" class="id-search-btn" onclick="searchUserById()">بحث 🔍</button>
                 </div>
 
                 <!-- CREATE ROOM BUTTON -->
@@ -1612,49 +1618,19 @@
 
                     <div class="mics-grid-container">
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)">
-                                <div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">1</span>
-                            </div>
-                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)">
-                                <div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">2</span>
-                            </div>
-                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)">
-                                <div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">3</span>
-                            </div>
-                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)">
-                                <div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">4</span>
-                            </div>
-                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)">
-                                <div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">5</span>
-                            </div>
+                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">1</span></div>
+                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">2</span></div>
+                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">3</span></div>
+                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">4</span></div>
+                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">5</span></div>
                         </div>
 
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)">
-                                <div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">6</span>
-                            </div>
-                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)">
-                                <div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">7</span>
-                            </div>
-                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)">
-                                <div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">8</span>
-                            </div>
-                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)">
-                                <div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">9</span>
-                            </div>
-                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)">
-                                <div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-                                <span class="mic-number">10</span>
-                            </div>
+                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">6</span></div>
+                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">7</span></div>
+                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">8</span></div>
+                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">9</span></div>
+                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">10</span></div>
                         </div>
                     </div>
 
@@ -1875,14 +1851,19 @@
 
             const navBar = document.getElementById('bottomNav');
             const cardContainer = document.getElementById('cardContainer');
-            const brandHeader = document.getElementById('mainBrandHeader');
+            const globalSearchBox = document.getElementById('globalSearchBox');
 
             if(stepId === 'liveRoomView') {
                 navBar.style.display = 'none';
-                brandHeader.style.display = 'none';
+                globalSearchBox.style.display = 'none';
                 cardContainer.classList.add('clean-mode');
             } else {
-                brandHeader.style.display = 'block';
+                if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView') {
+                    globalSearchBox.style.display = 'flex';
+                } else {
+                    globalSearchBox.style.display = 'none';
+                }
+
                 if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView') {
                     navBar.style.display = 'flex';
                     cardContainer.classList.add('clean-mode');
@@ -1990,6 +1971,7 @@
                 document.getElementById('email').value = '';
                 document.getElementById('password').value = '';
                 userData.id = '';
+                document.getElementById('globalSearchBox').style.display = 'none';
                 goToStep('loginView');
             }
         }
@@ -2200,6 +2182,9 @@
             document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
             document.getElementById('finalCardId').innerText = 'ID: ' + (userData.id || '0000000');
             if (userData.avatarSrc) document.getElementById('finalCardAvatar').src = userData.avatarSrc;
+            
+            // Show global search bar once entering main platform
+            document.getElementById('globalSearchBox').style.display = 'flex';
             goToStep('cardResultView');
         }
     </script>
