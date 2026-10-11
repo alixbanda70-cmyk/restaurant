@@ -518,10 +518,10 @@
 
         /* TOP GLOBAL ID SEARCH BAR (JUST UNDER SIMOMi LOGO) */
         .top-global-search-box {
-            display: flex;
+            display: none; /* مخفي في البداية حتى يتم تسجيل الدخول */
             gap: 8px;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             width: 100%;
             background: rgba(255, 255, 255, 0.02);
             padding: 10px;
@@ -1315,7 +1315,7 @@
                 <div class="subtitle">دردشـة صـوتـيـة</div>
             </div>
 
-            <!-- GLOBAL SEARCH BAR (MOVED TO TOP RIGHT UNDER LOGO) -->
+            <!-- GLOBAL SEARCH BAR (PLACED DIRECTLY UNDER SIMOMi LOGO) -->
             <div class="top-global-search-box" id="globalSearchBox">
                 <div class="id-search-input-wrapper">
                     <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="بحث بـ ID المستخدم (7 أرقام)..." autocomplete="off">
