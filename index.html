@@ -1491,7 +1491,7 @@
                 </div>
             </div>
 
-            <!-- STEP 7: MAIN HOME DASHBOARD WITH ID SEARCH BAR -->
+            <!-- STEP 7: MAIN HOME DASHBOARD WITH ID SEARCH BAR MOVED TO TOP -->
             <div id="homeMainView" class="view-step hidden-view">
                 <div class="home-top-bar">
                     <div class="home-title-tag">
@@ -1512,7 +1512,7 @@
                     </button>
                 </div>
 
-                <!-- NEW SEARCH BAR FOR ID -->
+                <!-- ID SEARCH BAR MOVED TO THE TOP -->
                 <div class="id-search-box">
                     <div class="id-search-input-wrapper">
                         <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="أدخل ID المستخدم (7 أرقام)..." autocomplete="off">
@@ -2062,7 +2062,6 @@
             userData.gender = newGender;
             userData.age = newAge;
 
-            // Sync with Firestore if logged in
             const currentUser = window.firebaseAuth.currentUser;
             if (currentUser) {
                 try {
