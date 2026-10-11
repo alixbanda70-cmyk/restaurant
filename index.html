@@ -61,7 +61,7 @@
             animation: springPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        /* وضعية إزالة الإطار والظل في الواجهات الرئيسية */
+        /* وضعية إزالة الإطار والظل في الواجهات الداخلية */
         .card-container.clean-mode {
             padding: 0 !important;
             background: transparent !important;
@@ -357,10 +357,6 @@
             margin-bottom: 24px;
         }
 
-        .date-select-wrapper {
-            position: relative;
-        }
-
         .date-select-wrapper select {
             width: 100%;
             padding: 16px 12px;
@@ -446,7 +442,7 @@
         .upload-placeholder-content { text-align: center; pointer-events: none; }
         .upload-icon { font-size: 28px; margin-bottom: 4px; display: block; }
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
-        #avatarInput { display: none; }
+        #avatarInput, #roomAvatarInput, #roomBgInput { display: none; }
 
         /* PREMIUM GOLD CARD UI */
         .gold-card-wrapper {
@@ -642,6 +638,133 @@
         .welcome-banner p {
             font-size: 12px;
             color: #9CA3AF;
+        }
+
+        /* ROOM BACKGROUND SELECTION STYLES */
+        .bg-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .bg-option {
+            height: 90px;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bg-option.selected {
+            border-color: #F59E0B;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+            transform: scale(1.03);
+        }
+
+        /* LIVE VOICE ROOM (10 MICROPHONES UI) */
+        .live-room-container {
+            position: relative;
+            width: 100%;
+            border-radius: 24px;
+            padding: 20px 14px 70px 14px;
+            min-height: 480px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.7);
+        }
+
+        .live-room-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            width: fit-content;
+            margin-bottom: 30px;
+        }
+
+        .live-room-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #F59E0B;
+        }
+
+        .live-room-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #FFF;
+        }
+
+        /* Mic Grid 5 Top - 5 Bottom */
+        .mics-grid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .mics-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mic-seat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            width: 58px;
+        }
+
+        .mic-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #FFF;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mic-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .mic-seat.occupied .mic-circle {
+            border-color: #10B981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+        }
+
+        .mic-number {
+            font-size: 11px;
+            font-weight: 800;
+            color: #E5E7EB;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
         /* PROFILE VIEW STYLES */
@@ -910,7 +1033,7 @@
 
             <!-- STEP 7: MAIN HOME DASHBOARD -->
             <div id="homeMainView" class="view-step hidden-view">
-                <button type="button" class="create-room-btn" onclick="alert('جاري إنشاء غرفة الدردشة...')">
+                <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
                     <span>🎙️</span>
                     <span>إنشاء غرفة دردشة</span>
                 </button>
@@ -921,7 +1044,121 @@
                 </div>
             </div>
 
-            <!-- STEP 8: MESSAGES VIEW -->
+            <!-- STEP 8: CREATE ROOM CONFIG VIEW (NAME & AVATAR) -->
+            <div id="createRoomView" class="view-step hidden-view">
+                <div class="step-title">إنشاء غرفة جديدة</div>
+                <div class="step-subtitle">اختر صورة الغرفة وأدخل اسمها</div>
+
+                <div class="upload-container">
+                    <div class="avatar-upload-zone" onclick="document.getElementById('roomAvatarInput').click()">
+                        <img id="roomAvatarPreview" src="" alt="Room Avatar">
+                        <div class="upload-placeholder-content" id="roomUploadPlaceholder">
+                            <span class="upload-icon">🏛️</span>
+                            <span class="upload-text">صورة الغرفة</span>
+                        </div>
+                    </div>
+                    <input type="file" id="roomAvatarInput" accept="image/*" onchange="previewRoomImage(event)">
+                </div>
+
+                <div class="input-box">
+                    <input type="text" id="roomNameInput" placeholder=" " required autocomplete="off">
+                    <label for="roomNameInput">اسم الغرفة الصوتية...</label>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="goToRoomBgStep()">
+                        متابعة لاختيار الخلفية 🎨
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 9: CHOOSE ROOM BACKGROUND VIEW -->
+            <div id="roomBgView" class="view-step hidden-view">
+                <div class="step-title">خلفية الغرفة</div>
+                <div class="step-subtitle">اختر خلفية مميزة لغرفتك الصوتية</div>
+
+                <div class="bg-grid">
+                    <div class="bg-option selected" style="background-image: linear-gradient(135deg, #1e3c72, #2a5298);" onclick="selectBgOption(this, 'linear-gradient(135deg, #1e3c72, #2a5298)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #2b5876, #4e4376);" onclick="selectBgOption(this, 'linear-gradient(135deg, #2b5876, #4e4376)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
+                </div>
+
+                <div class="upload-container" style="margin-bottom: 16px;">
+                    <button type="button" class="magnetic-btn mag-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">
+                        📷 رفع خلفية خاصة
+                    </button>
+                    <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn mag-btn" onclick="launchLiveRoom()">
+                        إطلاق الغرفة الآن 🚀
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 10: LIVE VOICE ROOM VIEW (10 MICS) -->
+            <div id="liveRoomView" class="view-step hidden-view">
+                <div class="live-room-container" id="liveRoomBg">
+                    <div class="live-room-header">
+                        <img id="liveRoomHeaderAvatar" src="https://via.placeholder.com/150" class="live-room-avatar" alt="Room">
+                        <span class="live-room-title" id="liveRoomHeaderTitle">غرفة الدردشة</span>
+                    </div>
+
+                    <!-- 10 Microphones Grid (5 Top, 5 Bottom) -->
+                    <div class="mics-grid-container">
+                        <!-- Top Row: Mics 1 to 5 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" onclick="toggleMicSeat(1, this)">
+                                <div class="mic-circle" id="micCircle-1">🎙️</div>
+                                <span class="mic-number">1</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(2, this)">
+                                <div class="mic-circle" id="micCircle-2">🎙️</div>
+                                <span class="mic-number">2</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(3, this)">
+                                <div class="mic-circle" id="micCircle-3">🎙️</div>
+                                <span class="mic-number">3</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(4, this)">
+                                <div class="mic-circle" id="micCircle-4">🎙️</div>
+                                <span class="mic-number">4</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(5, this)">
+                                <div class="mic-circle" id="micCircle-5">🎙️</div>
+                                <span class="mic-number">5</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Row: Mics 6 to 10 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" onclick="toggleMicSeat(6, this)">
+                                <div class="mic-circle" id="micCircle-6">🎙️</div>
+                                <span class="mic-number">6</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(7, this)">
+                                <div class="mic-circle" id="micCircle-7">🎙️</div>
+                                <span class="mic-number">7</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(8, this)">
+                                <div class="mic-circle" id="micCircle-8">🎙️</div>
+                                <span class="mic-number">8</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(9, this)">
+                                <div class="mic-circle" id="micCircle-9">🔒</div>
+                                <span class="mic-number">9</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(10, this)">
+                                <div class="mic-circle" id="micCircle-10">🎙️</div>
+                                <span class="mic-number">10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 11: MESSAGES VIEW -->
             <div id="messagesView" class="view-step hidden-view">
                 <div class="step-title">الرسائل</div>
                 <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
@@ -930,7 +1167,7 @@
                 </div>
             </div>
 
-            <!-- STEP 9: ACCOUNT PROFILE VIEW -->
+            <!-- STEP 12: ACCOUNT PROFILE VIEW -->
             <div id="profileView" class="view-step hidden-view">
                 <div class="profile-card">
                     <div class="profile-img-large">
@@ -1010,7 +1247,10 @@
             name: '',
             dob: { day: 1, month: 1, year: 2000 },
             age: 0,
-            avatarSrc: 'https://via.placeholder.com/150'
+            avatarSrc: 'https://via.placeholder.com/150',
+            roomName: '',
+            roomAvatarSrc: '',
+            roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
         };
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -1038,8 +1278,7 @@
             const navBar = document.getElementById('bottomNav');
             const cardContainer = document.getElementById('cardContainer');
 
-            // تفعيل وضع النظافة (إزالة الإطار والظل الخارجي) في الواجهات الرئيسية فقط
-            if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView') {
+            if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView' || stepId === 'liveRoomView') {
                 navBar.style.display = 'flex';
                 cardContainer.classList.add('clean-mode');
             } else {
@@ -1165,6 +1404,75 @@
                     userData.avatarSrc = evt.target.result;
                 };
                 reader.readAsDataURL(file);
+            }
+        }
+
+        function previewRoomImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('roomAvatarPreview').src = evt.target.result;
+                    document.getElementById('roomAvatarPreview').style.display = 'block';
+                    document.getElementById('roomUploadPlaceholder').style.display = 'none';
+                    userData.roomAvatarSrc = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function goToRoomBgStep() {
+            const roomName = document.getElementById('roomNameInput').value.trim();
+            if (!roomName) {
+                alert('الرجاء إدخال اسم الغرفة');
+                return;
+            }
+            userData.roomName = roomName;
+            goToStep('roomBgView');
+        }
+
+        function selectBgOption(el, bgValue) {
+            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            userData.roomBg = bgValue;
+        }
+
+        function previewRoomBg(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    userData.roomBg = `url('${evt.target.result}')`;
+                    alert('تم اختيار الخلفية بنجاح!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function launchLiveRoom() {
+            const roomContainer = document.getElementById('liveRoomBg');
+            if (userData.roomBg.startsWith('linear-gradient') || userData.roomBg.startsWith('url')) {
+                roomContainer.style.background = userData.roomBg;
+                roomContainer.style.backgroundSize = 'cover';
+            }
+            document.getElementById('liveRoomHeaderTitle').innerText = userData.roomName || 'غرفة جديدة';
+            if (userData.roomAvatarSrc) {
+                document.getElementById('liveRoomHeaderAvatar').src = userData.roomAvatarSrc;
+            } else {
+                document.getElementById('liveRoomHeaderAvatar').src = userData.avatarSrc;
+            }
+            goToStep('liveRoomView');
+        }
+
+        // Toggle Mic Seat Occupancy
+        function toggleMicSeat(micIndex, seatEl) {
+            const circle = document.getElementById(`micCircle-${micIndex}`);
+            if (seatEl.classList.contains('occupied')) {
+                seatEl.classList.remove('occupied');
+                circle.innerHTML = micIndex === 9 ? '🔒' : '🎙️';
+            } else {
+                seatEl.classList.add('occupied');
+                circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
             }
         }
 
