@@ -40,13 +40,13 @@
             filter: blur(40px);
         }
 
-        /* 2. Full Screen App Container */
+        /* 2. Full Screen Mobile App Container */
         .card-container {
             position: relative;
             z-index: 10;
             width: 100%;
             height: 100vh;
-            max-width: 480px; /* يحافظ على مظهر الهاتف الحقيقي حتى في الشاشات الكبيرة */
+            max-width: 440px;
             background: #0D1117;
             display: flex;
             flex-direction: column;
@@ -54,29 +54,8 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        .border-beam {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent 0 300deg, #EF4444 320deg, #F59E0B 360deg);
-            animation: rotateBeam 4s linear infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
         .card-container.clean-mode {
             background: #07090E !important;
-        }
-
-        .card-container.clean-mode .border-beam {
-            display: none !important;
-        }
-
-        @keyframes rotateBeam {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .glass-card {
@@ -86,21 +65,10 @@
             height: 100%;
             background: rgba(13, 17, 23, 0.95);
             backdrop-filter: blur(25px);
-            padding: 24px 16px 80px 16px; /* ترك مساحة للشريط السفلي */
+            padding: 20px 16px 75px 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-        }
-
-        .spotlight {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.05), transparent 40%);
-            z-index: 3;
         }
 
         .brand {
@@ -116,7 +84,6 @@
             background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
         }
 
         .subtitle {
@@ -161,7 +128,6 @@
             color: #FFFFFF;
             font-size: 15px;
             outline: none;
-            transition: all 0.3s;
         }
 
         .input-box label {
@@ -178,7 +144,6 @@
         .input-box input:focus,
         .input-box input:not(:placeholder-shown) {
             border-color: #EF4444;
-            background: rgba(239, 68, 68, 0.04);
         }
 
         .input-box input:focus ~ label,
@@ -238,7 +203,6 @@
             padding: 24px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
         }
 
         .gender-card .avatar { font-size: 42px; margin-bottom: 10px; display: block; }
@@ -263,7 +227,6 @@
             justify-content: center;
             font-size: 12px;
             opacity: 0;
-            transition: opacity 0.3s;
         }
 
         .gender-card.selected .checkmark { opacity: 1; }
@@ -552,13 +515,13 @@
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
-        /* LIVE VOICE ROOM (10 MICS - FULLFIT CONTAINER) */
+        /* LIVE VOICE ROOM (10 MICS - PERFECTLY CONTAINED) */
         .live-room-container {
             position: relative;
             width: 100%;
             flex: 1;
             border-radius: 20px;
-            padding: 14px 10px;
+            padding: 16px 12px;
             background-size: cover;
             background-position: center;
             display: flex;
@@ -594,21 +557,20 @@
             color: #FFF;
         }
 
-        /* Mics Grid inside container */
+        /* Mics Grid inside background */
         .mics-grid-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
             width: 100%;
-            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
 
         .mics-row {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
             width: 100%;
-            padding: 0 4px;
         }
 
         .mic-seat {
@@ -617,21 +579,21 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            width: 52px;
+            width: 50px;
         }
 
         .mic-circle {
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             color: #FFF;
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
             position: relative;
             overflow: hidden;
         }
@@ -647,7 +609,7 @@
 
         .mic-seat.occupied .mic-circle {
             border-color: #10B981;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
         }
 
         .mic-number {
@@ -718,4 +680,655 @@
         .bottom-nav-bar {
             position: absolute;
             bottom: 0;
-            left
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(13, 17, 23, 0.98);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: #6B7280;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-btn.active { color: #F59E0B; font-weight: 800; }
+        .nav-btn-icon { font-size: 20px; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+
+    <div class="card-container" id="cardContainer">
+        <div class="glass-card" id="card">
+            <div class="spotlight" id="spotlight"></div>
+
+            <div class="brand" id="mainBrandHeader">
+                <div class="logo-title">SIMOMi</div>
+                <div class="subtitle">AI Voice Hub • 2026 Edition</div>
+            </div>
+
+            <!-- STEP 1: Login View -->
+            <div id="loginView" class="view-step active-view">
+                <form onsubmit="handleLoginSubmit(event)">
+                    <div class="input-box">
+                        <input type="email" id="email" placeholder=" " required autocomplete="off">
+                        <label for="email">البريد الإلكتروني</label>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="password" id="password" placeholder=" " required>
+                        <label for="password">كلمة المرور</label>
+                        <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                    </div>
+
+                    <div id="authError" class="auth-error"></div>
+
+                    <div class="btn-wrapper">
+                        <button type="submit" id="loginBtn" class="magnetic-btn">
+                            تسجيل الدخول / إنشيء حسابك
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- STEP 2: Gender Selection View -->
+            <div id="genderView" class="view-step hidden-view">
+                <div class="gender-title">تحديد الهوية</div>
+                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك الصوتي</div>
+
+                <div class="gender-grid">
+                    <div class="gender-card" id="cardMale" onclick="selectGender('male')">
+                        <div class="checkmark">✓</div>
+                        <span class="avatar">👨‍💻</span>
+                        <div style="font-weight: 800; color: #FFF;">ذكر</div>
+                    </div>
+                    <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
+                        <div class="checkmark">✓</div>
+                        <span class="avatar">👩‍💻</span>
+                        <div style="font-weight: 800; color: #FFF;">أنثى</div>
+                    </div>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="goToStep('nameView')">
+                        متابعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Name Entry View -->
+            <div id="nameView" class="view-step hidden-view">
+                <div class="step-title">الاسم الشخصي</div>
+                <div class="step-subtitle">أدخل اسمك ليظهر في بطاقتك الخاصة</div>
+
+                <div class="name-field-wrapper" id="nameWrapper">
+                    <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
+                    <span class="name-icon">👤</span>
+                    <span class="status-check">✓</span>
+                </div>
+                <div class="counter-tag" id="charCounter">0 / 20 حرف</div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="saveNameAndNext()">
+                        متابعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Date of Birth View -->
+            <div id="dobView" class="view-step hidden-view">
+                <div class="step-title">تاريخ الميلاد</div>
+                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر الفعلي</div>
+
+                <div class="date-picker-grid">
+                    <div class="date-select-wrapper">
+                        <span class="date-label">اليوم</span>
+                        <select id="daySelect" onchange="calculateAge()"></select>
+                    </div>
+                    <div class="date-select-wrapper">
+                        <span class="date-label">الشهر</span>
+                        <select id="monthSelect" onchange="calculateAge()"></select>
+                    </div>
+                    <div class="date-select-wrapper">
+                        <span class="date-label">السنة</span>
+                        <select id="yearSelect" onchange="calculateAge()"></select>
+                    </div>
+                </div>
+
+                <div class="age-badge" id="ageBadge">العمر: 0 سنة</div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="goToStep('avatarView')">
+                        متابعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Avatar Selection View -->
+            <div id="avatarView" class="view-step hidden-view">
+                <div class="step-title">الصورة الشخصية</div>
+                <div class="step-subtitle">اختر صورة بروفايلك أو ارفع واحدة جديدة</div>
+
+                <div class="upload-container">
+                    <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
+                        <img id="avatarPreview" src="" alt="Avatar">
+                        <div class="upload-placeholder-content" id="uploadPlaceholder">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">رفع صورة</span>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewImage(event)">
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="generateGoldCard()">
+                        إنشاء البطاقة الذهبية ✨
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 6: Gold ID Card Result -->
+            <div id="cardResultView" class="view-step hidden-view">
+                <div class="step-title">بطاقتك الرقمية</div>
+                <div class="step-subtitle">مرحباً بك رسمياً في المنصة الصوتية SIMOMi</div>
+
+                <div class="gold-card-wrapper">
+                    <div class="gold-id-card" id="goldCard">
+                        <div class="card-header-row">
+                            <div class="card-chip"></div>
+                            <div class="card-brand-tag">SIMOMi PASS</div>
+                        </div>
+                        <div class="card-body-row">
+                            <div class="card-avatar-box">
+                                <img id="finalCardAvatar" src="" alt="Profile">
+                            </div>
+                            <div class="card-details">
+                                <div class="card-name" id="finalCardName">الاسم</div>
+                                <div class="card-info-grid">
+                                    <span id="finalCardGender">الجنس</span> • 
+                                    <span id="finalCardAge">العمر</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer-row">
+                            <span>ID: 2026-9981-VIP</span>
+                            <span>VERIFIED USER ✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="goToStep('homeMainView')">
+                        دخول المنصة 🚀
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 7: MAIN HOME DASHBOARD -->
+            <div id="homeMainView" class="view-step hidden-view">
+                <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
+                    <span>🎙️</span>
+                    <span>إنشاء غرفة دردشة</span>
+                </button>
+
+                <div class="welcome-banner">
+                    <h3>غرف الدردشة الصوتية 🎧</h3>
+                    <p>مرحباً بك في SIMOMi Hub! تواصل الآن مع أصدقائك وشارك في الغرف المباشرة.</p>
+                </div>
+            </div>
+
+            <!-- STEP 8: CREATE ROOM CONFIG VIEW -->
+            <div id="createRoomView" class="view-step hidden-view">
+                <div class="step-title">إنشاء غرفة جديدة</div>
+                <div class="step-subtitle">اختر صورة الغرفة وأدخل اسمها</div>
+
+                <div class="upload-container">
+                    <div class="avatar-upload-zone" onclick="document.getElementById('roomAvatarInput').click()">
+                        <img id="roomAvatarPreview" src="" alt="Room Avatar">
+                        <div class="upload-placeholder-content" id="roomUploadPlaceholder">
+                            <span class="upload-icon">🏛️</span>
+                            <span class="upload-text">صورة الغرفة</span>
+                        </div>
+                    </div>
+                    <input type="file" id="roomAvatarInput" accept="image/*" onchange="previewRoomImage(event)">
+                </div>
+
+                <div class="input-box">
+                    <input type="text" id="roomNameInput" placeholder=" " required autocomplete="off">
+                    <label for="roomNameInput">اسم الغرفة الصوتية...</label>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="goToRoomBgStep()">
+                        متابعة لاختيار الخلفية 🎨
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 9: CHOOSE ROOM BACKGROUND VIEW -->
+            <div id="roomBgView" class="view-step hidden-view">
+                <div class="step-title">خلفية الغرفة</div>
+                <div class="step-subtitle">اختر خلفية مميزة لغرفتك الصوتية</div>
+
+                <div class="bg-grid">
+                    <div class="bg-option selected" style="background-image: linear-gradient(135deg, #1e3c72, #2a5298);" onclick="selectBgOption(this, 'linear-gradient(135deg, #1e3c72, #2a5298)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #2b5876, #4e4376);" onclick="selectBgOption(this, 'linear-gradient(135deg, #2b5876, #4e4376)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
+                </div>
+
+                <div class="upload-container" style="margin-bottom: 16px;">
+                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">
+                        📷 رفع خلفية خاصة
+                    </button>
+                    <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="launchLiveRoom()">
+                        إطلاق الغرفة الآن 🚀
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 10: LIVE VOICE ROOM VIEW (10 MICS INSIDE BACKGROUND) -->
+            <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
+                <div class="live-room-container" id="liveRoomBg">
+                    <div class="live-room-header">
+                        <img id="liveRoomHeaderAvatar" src="https://via.placeholder.com/150" class="live-room-avatar" alt="Room">
+                        <span class="live-room-title" id="liveRoomHeaderTitle">غرفة الدردشة</span>
+                    </div>
+
+                    <!-- 10 Microphones Grid (5 Top, 5 Bottom) Properly Contained -->
+                    <div class="mics-grid-container">
+                        <!-- Top Row: Mics 1 to 5 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" onclick="toggleMicSeat(1, this)">
+                                <div class="mic-circle" id="micCircle-1">🎙️</div>
+                                <span class="mic-number">1</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(2, this)">
+                                <div class="mic-circle" id="micCircle-2">🎙️</div>
+                                <span class="mic-number">2</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(3, this)">
+                                <div class="mic-circle" id="micCircle-3">🎙️</div>
+                                <span class="mic-number">3</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(4, this)">
+                                <div class="mic-circle" id="micCircle-4">🎙️</div>
+                                <span class="mic-number">4</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(5, this)">
+                                <div class="mic-circle" id="micCircle-5">🎙️</div>
+                                <span class="mic-number">5</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Row: Mics 6 to 10 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" onclick="toggleMicSeat(6, this)">
+                                <div class="mic-circle" id="micCircle-6">🎙️</div>
+                                <span class="mic-number">6</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(7, this)">
+                                <div class="mic-circle" id="micCircle-7">🎙️</div>
+                                <span class="mic-number">7</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(8, this)">
+                                <div class="mic-circle" id="micCircle-8">🎙️</div>
+                                <span class="mic-number">8</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(9, this)">
+                                <div class="mic-circle" id="micCircle-9">🔒</div>
+                                <span class="mic-number">9</span>
+                            </div>
+                            <div class="mic-seat" onclick="toggleMicSeat(10, this)">
+                                <div class="mic-circle" id="micCircle-10">🎙️</div>
+                                <span class="mic-number">10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 11: MESSAGES VIEW -->
+            <div id="messagesView" class="view-step hidden-view">
+                <div class="step-title">الرسائل</div>
+                <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
+                <div class="welcome-banner">
+                    <p>لا توجد رسائل جديدة حالياً 💬</p>
+                </div>
+            </div>
+
+            <!-- STEP 12: ACCOUNT PROFILE VIEW -->
+            <div id="profileView" class="view-step hidden-view">
+                <div class="profile-card">
+                    <div class="profile-img-large">
+                        <img id="profileAvatarImg" src="" alt="Profile">
+                    </div>
+                    <div class="profile-display-name" id="profileNameTxt">اسم المستخدم</div>
+                    <div class="profile-display-email" id="profileEmailTxt">user@vlymax.app</div>
+
+                    <div class="profile-data-box">
+                        <div class="data-row">
+                            <span class="data-label">الجنس</span>
+                            <span class="data-val" id="profileGenderTxt">-</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">العمر</span>
+                            <span class="data-val" id="profileAgeTxt">-</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">حالة الحساب</span>
+                            <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM NAVIGATION BAR -->
+            <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
+                <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
+                    <span class="nav-btn-icon">🏠</span>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')">
+                    <span class="nav-btn-icon">💬</span>
+                    <span>رسائل</span>
+                </div>
+                <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')">
+                    <span class="nav-btn-icon">👤</span>
+                    <span>حسابي</span>
+                </div>
+            </div>
+
+            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
+        </div>
+    </div>
+
+    <!-- FIREBASE MODULE SYSTEM -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoPrnf3HXH8zipsJ5ROXApWu20Vm56QhY",
+            authDomain: "vlymax.firebaseapp.com",
+            projectId: "vlymax",
+            storageBucket: "vlymax.firebasestorage.app",
+            messagingSenderId: "825269785341",
+            appId: "1:825269785341:web:74b34d4f6366a1f594e494"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.firebaseAuth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    </script>
+
+    <!-- APP SCRIPT LOGIC -->
+    <script>
+        const userData = {
+            email: '',
+            gender: 'male',
+            name: '',
+            dob: { day: 1, month: 1, year: 2000 },
+            age: 0,
+            avatarSrc: 'https://via.placeholder.com/150',
+            roomName: '',
+            roomAvatarSrc: '',
+            roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const daySel = document.getElementById('daySelect');
+            const monthSel = document.getElementById('monthSelect');
+            const yearSel = document.getElementById('yearSelect');
+
+            for(let i=1; i<=31; i++) daySel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=1; i<=12; i++) monthSel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=2026; i>=1950; i--) yearSel.innerHTML += `<option value="${i}">${i}</option>`;
+            
+            calculateAge();
+        });
+
+        function goToStep(stepId) {
+            document.querySelectorAll('.view-step').forEach(el => {
+                el.classList.remove('active-view');
+                el.classList.add('hidden-view');
+            });
+            const target = document.getElementById(stepId);
+            target.classList.remove('hidden-view');
+            target.classList.add('active-view');
+
+            const navBar = document.getElementById('bottomNav');
+            const cardContainer = document.getElementById('cardContainer');
+
+            if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView' || stepId === 'liveRoomView') {
+                navBar.style.display = 'flex';
+                cardContainer.classList.add('clean-mode');
+            } else {
+                navBar.style.display = 'none';
+                cardContainer.classList.remove('clean-mode');
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            if(tab === 'home') {
+                document.getElementById('navHomeBtn').classList.add('active');
+                goToStep('homeMainView');
+            } else if(tab === 'messages') {
+                document.getElementById('navMsgBtn').classList.add('active');
+                goToStep('messagesView');
+            } else if(tab === 'profile') {
+                document.getElementById('navProfileBtn').classList.add('active');
+                
+                document.getElementById('profileNameTxt').innerText = userData.name || 'مستخدم جديد';
+                document.getElementById('profileEmailTxt').innerText = userData.email || 'user@vlymax.app';
+                document.getElementById('profileGenderTxt').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+                document.getElementById('profileAgeTxt').innerText = userData.age + ' سنة';
+                if(userData.avatarSrc) {
+                    document.getElementById('profileAvatarImg').src = userData.avatarSrc;
+                }
+
+                goToStep('profileView');
+            }
+        }
+
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            userData.email = email;
+            const errorDiv = document.getElementById('authError');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorDiv.style.display = 'none';
+            loginBtn.innerText = "جاري التحقق...";
+
+            try {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                goToStep('genderView');
+            } catch (err) {
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                    try {
+                        await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                        goToStep('genderView');
+                    } catch (createErr) {
+                        errorDiv.innerText = "كلمة المرور ضعيفة أو الإيميل غير صحيح!";
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.innerText = "حدث خطأ: " + err.message;
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
+            }
+        }
+
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
+        }
+
+        function selectGender(gender) {
+            userData.gender = gender;
+            document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
+            document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
+        }
+
+        function validateNameInput(input) {
+            const wrapper = document.getElementById('nameWrapper');
+            const counter = document.getElementById('charCounter');
+            const val = input.value;
+            counter.innerText = `${val.length} / 20 حرف`;
+            if (val.trim().length >= 3) {
+                wrapper.classList.add('valid');
+            } else {
+                wrapper.classList.remove('valid');
+            }
+        }
+
+        function saveNameAndNext() {
+            const input = document.getElementById('userNameInput');
+            if (input.value.trim().length >= 3) {
+                userData.name = input.value.trim();
+                goToStep('dobView');
+            } else {
+                alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل');
+            }
+        }
+
+        function calculateAge() {
+            const day = parseInt(document.getElementById('daySelect').value);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const year = parseInt(document.getElementById('yearSelect').value);
+
+            const birth = new Date(year, month - 1, day);
+            const today = new Date(2026, 9, 10);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+            userData.age = age;
+            const badge = document.getElementById('ageBadge');
+            badge.innerText = `العمر: ${age} سنة`;
+            badge.classList.add('show');
+        }
+
+        function previewImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('avatarPreview').src = evt.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
+                    userData.avatarSrc = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewRoomImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('roomAvatarPreview').src = evt.target.result;
+                    document.getElementById('roomAvatarPreview').style.display = 'block';
+                    document.getElementById('roomUploadPlaceholder').style.display = 'none';
+                    userData.roomAvatarSrc = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function goToRoomBgStep() {
+            const roomName = document.getElementById('roomNameInput').value.trim();
+            if (!roomName) {
+                alert('الرجاء إدخال اسم الغرفة');
+                return;
+            }
+            userData.roomName = roomName;
+            goToStep('roomBgView');
+        }
+
+        function selectBgOption(el, bgValue) {
+            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            userData.roomBg = bgValue;
+        }
+
+        function previewRoomBg(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    userData.roomBg = `url('${evt.target.result}')`;
+                    alert('تم اختيار الخلفية بنجاح!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function launchLiveRoom() {
+            const roomContainer = document.getElementById('liveRoomBg');
+            if (userData.roomBg.startsWith('linear-gradient') || userData.roomBg.startsWith('url')) {
+                roomContainer.style.background = userData.roomBg;
+                roomContainer.style.backgroundSize = 'cover';
+                roomContainer.style.backgroundPosition = 'center';
+            }
+            document.getElementById('liveRoomHeaderTitle').innerText = userData.roomName || 'غرفة جديدة';
+            if (userData.roomAvatarSrc) {
+                document.getElementById('liveRoomHeaderAvatar').src = userData.roomAvatarSrc;
+            } else {
+                document.getElementById('liveRoomHeaderAvatar').src = userData.avatarSrc;
+            }
+            goToStep('liveRoomView');
+        }
+
+        function toggleMicSeat(micIndex, seatEl) {
+            const circle = document.getElementById(`micCircle-${micIndex}`);
+            if (seatEl.classList.contains('occupied')) {
+                seatEl.classList.remove('occupied');
+                circle.innerHTML = micIndex === 9 ? '🔒' : '🎙️';
+            } else {
+                seatEl.classList.add('occupied');
+                circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+            }
+        }
+
+        function generateGoldCard() {
+            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
+            document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+            document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            if (userData.avatarSrc) {
+                document.getElementById('finalCardAvatar').src = userData.avatarSrc;
+            }
+            goToStep('cardResultView');
+        }
+    </script>
+</body>
+</html>
