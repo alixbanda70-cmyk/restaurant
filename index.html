@@ -57,7 +57,20 @@
             background: rgba(255, 255, 255, 0.03);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
                         0 0 40px rgba(239, 68, 68, 0.15);
+            transition: all 0.4s ease;
             animation: springPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* وضعية إزالة الإطار والظل في الواجهات الرئيسية */
+        .card-container.clean-mode {
+            padding: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        .card-container.clean-mode .border-beam {
+            display: none !important;
         }
 
         @keyframes springPop {
@@ -726,8 +739,8 @@
 
     <div class="aurora-bg"></div>
 
-    <div class="card-container">
-        <!-- الإطار المتحرك (Border Beam) أضفنا له ID للتحكم في ظهوره -->
+    <div class="card-container" id="cardContainer">
+        <!-- الإطار المتحرك (Border Beam) -->
         <div class="border-beam" id="borderBeam"></div>
 
         <div class="glass-card" id="card">
@@ -1012,7 +1025,7 @@
             calculateAge();
         });
 
-        // Navigation Management & Border Beam Toggle
+        // Navigation Management & Clean Frame Mode Toggle
         function goToStep(stepId) {
             document.querySelectorAll('.view-step').forEach(el => {
                 el.classList.remove('active-view');
@@ -1023,15 +1036,15 @@
             target.classList.add('active-view');
 
             const navBar = document.getElementById('bottomNav');
-            const borderBeam = document.getElementById('borderBeam');
+            const cardContainer = document.getElementById('cardContainer');
 
-            // إخفاء أو إظهار الإطار المتحرك والنافذة السفلية بناءً على المرحلة
+            // تفعيل وضع النظافة (إزالة الإطار والظل الخارجي) في الواجهات الرئيسية فقط
             if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView') {
                 navBar.style.display = 'flex';
-                if(borderBeam) borderBeam.style.display = 'none'; // إخفاء الإطار في الواجهات الرئيسية
+                cardContainer.classList.add('clean-mode');
             } else {
                 navBar.style.display = 'none';
-                if(borderBeam) borderBeam.style.display = 'block'; // إظهار الإطار في مراحل التسجيل
+                cardContainer.classList.remove('clean-mode');
             }
         }
 
