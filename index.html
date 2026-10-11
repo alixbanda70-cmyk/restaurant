@@ -596,10 +596,17 @@
 
         .live-room-top-bar {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             width: 100%;
             flex-shrink: 0;
+        }
+
+        .top-left-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
         }
 
         .live-room-header {
@@ -627,7 +634,7 @@
             color: #FFF;
         }
 
-        /* Online Users Count Badge */
+        /* Online Users Count Badge (Moved under exit button) */
         .room-online-badge {
             display: flex;
             align-items: center;
@@ -640,6 +647,7 @@
             color: #FFF;
             font-size: 13px;
             font-weight: 800;
+            width: fit-content;
         }
 
         .room-online-badge svg {
@@ -679,13 +687,13 @@
             transform: scale(1.08);
         }
 
-        /* Centered Mics Grid - Raised Higher using margin-top offset */
+        /* Centered Mics Grid */
         .mics-grid-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
             width: 100%;
-            margin-top: 50px; /* تم رفع الميكروفونات نحو الأعلى هنا */
+            margin-top: 35px;
             flex-shrink: 0;
         }
 
@@ -756,18 +764,19 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
 
-        /* ROOM COMMENTS & CHAT SECTION AT BOTTOM */
+        /* ROOM COMMENTS & CHAT SECTION - EXPANDED */
         .room-comments-section {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 10px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 130px;
+            gap: 10px;
+            height: 210px;
             margin-top: auto;
+            margin-bottom: 5px;
         }
 
         .comments-list {
@@ -775,7 +784,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            max-height: 80px;
+            flex: 1;
             padding-left: 4px;
         }
 
@@ -1254,7 +1263,6 @@
             <div id="homeMainView" class="view-step hidden-view">
                 <div class="home-top-bar">
                     <div class="home-title-tag">
-                        <!-- أيقونة منزل بأسلوب رسم أبيض -->
                         <svg class="svg-icon lg" style="stroke: #F59E0B;" viewBox="0 0 24 24">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -1273,7 +1281,6 @@
                 </div>
 
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
-                    <!-- أيقونة ميكروفون رسم -->
                     <svg viewBox="0 0 24 24">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -1340,30 +1347,32 @@
             <!-- STEP 10: LIVE VOICE ROOM VIEW -->
             <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
                 <div class="live-room-container" id="liveRoomBg">
-                    <!-- Top Bar Header with Online Count Badge & Exit Button -->
+                    <!-- Top Bar Header with Exit Button & Online Count Badge Below It -->
                     <div class="live-room-top-bar">
-                        <!-- Online Users Badge -->
-                        <div class="room-online-badge">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            <span id="onlineCountNum">1</span>
-                        </div>
+                        <div class="top-left-actions">
+                            <!-- Power/Exit Vector Icon Button -->
+                            <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج من الغرفة">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </div>
 
-                        <!-- Power/Exit Vector Icon Button in Top-Left (Opens Confirmation Dialog) -->
-                        <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج من الغرفة">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg>
+                            <!-- Online Users Count Badge (Moved under exit button) -->
+                            <div class="room-online-badge">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <span id="onlineCountNum">1</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- 10 Microphones Grid Raised Higher -->
+                    <!-- 10 Microphones Grid -->
                     <div class="mics-grid-container">
                         <!-- Top Row: Mics 1 to 5 -->
                         <div class="mics-row">
@@ -1434,7 +1443,7 @@
                         </div>
                     </div>
 
-                    <!-- ROOM COMMENTS & CHAT SECTION AT THE BOTTOM -->
+                    <!-- ROOM COMMENTS & CHAT SECTION -->
                     <div class="room-comments-section">
                         <div class="comments-list" id="commentsListContainer">
                             <div class="comment-bubble">
@@ -1525,7 +1534,6 @@
             <!-- BOTTOM NAVIGATION BAR WITH WHITE VECTOR ICONS -->
             <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
                 <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
-                    <!-- أيقونة منزل -->
                     <svg viewBox="0 0 24 24">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -1533,14 +1541,12 @@
                     <span>الرئيسية</span>
                 </div>
                 <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')">
-                    <!-- أيقونة محادثة/رسائل -->
                     <svg viewBox="0 0 24 24">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     <span>رسائل</span>
                 </div>
                 <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')">
-                    <!-- أيقونة حسابي/مستخدم -->
                     <svg viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
