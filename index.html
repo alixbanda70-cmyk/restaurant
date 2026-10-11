@@ -16,11 +16,12 @@
         body {
             background-color: #07090E;
             color: #FFFFFF;
-            min-height: 100vh;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
             position: relative;
         }
 
@@ -37,45 +38,20 @@
                 radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%),
                 radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, #07090E 100%);
             filter: blur(40px);
-            animation: auroraMove 12s ease-in-out infinite alternate;
         }
 
-        @keyframes auroraMove {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.1) rotate(3deg); }
-        }
-
-        /* 2. Glass Container & Border Beam */
+        /* 2. Full Screen App Container */
         .card-container {
             position: relative;
             z-index: 10;
-            width: 90%;
-            max-width: 440px;
-            padding: 2px;
-            border-radius: 28px;
+            width: 100%;
+            height: 100vh;
+            max-width: 480px; /* يحافظ على مظهر الهاتف الحقيقي حتى في الشاشات الكبيرة */
+            background: #0D1117;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.03);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
-                        0 0 40px rgba(239, 68, 68, 0.15);
-            transition: all 0.4s ease;
-            animation: springPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        /* وضعية إزالة الإطار والظل في الواجهات الداخلية */
-        .card-container.clean-mode {
-            padding: 0 !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            border: none !important;
-        }
-
-        .card-container.clean-mode .border-beam {
-            display: none !important;
-        }
-
-        @keyframes springPop {
-            0% { opacity: 0; transform: translateY(50px) scale(0.85); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
         .border-beam {
@@ -87,6 +63,15 @@
             background: conic-gradient(from 0deg, transparent 0 300deg, #EF4444 320deg, #F59E0B 360deg);
             animation: rotateBeam 4s linear infinite;
             z-index: 1;
+            pointer-events: none;
+        }
+
+        .card-container.clean-mode {
+            background: #07090E !important;
+        }
+
+        .card-container.clean-mode .border-beam {
+            display: none !important;
         }
 
         @keyframes rotateBeam {
@@ -97,13 +82,14 @@
         .glass-card {
             position: relative;
             z-index: 2;
-            background: rgba(13, 17, 23, 0.88);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-radius: 26px;
-            padding: 30px 24px;
-            overflow: hidden;
-            min-height: 520px;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(25px);
+            padding: 24px 16px 80px 16px; /* ترك مساحة للشريط السفلي */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .spotlight {
@@ -113,17 +99,18 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.08), transparent 40%);
+            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.05), transparent 40%);
             z-index: 3;
         }
 
         .brand {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            margin-top: 10px;
         }
 
         .logo-title {
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 900;
             letter-spacing: 4px;
             background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
@@ -140,29 +127,29 @@
 
         /* View Step Transitions */
         .view-step {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .hidden-view {
-            display: none;
-            opacity: 0;
-            transform: scale(0.9) translateY(20px);
+            display: none !important;
         }
 
         .active-view {
-            display: block;
-            animation: viewEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            display: flex;
+            animation: viewEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes viewEnter {
-            from { opacity: 0; transform: scale(0.92) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Form Inputs */
         .input-box {
             position: relative;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
         }
 
         .input-box input {
@@ -174,7 +161,7 @@
             color: #FFFFFF;
             font-size: 15px;
             outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
         }
 
         .input-box label {
@@ -185,14 +172,13 @@
             color: #6B7280;
             font-size: 14px;
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
         }
 
         .input-box input:focus,
         .input-box input:not(:placeholder-shown) {
             border-color: #EF4444;
             background: rgba(239, 68, 68, 0.04);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
         }
 
         .input-box input:focus ~ label,
@@ -210,7 +196,6 @@
             transform: translateY(-50%);
             cursor: pointer;
             font-size: 16px;
-            user-select: none;
             opacity: 0.6;
         }
 
@@ -235,14 +220,14 @@
             text-align: center;
             font-size: 13px;
             color: #9CA3AF;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .gender-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .gender-card {
@@ -253,13 +238,7 @@
             padding: 24px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            user-select: none;
-        }
-
-        .gender-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            border-color: rgba(245, 158, 11, 0.4);
+            transition: all 0.3s;
         }
 
         .gender-card .avatar { font-size: 42px; margin-bottom: 10px; display: block; }
@@ -267,8 +246,7 @@
         .gender-card.selected {
             background: rgba(239, 68, 68, 0.12);
             border-color: #EF4444;
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
-            transform: scale(1.04);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
         }
 
         .gender-card .checkmark {
@@ -278,20 +256,17 @@
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: #EF4444;
+            color: #FFF;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
             opacity: 0;
-            transition: all 0.3s;
+            transition: opacity 0.3s;
         }
 
-        .gender-card.selected .checkmark {
-            opacity: 1;
-            background: #EF4444;
-            color: #FFF;
-        }
+        .gender-card.selected .checkmark { opacity: 1; }
 
         /* Name Input */
         .name-field-wrapper {
@@ -309,13 +284,6 @@
             font-size: 17px;
             font-weight: 700;
             outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .name-input:focus {
-            border-color: #EF4444;
-            background: rgba(239, 68, 68, 0.05);
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), inset 0 -3px 0 #F59E0B;
         }
 
         .name-icon {
@@ -334,7 +302,7 @@
             transform: translateY(-50%) scale(0);
             color: #10B981;
             font-size: 20px;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s;
         }
 
         .name-field-wrapper.valid .status-check {
@@ -345,7 +313,7 @@
             text-align: left;
             font-size: 11px;
             color: #6B7280;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             padding-left: 6px;
         }
 
@@ -353,23 +321,20 @@
         .date-picker-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr 1fr;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .date-select-wrapper select {
             width: 100%;
-            padding: 16px 12px;
+            padding: 14px 8px;
             background: rgba(255, 255, 255, 0.03);
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            border-radius: 14px;
             color: #FFFFFF;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             outline: none;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
             text-align: center;
         }
 
@@ -389,29 +354,28 @@
 
         .age-badge {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-size: 12px;
             color: #10B981;
             font-weight: 700;
             opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: opacity 0.3s;
         }
 
-        .age-badge.show { opacity: 1; transform: scale(1); }
+        .age-badge.show { opacity: 1; }
 
         /* Avatar Upload */
         .upload-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .avatar-upload-zone {
             position: relative;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.04);
             border: 2px dashed rgba(245, 158, 11, 0.5);
@@ -420,13 +384,6 @@
             justify-content: center;
             cursor: pointer;
             overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .avatar-upload-zone:hover {
-            transform: scale(1.05);
-            border-color: #EF4444;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
         }
 
         .avatar-upload-zone img {
@@ -440,308 +397,241 @@
         }
 
         .upload-placeholder-content { text-align: center; pointer-events: none; }
-        .upload-icon { font-size: 28px; margin-bottom: 4px; display: block; }
+        .upload-icon { font-size: 26px; margin-bottom: 4px; display: block; }
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
         #avatarInput, #roomAvatarInput, #roomBgInput { display: none; }
 
-        /* PREMIUM GOLD CARD UI */
+        /* GOLD CARD UI */
         .gold-card-wrapper {
             perspective: 1000px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .gold-id-card {
             position: relative;
             width: 100%;
-            height: 220px;
-            border-radius: 20px;
+            height: 200px;
+            border-radius: 18px;
             background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-            padding: 22px;
-            box-shadow: 0 20px 50px rgba(170, 119, 28, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            padding: 18px;
+            box-shadow: 0 15px 35px rgba(170, 119, 28, 0.4);
             overflow: hidden;
-            transition: transform 0.1s ease-out;
-            transform-style: preserve-3d;
             border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .gold-id-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
-            transform: rotate(30deg);
-            animation: shimmerMove 4s infinite linear;
-            pointer-events: none;
-        }
-
-        @keyframes shimmerMove {
-            0% { transform: translateY(-100%) rotate(30deg); }
-            100% { transform: translateY(100%) rotate(30deg); }
         }
 
         .card-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 12px;
         }
 
         .card-chip {
-            width: 38px;
-            height: 28px;
+            width: 34px;
+            height: 24px;
             background: linear-gradient(135deg, #E6C687 0%, #99742B 100%);
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border-radius: 5px;
         }
 
         .card-brand-tag {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 900;
             color: #382506;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 1px 1px rgba(255,255,255,0.6);
         }
 
         .card-body-row {
             display: flex;
             align-items: center;
-            gap: 16px;
-            position: relative;
-            z-index: 2;
+            gap: 14px;
         }
 
         .card-avatar-box {
-            width: 68px;
-            height: 68px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             border: 2px solid #FFF;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             background: #222;
             flex-shrink: 0;
         }
 
-        .card-avatar-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card-details {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .card-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .card-name {
-            font-size: 19px;
+            font-size: 17px;
             font-weight: 900;
             color: #2b1c03;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-            letter-spacing: 0.5px;
         }
 
         .card-info-grid {
-            display: flex;
-            gap: 12px;
-            font-size: 12px;
+            font-size: 11px;
             color: #4a3307;
             font-weight: 700;
+            margin-top: 3px;
         }
 
         .card-footer-row {
-            margin-top: 14px;
+            margin-top: 12px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-size: 10px;
+            font-size: 9px;
             color: #5c4109;
             font-weight: 800;
             border-top: 1px solid rgba(110, 78, 13, 0.2);
-            padding-top: 8px;
-            position: relative;
-            z-index: 2;
+            padding-top: 6px;
         }
 
         /* Magnetic Buttons */
-        .btn-wrapper { position: relative; margin-top: 10px; }
+        .btn-wrapper { position: relative; margin-top: 10px; width: 100%; }
 
         .magnetic-btn {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             border: none;
             border-radius: 16px;
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
             color: #FFFFFF;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
         }
 
-        .magnetic-btn:hover {
-            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.6), 0 0 15px rgba(245, 158, 11, 0.4);
-        }
+        .footer-tag { text-align: center; margin-top: 20px; font-size: 11px; color: #4B5563; }
 
-        .footer-tag { text-align: center; margin-top: 20px; font-size: 12px; color: #4B5563; }
-
-        /* MAIN DASHBOARD UI STYLES */
+        /* DASHBOARD STYLES */
         .create-room-btn {
             width: 100%;
             padding: 16px;
-            border-radius: 18px;
+            border-radius: 16px;
             background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
             color: #07090E;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
             border: none;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 24px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .create-room-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.6);
+            margin-bottom: 20px;
         }
 
         .welcome-banner {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 18px;
+            padding: 18px;
             text-align: center;
-            margin-bottom: 60px;
         }
 
-        .welcome-banner h3 {
-            font-size: 18px;
-            color: #FFF;
-            margin-bottom: 6px;
-        }
+        .welcome-banner h3 { font-size: 16px; color: #FFF; margin-bottom: 6px; }
+        .welcome-banner p { font-size: 12px; color: #9CA3AF; }
 
-        .welcome-banner p {
-            font-size: 12px;
-            color: #9CA3AF;
-        }
-
-        /* ROOM BACKGROUND SELECTION STYLES */
+        /* ROOM BACKGROUNDS */
         .bg-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .bg-option {
-            height: 90px;
-            border-radius: 14px;
+            height: 80px;
+            border-radius: 12px;
             border: 2px solid transparent;
             cursor: pointer;
             background-size: cover;
             background-position: center;
-            transition: all 0.3s ease;
-            position: relative;
         }
 
         .bg-option.selected {
             border-color: #F59E0B;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-            transform: scale(1.03);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
-        /* LIVE VOICE ROOM (10 MICROPHONES UI) */
+        /* LIVE VOICE ROOM (10 MICS - FULLFIT CONTAINER) */
         .live-room-container {
             position: relative;
             width: 100%;
-            border-radius: 24px;
-            padding: 20px 14px 70px 14px;
-            min-height: 480px;
+            flex: 1;
+            border-radius: 20px;
+            padding: 14px 10px;
             background-size: cover;
             background-position: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
         }
 
         .live-room-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 8px 14px;
-            border-radius: 30px;
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 20px;
             width: fit-content;
-            margin-bottom: 30px;
         }
 
         .live-room-avatar {
-            width: 38px;
-            height: 38px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
             border: 1.5px solid #F59E0B;
         }
 
         .live-room-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: #FFF;
         }
 
-        /* Mic Grid 5 Top - 5 Bottom */
+        /* Mics Grid inside container */
         .mics-grid-container {
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            margin-top: 10px;
+            gap: 16px;
+            width: 100%;
+            padding-bottom: 10px;
         }
 
         .mics-row {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
+            width: 100%;
+            padding: 0 4px;
         }
 
         .mic-seat {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             cursor: pointer;
-            width: 58px;
+            width: 52px;
         }
 
         .mic-circle {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             color: #FFF;
             border: 1.5px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -757,69 +647,65 @@
 
         .mic-seat.occupied .mic-circle {
             border-color: #10B981;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
         }
 
         .mic-number {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #E5E7EB;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
 
-        /* PROFILE VIEW STYLES */
+        /* PROFILE VIEW */
         .profile-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 60px;
+            width: 100%;
         }
 
         .profile-img-large {
-            width: 90px;
-            height: 90px;
+            width: 84px;
+            height: 84px;
             border-radius: 50%;
             border: 3px solid #F59E0B;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             background: #222;
         }
 
-        .profile-img-large img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
 
         .profile-display-name {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 900;
             color: #FFF;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .profile-display-email {
             font-size: 12px;
             color: #9CA3AF;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .profile-data-box {
             width: 100%;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 16px;
+            border-radius: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .data-row {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 13px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding-bottom: 8px;
         }
@@ -828,663 +714,8 @@
         .data-label { color: #9CA3AF; }
         .data-val { color: #F59E0B; font-weight: 800; }
 
-        /* BOTTOM NAVIGATION BAR (3 BUTTONS) */
+        /* BOTTOM NAVIGATION BAR */
         .bottom-nav-bar {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 65px;
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 20;
-        }
-
-        .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 11px;
-            color: #6B7280;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .nav-btn.active { color: #F59E0B; font-weight: 800; }
-        .nav-btn-icon { font-size: 20px; margin-bottom: 3px; }
-    </style>
-</head>
-<body>
-
-    <div class="aurora-bg"></div>
-
-    <div class="card-container" id="cardContainer">
-        <!-- الإطار المتحرك (Border Beam) -->
-        <div class="border-beam" id="borderBeam"></div>
-
-        <div class="glass-card" id="card">
-            <div class="spotlight" id="spotlight"></div>
-
-            <div class="brand" id="mainBrandHeader">
-                <div class="logo-title">SIMOMi</div>
-                <div class="subtitle">AI Voice Hub • 2026 Edition</div>
-            </div>
-
-            <!-- STEP 1: Login View -->
-            <div id="loginView" class="view-step active-view">
-                <form onsubmit="handleLoginSubmit(event)">
-                    <div class="input-box">
-                        <input type="email" id="email" placeholder=" " required autocomplete="off">
-                        <label for="email">البريد الإلكتروني</label>
-                    </div>
-
-                    <div class="input-box">
-                        <input type="password" id="password" placeholder=" " required>
-                        <label for="password">كلمة المرور</label>
-                        <span class="password-toggle" onclick="togglePassword()">👁️</span>
-                    </div>
-
-                    <div id="authError" class="auth-error"></div>
-
-                    <div class="btn-wrapper">
-                        <button type="submit" id="loginBtn" class="magnetic-btn mag-btn">
-                            تسجيل الدخول / إنشيء حسابك
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- STEP 2: Gender Selection View -->
-            <div id="genderView" class="view-step hidden-view">
-                <div class="gender-title">تحديد الهوية</div>
-                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك الصوتي</div>
-
-                <div class="gender-grid">
-                    <div class="gender-card" id="cardMale" onclick="selectGender('male')">
-                        <div class="checkmark">✓</div>
-                        <span class="avatar">👨‍💻</span>
-                        <div style="font-weight: 800; color: #FFF;">ذكر</div>
-                    </div>
-                    <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
-                        <div class="checkmark">✓</div>
-                        <span class="avatar">👩‍💻</span>
-                        <div style="font-weight: 800; color: #FFF;">أنثى</div>
-                    </div>
-                </div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('nameView')">
-                        متابعة
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 3: Name Entry View -->
-            <div id="nameView" class="view-step hidden-view">
-                <div class="step-title">الاسم الشخصي</div>
-                <div class="step-subtitle">أدخل اسمك ليظهر في بطاقتك الخاصة</div>
-
-                <div class="name-field-wrapper" id="nameWrapper">
-                    <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
-                    <span class="name-icon">👤</span>
-                    <span class="status-check">✓</span>
-                </div>
-                <div class="counter-tag" id="charCounter">0 / 20 حرف</div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="saveNameAndNext()">
-                        متابعة
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 4: Date of Birth View -->
-            <div id="dobView" class="view-step hidden-view">
-                <div class="step-title">تاريخ الميلاد</div>
-                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر الفعلي</div>
-
-                <div class="date-picker-grid">
-                    <div class="date-select-wrapper">
-                        <span class="date-label">اليوم</span>
-                        <select id="daySelect" onchange="calculateAge()"></select>
-                    </div>
-                    <div class="date-select-wrapper">
-                        <span class="date-label">الشهر</span>
-                        <select id="monthSelect" onchange="calculateAge()"></select>
-                    </div>
-                    <div class="date-select-wrapper">
-                        <span class="date-label">السنة</span>
-                        <select id="yearSelect" onchange="calculateAge()"></select>
-                    </div>
-                </div>
-
-                <div class="age-badge" id="ageBadge">العمر: 0 سنة</div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('avatarView')">
-                        متابعة
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 5: Avatar Selection View -->
-            <div id="avatarView" class="view-step hidden-view">
-                <div class="step-title">الصورة الشخصية</div>
-                <div class="step-subtitle">اختر صورة بروفايلك أو ارفع واحدة جديدة</div>
-
-                <div class="upload-container">
-                    <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
-                        <img id="avatarPreview" src="" alt="Avatar">
-                        <div class="upload-placeholder-content" id="uploadPlaceholder">
-                            <span class="upload-icon">📷</span>
-                            <span class="upload-text">رفع صورة</span>
-                        </div>
-                    </div>
-                    <input type="file" id="avatarInput" accept="image/*" onchange="previewImage(event)">
-                </div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="generateGoldCard()">
-                        إنشاء البطاقة الذهبية ✨
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 6: Gold ID Card Result -->
-            <div id="cardResultView" class="view-step hidden-view">
-                <div class="step-title">بطاقتك الرقمية</div>
-                <div class="step-subtitle">مرحباً بك رسمياً في المنصة الصوتية SIMOMi</div>
-
-                <div class="gold-card-wrapper">
-                    <div class="gold-id-card" id="goldCard">
-                        <div class="card-header-row">
-                            <div class="card-chip"></div>
-                            <div class="card-brand-tag">SIMOMi PASS</div>
-                        </div>
-                        <div class="card-body-row">
-                            <div class="card-avatar-box">
-                                <img id="finalCardAvatar" src="" alt="Profile">
-                            </div>
-                            <div class="card-details">
-                                <div class="card-name" id="finalCardName">الاسم</div>
-                                <div class="card-info-grid">
-                                    <span id="finalCardGender">الجنس</span> • 
-                                    <span id="finalCardAge">العمر</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer-row">
-                            <span>ID: 2026-9981-VIP</span>
-                            <span>VERIFIED USER ✓</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToStep('homeMainView')">
-                        دخول المنصة 🚀
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 7: MAIN HOME DASHBOARD -->
-            <div id="homeMainView" class="view-step hidden-view">
-                <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
-                    <span>🎙️</span>
-                    <span>إنشاء غرفة دردشة</span>
-                </button>
-
-                <div class="welcome-banner">
-                    <h3>غرف الدردشة الصوتية 🎧</h3>
-                    <p>مرحباً بك في SIMOMi Hub! تواصل الآن مع أصدقائك وشارك في الغرف المباشرة.</p>
-                </div>
-            </div>
-
-            <!-- STEP 8: CREATE ROOM CONFIG VIEW (NAME & AVATAR) -->
-            <div id="createRoomView" class="view-step hidden-view">
-                <div class="step-title">إنشاء غرفة جديدة</div>
-                <div class="step-subtitle">اختر صورة الغرفة وأدخل اسمها</div>
-
-                <div class="upload-container">
-                    <div class="avatar-upload-zone" onclick="document.getElementById('roomAvatarInput').click()">
-                        <img id="roomAvatarPreview" src="" alt="Room Avatar">
-                        <div class="upload-placeholder-content" id="roomUploadPlaceholder">
-                            <span class="upload-icon">🏛️</span>
-                            <span class="upload-text">صورة الغرفة</span>
-                        </div>
-                    </div>
-                    <input type="file" id="roomAvatarInput" accept="image/*" onchange="previewRoomImage(event)">
-                </div>
-
-                <div class="input-box">
-                    <input type="text" id="roomNameInput" placeholder=" " required autocomplete="off">
-                    <label for="roomNameInput">اسم الغرفة الصوتية...</label>
-                </div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="goToRoomBgStep()">
-                        متابعة لاختيار الخلفية 🎨
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 9: CHOOSE ROOM BACKGROUND VIEW -->
-            <div id="roomBgView" class="view-step hidden-view">
-                <div class="step-title">خلفية الغرفة</div>
-                <div class="step-subtitle">اختر خلفية مميزة لغرفتك الصوتية</div>
-
-                <div class="bg-grid">
-                    <div class="bg-option selected" style="background-image: linear-gradient(135deg, #1e3c72, #2a5298);" onclick="selectBgOption(this, 'linear-gradient(135deg, #1e3c72, #2a5298)')"></div>
-                    <div class="bg-option" style="background-image: linear-gradient(135deg, #2b5876, #4e4376);" onclick="selectBgOption(this, 'linear-gradient(135deg, #2b5876, #4e4376)')"></div>
-                    <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
-                </div>
-
-                <div class="upload-container" style="margin-bottom: 16px;">
-                    <button type="button" class="magnetic-btn mag-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">
-                        📷 رفع خلفية خاصة
-                    </button>
-                    <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
-                </div>
-
-                <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn mag-btn" onclick="launchLiveRoom()">
-                        إطلاق الغرفة الآن 🚀
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 10: LIVE VOICE ROOM VIEW (10 MICS) -->
-            <div id="liveRoomView" class="view-step hidden-view">
-                <div class="live-room-container" id="liveRoomBg">
-                    <div class="live-room-header">
-                        <img id="liveRoomHeaderAvatar" src="https://via.placeholder.com/150" class="live-room-avatar" alt="Room">
-                        <span class="live-room-title" id="liveRoomHeaderTitle">غرفة الدردشة</span>
-                    </div>
-
-                    <!-- 10 Microphones Grid (5 Top, 5 Bottom) -->
-                    <div class="mics-grid-container">
-                        <!-- Top Row: Mics 1 to 5 -->
-                        <div class="mics-row">
-                            <div class="mic-seat" onclick="toggleMicSeat(1, this)">
-                                <div class="mic-circle" id="micCircle-1">🎙️</div>
-                                <span class="mic-number">1</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(2, this)">
-                                <div class="mic-circle" id="micCircle-2">🎙️</div>
-                                <span class="mic-number">2</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(3, this)">
-                                <div class="mic-circle" id="micCircle-3">🎙️</div>
-                                <span class="mic-number">3</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(4, this)">
-                                <div class="mic-circle" id="micCircle-4">🎙️</div>
-                                <span class="mic-number">4</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(5, this)">
-                                <div class="mic-circle" id="micCircle-5">🎙️</div>
-                                <span class="mic-number">5</span>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Row: Mics 6 to 10 -->
-                        <div class="mics-row">
-                            <div class="mic-seat" onclick="toggleMicSeat(6, this)">
-                                <div class="mic-circle" id="micCircle-6">🎙️</div>
-                                <span class="mic-number">6</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(7, this)">
-                                <div class="mic-circle" id="micCircle-7">🎙️</div>
-                                <span class="mic-number">7</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(8, this)">
-                                <div class="mic-circle" id="micCircle-8">🎙️</div>
-                                <span class="mic-number">8</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(9, this)">
-                                <div class="mic-circle" id="micCircle-9">🔒</div>
-                                <span class="mic-number">9</span>
-                            </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(10, this)">
-                                <div class="mic-circle" id="micCircle-10">🎙️</div>
-                                <span class="mic-number">10</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- STEP 11: MESSAGES VIEW -->
-            <div id="messagesView" class="view-step hidden-view">
-                <div class="step-title">الرسائل</div>
-                <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
-                <div class="welcome-banner">
-                    <p>لا توجد رسائل جديدة حالياً 💬</p>
-                </div>
-            </div>
-
-            <!-- STEP 12: ACCOUNT PROFILE VIEW -->
-            <div id="profileView" class="view-step hidden-view">
-                <div class="profile-card">
-                    <div class="profile-img-large">
-                        <img id="profileAvatarImg" src="" alt="Profile">
-                    </div>
-                    <div class="profile-display-name" id="profileNameTxt">اسم المستخدم</div>
-                    <div class="profile-display-email" id="profileEmailTxt">user@vlymax.app</div>
-
-                    <div class="profile-data-box">
-                        <div class="data-row">
-                            <span class="data-label">الجنس</span>
-                            <span class="data-val" id="profileGenderTxt">-</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-label">العمر</span>
-                            <span class="data-val" id="profileAgeTxt">-</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-label">حالة الحساب</span>
-                            <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTTOM NAVIGATION BAR -->
-            <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
-                <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
-                    <span class="nav-btn-icon">🏠</span>
-                    <span>الرئيسية</span>
-                </div>
-                <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')">
-                    <span class="nav-btn-icon">💬</span>
-                    <span>رسائل</span>
-                </div>
-                <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')">
-                    <span class="nav-btn-icon">👤</span>
-                    <span>حسابي</span>
-                </div>
-            </div>
-
-            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
-        </div>
-    </div>
-
-    <!-- FIREBASE MODULE SYSTEM -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDoPrnf3HXH8zipsJ5ROXApWu20Vm56QhY",
-            authDomain: "vlymax.firebaseapp.com",
-            projectId: "vlymax",
-            storageBucket: "vlymax.firebasestorage.app",
-            messagingSenderId: "825269785341",
-            appId: "1:825269785341:web:74b34d4f6366a1f594e494"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        window.firebaseAuth = auth;
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-    </script>
-
-    <!-- APP SCRIPT LOGIC -->
-    <script>
-        const userData = {
-            email: '',
-            gender: 'male',
-            name: '',
-            dob: { day: 1, month: 1, year: 2000 },
-            age: 0,
-            avatarSrc: 'https://via.placeholder.com/150',
-            roomName: '',
-            roomAvatarSrc: '',
-            roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
-        };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const daySel = document.getElementById('daySelect');
-            const monthSel = document.getElementById('monthSelect');
-            const yearSel = document.getElementById('yearSelect');
-
-            for(let i=1; i<=31; i++) daySel.innerHTML += `<option value="${i}">${i}</option>`;
-            for(let i=1; i<=12; i++) monthSel.innerHTML += `<option value="${i}">${i}</option>`;
-            for(let i=2026; i>=1950; i--) yearSel.innerHTML += `<option value="${i}">${i}</option>`;
-            
-            calculateAge();
-        });
-
-        // Navigation Management & Clean Frame Mode Toggle
-        function goToStep(stepId) {
-            document.querySelectorAll('.view-step').forEach(el => {
-                el.classList.remove('active-view');
-                el.classList.add('hidden-view');
-            });
-            const target = document.getElementById(stepId);
-            target.classList.remove('hidden-view');
-            target.classList.add('active-view');
-
-            const navBar = document.getElementById('bottomNav');
-            const cardContainer = document.getElementById('cardContainer');
-
-            if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView' || stepId === 'liveRoomView') {
-                navBar.style.display = 'flex';
-                cardContainer.classList.add('clean-mode');
-            } else {
-                navBar.style.display = 'none';
-                cardContainer.classList.remove('clean-mode');
-            }
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-            if(tab === 'home') {
-                document.getElementById('navHomeBtn').classList.add('active');
-                goToStep('homeMainView');
-            } else if(tab === 'messages') {
-                document.getElementById('navMsgBtn').classList.add('active');
-                goToStep('messagesView');
-            } else if(tab === 'profile') {
-                document.getElementById('navProfileBtn').classList.add('active');
-                
-                document.getElementById('profileNameTxt').innerText = userData.name || 'مستخدم جديد';
-                document.getElementById('profileEmailTxt').innerText = userData.email || 'user@vlymax.app';
-                document.getElementById('profileGenderTxt').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
-                document.getElementById('profileAgeTxt').innerText = userData.age + ' سنة';
-                if(userData.avatarSrc) {
-                    document.getElementById('profileAvatarImg').src = userData.avatarSrc;
-                }
-
-                goToStep('profileView');
-            }
-        }
-
-        async function handleLoginSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            userData.email = email;
-            const errorDiv = document.getElementById('authError');
-            const loginBtn = document.getElementById('loginBtn');
-
-            errorDiv.style.display = 'none';
-            loginBtn.innerText = "جاري التحقق...";
-
-            try {
-                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
-                goToStep('genderView');
-            } catch (err) {
-                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
-                    try {
-                        await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
-                        goToStep('genderView');
-                    } catch (createErr) {
-                        errorDiv.innerText = "كلمة المرور ضعيفة أو الإيميل غير صحيح!";
-                        errorDiv.style.display = 'block';
-                    }
-                } else {
-                    errorDiv.innerText = "حدث خطأ: " + err.message;
-                    errorDiv.style.display = 'block';
-                }
-            } finally {
-                loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
-            }
-        }
-
-        function togglePassword() {
-            const passInput = document.getElementById('password');
-            passInput.type = passInput.type === 'password' ? 'text' : 'password';
-        }
-
-        function selectGender(gender) {
-            userData.gender = gender;
-            document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
-            document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
-        }
-
-        function validateNameInput(input) {
-            const wrapper = document.getElementById('nameWrapper');
-            const counter = document.getElementById('charCounter');
-            const val = input.value;
-            counter.innerText = `${val.length} / 20 حرف`;
-            if (val.trim().length >= 3) {
-                wrapper.classList.add('valid');
-            } else {
-                wrapper.classList.remove('valid');
-            }
-        }
-
-        function saveNameAndNext() {
-            const input = document.getElementById('userNameInput');
-            if (input.value.trim().length >= 3) {
-                userData.name = input.value.trim();
-                goToStep('dobView');
-            } else {
-                alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل');
-            }
-        }
-
-        function calculateAge() {
-            const day = parseInt(document.getElementById('daySelect').value);
-            const month = parseInt(document.getElementById('monthSelect').value);
-            const year = parseInt(document.getElementById('yearSelect').value);
-
-            const birth = new Date(year, month - 1, day);
-            const today = new Date(2026, 9, 10);
-            let age = today.getFullYear() - birth.getFullYear();
-            const m = today.getMonth() - birth.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-
-            userData.age = age;
-            const badge = document.getElementById('ageBadge');
-            badge.innerText = `العمر: ${age} سنة`;
-            badge.classList.add('show');
-        }
-
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('avatarPreview').src = evt.target.result;
-                    document.getElementById('avatarPreview').style.display = 'block';
-                    document.getElementById('uploadPlaceholder').style.display = 'none';
-                    userData.avatarSrc = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function previewRoomImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('roomAvatarPreview').src = evt.target.result;
-                    document.getElementById('roomAvatarPreview').style.display = 'block';
-                    document.getElementById('roomUploadPlaceholder').style.display = 'none';
-                    userData.roomAvatarSrc = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function goToRoomBgStep() {
-            const roomName = document.getElementById('roomNameInput').value.trim();
-            if (!roomName) {
-                alert('الرجاء إدخال اسم الغرفة');
-                return;
-            }
-            userData.roomName = roomName;
-            goToStep('roomBgView');
-        }
-
-        function selectBgOption(el, bgValue) {
-            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            userData.roomBg = bgValue;
-        }
-
-        function previewRoomBg(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    userData.roomBg = `url('${evt.target.result}')`;
-                    alert('تم اختيار الخلفية بنجاح!');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function launchLiveRoom() {
-            const roomContainer = document.getElementById('liveRoomBg');
-            if (userData.roomBg.startsWith('linear-gradient') || userData.roomBg.startsWith('url')) {
-                roomContainer.style.background = userData.roomBg;
-                roomContainer.style.backgroundSize = 'cover';
-            }
-            document.getElementById('liveRoomHeaderTitle').innerText = userData.roomName || 'غرفة جديدة';
-            if (userData.roomAvatarSrc) {
-                document.getElementById('liveRoomHeaderAvatar').src = userData.roomAvatarSrc;
-            } else {
-                document.getElementById('liveRoomHeaderAvatar').src = userData.avatarSrc;
-            }
-            goToStep('liveRoomView');
-        }
-
-        // Toggle Mic Seat Occupancy
-        function toggleMicSeat(micIndex, seatEl) {
-            const circle = document.getElementById(`micCircle-${micIndex}`);
-            if (seatEl.classList.contains('occupied')) {
-                seatEl.classList.remove('occupied');
-                circle.innerHTML = micIndex === 9 ? '🔒' : '🎙️';
-            } else {
-                seatEl.classList.add('occupied');
-                circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
-            }
-        }
-
-        function generateGoldCard() {
-            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
-            document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
-            document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
-            if (userData.avatarSrc) {
-                document.getElementById('finalCardAvatar').src = userData.avatarSrc;
-            }
-            goToStep('cardResultView');
-        }
-    </script>
-</body>
-</html>
+            left
