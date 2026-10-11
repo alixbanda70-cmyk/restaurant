@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Live Voice Rooms 2026</title>
+    <title>SIMOMi - Futuristic Multi-Step Auth & Gold Card 2026</title>
     <style>
+        /* Base Reset */
         * {
             margin: 0;
             padding: 0;
@@ -24,6 +25,25 @@
             position: relative;
         }
 
+        /* Vector Icon Styling Helper */
+        .svg-icon {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .svg-icon.lg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* 1. Aurora Background */
         .aurora-bg {
             position: absolute;
             width: 100%;
@@ -38,6 +58,7 @@
             filter: blur(40px);
         }
 
+        /* 2. Full Screen Mobile App Container */
         .card-container {
             position: relative;
             z-index: 10;
@@ -72,6 +93,7 @@
             text-align: center;
             margin-bottom: 20px;
             margin-top: 10px;
+            transition: all 0.3s ease;
         }
 
         .logo-title {
@@ -90,6 +112,7 @@
             font-weight: 700;
         }
 
+        /* View Step Transitions */
         .view-step {
             flex: 1;
             display: flex;
@@ -110,6 +133,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Form Inputs */
         .input-box {
             position: relative;
             margin-bottom: 18px;
@@ -160,7 +184,16 @@
             opacity: 0.6;
         }
 
-        .step-title {
+        .auth-error {
+            color: #EF4444;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        /* Gender Grid */
+        .gender-title, .step-title {
             text-align: center;
             font-size: 20px;
             font-weight: 800;
@@ -168,7 +201,7 @@
             margin-bottom: 6px;
         }
 
-        .step-subtitle {
+        .gender-subtitle, .step-subtitle {
             text-align: center;
             font-size: 13px;
             color: #9CA3AF;
@@ -218,6 +251,7 @@
 
         .gender-card.selected .checkmark { opacity: 1; }
 
+        /* Name Input */
         .name-field-wrapper {
             position: relative;
             margin-bottom: 12px;
@@ -266,6 +300,7 @@
             padding-left: 6px;
         }
 
+        /* Date Picker */
         .date-picker-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr 1fr;
@@ -312,6 +347,7 @@
 
         .age-badge.show { opacity: 1; }
 
+        /* Avatar Upload */
         .upload-container {
             display: flex;
             flex-direction: column;
@@ -346,8 +382,9 @@
         .upload-placeholder-content { text-align: center; pointer-events: none; }
         .upload-icon { font-size: 26px; margin-bottom: 4px; display: block; }
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
-        #avatarInput { display: none; }
+        #avatarInput, #roomAvatarInput, #roomBgInput { display: none; }
 
+        /* GOLD CARD UI */
         .gold-card-wrapper {
             perspective: 1000px;
             margin-bottom: 20px;
@@ -428,6 +465,7 @@
             padding-top: 6px;
         }
 
+        /* Magnetic Buttons */
         .btn-wrapper { position: relative; margin-top: 10px; width: 100%; }
 
         .magnetic-btn {
@@ -445,6 +483,7 @@
 
         .footer-tag { text-align: center; margin-top: auto; padding: 12px 0; font-size: 11px; color: #4B5563; }
 
+        /* DASHBOARD STYLES & HEADER LOGOUT BUTTON */
         .home-top-bar {
             display: flex;
             justify-content: space-between;
@@ -473,6 +512,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s;
         }
 
         .logout-small-btn svg {
@@ -481,6 +521,11 @@
             stroke: #FFFFFF;
             stroke-width: 2.2;
             fill: none;
+        }
+
+        .logout-small-btn:hover {
+            background: #EF4444;
+            color: #FFF;
         }
 
         .create-room-btn {
@@ -509,6 +554,7 @@
             fill: none;
         }
 
+        /* ROOM BACKGROUNDS */
         .bg-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -530,6 +576,7 @@
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
+        /* LIVE VOICE ROOM (10 MICS RAISED HIGHER) */
         .live-room-container {
             position: relative;
             width: 100%;
@@ -580,6 +627,7 @@
             color: #FFF;
         }
 
+        /* Online Users Count Badge */
         .room-online-badge {
             display: flex;
             align-items: center;
@@ -614,6 +662,8 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
         .leave-room-btn svg {
@@ -624,12 +674,18 @@
             fill: none;
         }
 
+        .leave-room-btn:hover {
+            background: #EF4444;
+            transform: scale(1.08);
+        }
+
+        /* Centered Mics Grid - Raised Higher using margin-top offset */
         .mics-grid-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             width: 100%;
-            margin: auto 0;
+            margin-top: 50px; /* تم رفع الميكروفونات نحو الأعلى هنا */
             flex-shrink: 0;
         }
 
@@ -663,6 +719,7 @@
             border: 1.5px solid rgba(255, 255, 255, 0.35);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s;
         }
 
         .mic-circle svg {
@@ -682,357 +739,829 @@
             left: 0;
         }
 
-        .mic-name {
-            font-size: 10px;
-            color: #FFF;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 50px;
-            text-align: center;
+        .mic-seat.occupied .mic-circle {
+            border-color: #10B981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
         }
 
-        .room-footer-panel {
+        .mic-seat.locked .mic-circle {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #EF4444;
+        }
+
+        .mic-number {
+            font-size: 10px;
+            font-weight: 800;
+            color: #E5E7EB;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+        }
+
+        /* ROOM COMMENTS & CHAT SECTION AT BOTTOM */
+        .room-comments-section {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            flex-shrink: 0;
+            max-height: 130px;
+            margin-top: auto;
         }
 
-        .room-chat-box {
-            height: 100px;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(8px);
-            border-radius: 14px;
-            padding: 8px 10px;
+        .comments-list {
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 6px;
+            max-height: 80px;
+            padding-left: 4px;
         }
 
-        .chat-msg {
+        .comment-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 6px 10px;
             font-size: 12px;
-            color: #E5E7EB;
-            line-height: 1.4;
+            color: #FFF;
+            word-break: break-word;
         }
 
-        .chat-msg span {
+        .comment-user {
             color: #F59E0B;
             font-weight: 800;
-            margin-left: 4px;
+            margin-left: 6px;
         }
 
-        .room-chat-input-row {
+        .comment-input-row {
             display: flex;
             gap: 8px;
+            align-items: center;
         }
 
-        .room-chat-input-row input {
+        .comment-input {
             flex: 1;
-            padding: 10px 14px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
+            padding: 8px 12px;
             color: #FFF;
             font-size: 13px;
             outline: none;
         }
 
-        .room-chat-input-row button {
-            padding: 0 16px;
-            background: #F59E0B;
-            border: none;
-            border-radius: 12px;
-            color: #07090E;
-            font-weight: 800;
-            cursor: pointer;
+        .comment-input:focus {
+            border-color: #F59E0B;
         }
 
-        .rooms-list {
+        .send-comment-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            border: none;
+            color: #07090E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .send-comment-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #07090E;
+            stroke-width: 2.2;
+            fill: none;
+        }
+
+        /* MIC CONTROL ACTION SHEET MODAL */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: modalUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes modalUp {
+            from { opacity: 0; transform: translateY(100px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .action-sheet {
+            background: #131722;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 20px 20px 30px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-top: 10px;
-            overflow-y: auto;
-            flex: 1;
         }
 
-        .room-card-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+        .action-sheet-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #F59E0B;
+            margin-bottom: 6px;
+        }
+
+        .sheet-btn {
+            width: 100%;
             padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #FFF;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
         }
 
-        .room-card-info {
-            display: flex;
+        .sheet-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .sheet-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #EF4444; }
+        .sheet-btn.cancel { background: transparent; border: none; color: #9CA3AF; margin-top: 4px; }
+
+        /* EXIT CONFIRMATION MODAL */
+        .confirm-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
             align-items: center;
+            padding: 20px;
+        }
+
+        .confirm-modal-overlay.active {
+            display: flex;
+            animation: fadeInScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .confirm-dialog {
+            background: #131722;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        .confirm-dialog-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .confirm-dialog-text {
+            font-size: 13px;
+            color: #9CA3AF;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .confirm-dialog-buttons {
+            display: flex;
             gap: 12px;
         }
 
-        .room-card-thumb {
-            width: 48px;
-            height: 48px;
+        .confirm-btn {
+            flex: 1;
+            padding: 12px;
             border-radius: 12px;
-            object-fit: cover;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
         }
 
-        .room-card-title {
-            font-size: 15px;
-            font-weight: 800;
+        .confirm-btn.yes {
+            background: #EF4444;
+            color: #FFF;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .confirm-btn.no {
+            background: rgba(255, 255, 255, 0.08);
+            color: #E5E7EB;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* PROFILE VIEW */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .profile-img-large {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            border: 3px solid #F59E0B;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            overflow: hidden;
+            margin-bottom: 10px;
+            background: #222;
+        }
+
+        .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
+
+        .profile-display-name {
+            font-size: 19px;
+            font-weight: 900;
             color: #FFF;
             margin-bottom: 2px;
         }
 
-        .room-card-owner {
+        .profile-display-email {
             font-size: 12px;
             color: #9CA3AF;
+            margin-bottom: 18px;
         }
 
-        .join-badge {
-            background: rgba(245, 158, 11, 0.15);
-            color: #F59E0B;
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 800;
+        .profile-data-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .data-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .data-label { color: #9CA3AF; }
+        .data-val { color: #F59E0B; font-weight: 800; }
+
+        /* BOTTOM NAVIGATION BAR WITH WHITE VECTOR ICONS */
+        .bottom-nav-bar {
+            width: calc(100% + 32px);
+            margin-left: -16px;
+            margin-right: -16px;
+            height: 65px;
+            background: rgba(13, 17, 23, 0.98);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 20;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: #6B7280;
+            cursor: pointer;
+            transition: color 0.3s;
+            gap: 4px;
+        }
+
+        .nav-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #6B7280;
+            stroke-width: 2;
+            fill: none;
+            transition: stroke 0.3s;
+        }
+
+        .nav-btn.active { color: #F59E0B; font-weight: 800; }
+        .nav-btn.active svg { stroke: #F59E0B; }
     </style>
 </head>
 <body>
 
     <div class="aurora-bg"></div>
 
-    <div class="card-container" id="appContainer">
-        <div class="glass-card">
-            
-            <div class="brand">
+    <div class="card-container" id="cardContainer">
+        <div class="glass-card" id="card">
+            <div class="spotlight" id="spotlight"></div>
+
+            <div class="brand" id="mainBrandHeader">
                 <div class="logo-title">SIMOMi</div>
-                <div class="subtitle">بثوث حية وغرف صوتية ذكية</div>
+                <div class="subtitle">دردشـة صـوتـيـة</div>
             </div>
 
-            <!-- STEP 1: AUTH -->
-            <div id="stepAuth" class="view-step active-view">
-                <div class="input-box">
-                    <input type="email" id="authEmail" placeholder=" " required>
-                    <label>البريد الإلكتروني</label>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="authPassword" placeholder=" " required>
-                    <label>كلمة المرور</label>
-                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
-                </div>
-                <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="goToStep('gender')">التالي</button>
-                </div>
-                <div class="footer-tag">SIMOMi Secure Cloud &copy; 2026</div>
+            <!-- STEP 1: Login View -->
+            <div id="loginView" class="view-step active-view">
+                <form onsubmit="handleLoginSubmit(event)">
+                    <div class="input-box">
+                        <input type="email" id="email" placeholder=" " required autocomplete="off">
+                        <label for="email">البريد الإلكتروني</label>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="password" id="password" placeholder=" " required>
+                        <label for="password">كلمة المرور</label>
+                        <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                    </div>
+
+                    <div id="authError" class="auth-error"></div>
+
+                    <div class="btn-wrapper">
+                        <button type="submit" id="loginBtn" class="magnetic-btn">
+                            تسجيل الدخول / إنشيء حسابك
+                        </button>
+                    </div>
+                </form>
             </div>
 
-            <!-- STEP 2: GENDER -->
-            <div id="stepGender" class="view-step hidden-view">
-                <div class="step-title">اختر جنسك</div>
-                <div class="step-subtitle">ليتم تخصيص تجربتك في التطبيق</div>
+            <!-- STEP 2: Gender Selection View -->
+            <div id="genderView" class="view-step hidden-view">
+                <div class="gender-title">تحديد الهوية</div>
+                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك الصوتي</div>
+
                 <div class="gender-grid">
-                    <div class="gender-card" id="genderMale" onclick="selectGender('male')">
+                    <div class="gender-card" id="cardMale" onclick="selectGender('male')">
+                        <div class="checkmark">✓</div>
                         <span class="avatar">👨‍💻</span>
-                        <div style="font-weight:800;">ذكر</div>
-                        <div class="checkmark">✓</div>
+                        <div style="font-weight: 800; color: #FFF;">ذكر</div>
                     </div>
-                    <div class="gender-card" id="genderFemale" onclick="selectGender('female')">
-                        <span class="avatar">👩‍💻</span>
-                        <div style="font-weight:800;">أنثى</div>
+                    <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
                         <div class="checkmark">✓</div>
+                        <span class="avatar">👩‍💻</span>
+                        <div style="font-weight: 800; color: #FFF;">أنثى</div>
                     </div>
                 </div>
+
                 <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="goToStep('name')">متابعة</button>
+                    <button type="button" class="magnetic-btn" onclick="goToStep('nameView')">
+                        متابعة
+                    </button>
                 </div>
             </div>
 
-            <!-- STEP 3: NAME -->
-            <div id="stepName" class="view-step hidden-view">
-                <div class="step-title">ما هو اسمك المستعار؟</div>
-                <div class="step-subtitle">هذا الاسم سيظهر للجميع في الغرف الصوتية</div>
+            <!-- STEP 3: Name Entry View -->
+            <div id="nameView" class="view-step hidden-view">
+                <div class="step-title">الاسم الشخصي</div>
+                <div class="step-subtitle">أدخل اسمك ليظهر في بطاقتك الخاصة</div>
+
                 <div class="name-field-wrapper" id="nameWrapper">
-                    <input type="text" id="userNameInput" class="name-input" placeholder="اكتب اسمك هنا..." maxlength="20" oninput="checkNameInput()">
-                    <span class="name-icon">✏️</span>
+                    <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
+                    <span class="name-icon">👤</span>
                     <span class="status-check">✓</span>
                 </div>
-                <div class="counter-tag"><span id="nameCounter">0</span>/20 حرف</div>
+                <div class="counter-tag" id="charCounter">0 / 20 حرف</div>
+
                 <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="goToStep('birthdate')">متابعة</button>
+                    <button type="button" class="magnetic-btn" onclick="saveNameAndNext()">
+                        متابعة
+                    </button>
                 </div>
             </div>
 
-            <!-- STEP 4: BIRTHDATE -->
-            <div id="stepBirthdate" class="view-step hidden-view">
-                <div class="step-title">تاريخ ميلادك</div>
-                <div class="step-subtitle">لإظهار عمرك الحقيقي على بطاقتك الشخصية</div>
+            <!-- STEP 4: Date of Birth View -->
+            <div id="dobView" class="view-step hidden-view">
+                <div class="step-title">تاريخ الميلاد</div>
+                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر الفعلي</div>
+
                 <div class="date-picker-grid">
                     <div class="date-select-wrapper">
                         <span class="date-label">اليوم</span>
-                        <select id="birthDay" onchange="calculateAge()"></select>
+                        <select id="daySelect" onchange="calculateAge()"></select>
                     </div>
                     <div class="date-select-wrapper">
                         <span class="date-label">الشهر</span>
-                        <select id="birthMonth" onchange="calculateAge()">
-                            <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
-                            <option value="4">أبريل</option><option value="5">ماي</option><option value="6">يونيو</option>
-                            <option value="7">يوليوز</option><option value="8">غشت</option><option value="9">شتنبر</option>
-                            <option value="10">أكتوبر</option><option value="11">نونبر</option><option value="12">دجنبر</option>
-                        </select>
+                        <select id="monthSelect" onchange="calculateAge()"></select>
                     </div>
                     <div class="date-select-wrapper">
                         <span class="date-label">السنة</span>
-                        <select id="birthYear" onchange="calculateAge()"></select>
+                        <select id="yearSelect" onchange="calculateAge()"></select>
                     </div>
                 </div>
-                <div class="age-badge" id="ageBadgeDisplay">العمر: 0 سنة</div>
+
+                <div class="age-badge" id="ageBadge">العمر: 0 سنة</div>
+
                 <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="goToStep('avatar')">متابعة</button>
+                    <button type="button" class="magnetic-btn" onclick="goToStep('avatarView')">
+                        متابعة
+                    </button>
                 </div>
             </div>
 
-            <!-- STEP 5: AVATAR -->
-            <div id="stepAvatar" class="view-step hidden-view">
-                <div class="step-title">صورة الملف الشخصي</div>
-                <div class="step-subtitle">أضف صورتك الشخصية لتبرز في الغرف</div>
+            <!-- STEP 5: Avatar Selection View -->
+            <div id="avatarView" class="view-step hidden-view">
+                <div class="step-title">الصورة الشخصية</div>
+                <div class="step-subtitle">اختر صورة بروفايلك أو ارفع واحدة جديدة</div>
+
                 <div class="upload-container">
                     <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
-                        <div class="upload-placeholder-content" id="avatarPlaceholder">
+                        <img id="avatarPreview" src="" alt="Avatar">
+                        <div class="upload-placeholder-content" id="uploadPlaceholder">
                             <span class="upload-icon">📷</span>
-                            <span class="upload-text">اختر صورة</span>
+                            <span class="upload-text">رفع صورة</span>
                         </div>
-                        <img id="avatarPreviewImg" src="" alt="Avatar">
                     </div>
-                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewImage(event)">
                 </div>
+
                 <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="buildGoldCardAndProceed()">إنشاء بطاقة الذهب</button>
+                    <button type="button" class="magnetic-btn" onclick="generateGoldCard()">
+                        إنشاء البطاقة الذهبية ✨
+                    </button>
                 </div>
             </div>
 
-            <!-- STEP 6: GOLD CARD -->
-            <div id="stepGoldCard" class="view-step hidden-view">
-                <div class="step-title">بطاقتك الذهبية الرسمية</div>
-                <div class="step-subtitle">هويتك الرقمية الخاصة داخل تطبيق SIMOMi</div>
+            <!-- STEP 6: Gold ID Card Result -->
+            <div id="cardResultView" class="view-step hidden-view">
+                <div class="step-title">بطاقتك الرقمية</div>
+                <div class="step-subtitle">مرحباً بك رسمياً في المنصة الصوتية SIMOMi</div>
+
                 <div class="gold-card-wrapper">
-                    <div class="gold-id-card">
+                    <div class="gold-id-card" id="goldCard">
                         <div class="card-header-row">
                             <div class="card-chip"></div>
-                            <div class="card-brand-tag">SIMOMi VIP</div>
+                            <div class="card-brand-tag">SIMOMi PASS</div>
                         </div>
                         <div class="card-body-row">
                             <div class="card-avatar-box">
-                                <img id="cardAvatarDisplay" src="" alt="User">
+                                <img id="finalCardAvatar" src="" alt="Profile">
                             </div>
-                            <div>
-                                <div class="card-name" id="cardNameDisplay">اسم المستخدم</div>
-                                <div class="card-info-grid" id="cardInfoDisplay">العمر: 0 | الجنس: -</div>
+                            <div class="card-details">
+                                <div class="card-name" id="finalCardName">الاسم</div>
+                                <div class="card-info-grid">
+                                    <span id="finalCardGender">الجنس</span> • 
+                                    <span id="finalCardAge">العمر</span>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer-row">
-                            <span>ID: #883920</span>
-                            <span>VERIFIED 2026</span>
+                            <span>ID: 2026-9981-VIP</span>
+                            <span>VERIFIED USER ✓</span>
                         </div>
                     </div>
                 </div>
-                <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="enterDashboard()">الدخول إلى المنصة الرئيسية</button>
-                </div>
-            </div>
 
-            <!-- DASHBOARD -->
-            <div id="stepDashboard" class="view-step hidden-view">
-                <div class="home-top-bar">
-                    <div class="home-title-tag"><span>🔥</span> الغرف النشطة الآن</div>
-                    <button class="logout-small-btn" onclick="logoutApp()">
-                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                        خروج
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="goToStep('homeMainView')">
+                        دخول المنصة 🚀
                     </button>
                 </div>
-                <button class="create-room-btn" onclick="goToStep('createRoom')">
-                    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    إنشاء غرفة بث جديدة
+            </div>
+
+            <!-- STEP 7: MAIN HOME DASHBOARD WITH CLEAN LAYOUT -->
+            <div id="homeMainView" class="view-step hidden-view">
+                <div class="home-top-bar">
+                    <div class="home-title-tag">
+                        <!-- أيقونة منزل بأسلوب رسم أبيض -->
+                        <svg class="svg-icon lg" style="stroke: #F59E0B;" viewBox="0 0 24 24">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span>الرئيسية</span>
+                    </div>
+
+                    <button type="button" class="logout-small-btn" onclick="handleFullLogout()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"></path>
+                            <polyline points="21 12 11 12"></polyline>
+                            <polyline points="18 9 21 12 18 15"></polyline>
+                        </svg>
+                        <span>تسجيل الخروج</span>
+                    </button>
+                </div>
+
+                <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
+                    <!-- أيقونة ميكروفون رسم -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                    <span>إنشاء غرفة دردشة</span>
                 </button>
-                <div class="rooms-list" id="roomsListContainer"></div>
             </div>
 
-            <!-- CREATE ROOM -->
-            <div id="stepCreateRoom" class="view-step hidden-view">
-                <div class="step-title">إعداد غرفة البث</div>
-                <div class="step-subtitle">اختر خلفية وصورة للغرفة الصوتية</div>
+            <!-- STEP 8: CREATE ROOM CONFIG VIEW -->
+            <div id="createRoomView" class="view-step hidden-view">
+                <div class="step-title">إنشاء غرفة جديدة</div>
+                <div class="step-subtitle">اختر صورة الغرفة وأدخل اسمها</div>
+
+                <div class="upload-container">
+                    <div class="avatar-upload-zone" onclick="document.getElementById('roomAvatarInput').click()">
+                        <img id="roomAvatarPreview" src="" alt="Room Avatar">
+                        <div class="upload-placeholder-content" id="roomUploadPlaceholder">
+                            <span class="upload-icon">🏛️</span>
+                            <span class="upload-text">صورة الغرفة</span>
+                        </div>
+                    </div>
+                    <input type="file" id="roomAvatarInput" accept="image/*" onchange="previewRoomImage(event)">
+                </div>
+
                 <div class="input-box">
-                    <input type="text" id="roomNameInput" placeholder=" " required>
-                    <label>عنوان الغرفة (مثلا: جلسة طرب وسوالف)</label>
+                    <input type="text" id="roomNameInput" placeholder=" " required autocomplete="off">
+                    <label for="roomNameInput">اسم الغرفة الصوتية...</label>
                 </div>
-                <div style="font-size: 13px; font-weight: 800; color: #F59E0B; margin-bottom: 8px;">اختر خلفية الغرفة:</div>
-                <div class="bg-grid">
-                    <div class="bg-option selected" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300')" onclick="selectRoomBg(this, 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600')"></div>
-                    <div class="bg-option" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300')" onclick="selectRoomBg(this, 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600')"></div>
-                    <div class="bg-option" style="background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300')" onclick="selectRoomBg(this, 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600')"></div>
-                </div>
+
                 <div class="btn-wrapper">
-                    <button class="magnetic-btn" onclick="createNewLiveRoom()">إطلاق الغرفة الآن</button>
-                </div>
-                <div style="text-align: center; margin-top: 10px;">
-                    <button style="background:none; border:none; color:#9CA3AF; font-size:12px; cursor:pointer;" onclick="goToStep('dashboard')">رجوع</button>
+                    <button type="button" class="magnetic-btn" onclick="goToRoomBgStep()">
+                        متابعة لاختيار الخلفية 🎨
+                    </button>
                 </div>
             </div>
 
-            <!-- LIVE ROOM (10 MICS + REALTIME ONLINE COUNTER) -->
-            <div id="stepLiveRoom" class="view-step hidden-view">
-                <div class="live-room-container" id="activeRoomContainerBg" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600')">
-                    
+            <!-- STEP 9: CHOOSE ROOM BACKGROUND VIEW -->
+            <div id="roomBgView" class="view-step hidden-view">
+                <div class="step-title">خلفية الغرفة</div>
+                <div class="step-subtitle">اختر خلفية مميزة لغرفتك الصوتية</div>
+
+                <div class="bg-grid">
+                    <div class="bg-option selected" style="background-image: linear-gradient(135deg, #1e3c72, #2a5298);" onclick="selectBgOption(this, 'linear-gradient(135deg, #1e3c72, #2a5298)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #2b5876, #4e4376);" onclick="selectBgOption(this, 'linear-gradient(135deg, #2b5876, #4e4376)')"></div>
+                    <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
+                </div>
+
+                <div class="upload-container" style="margin-bottom: 16px;">
+                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">
+                        📷 رفع خلفية خاصة
+                    </button>
+                    <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
+                </div>
+
+                <div class="btn-wrapper">
+                    <button type="button" class="magnetic-btn" onclick="launchLiveRoom()">
+                        إطلاق الغرفة الآن 🚀
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 10: LIVE VOICE ROOM VIEW -->
+            <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
+                <div class="live-room-container" id="liveRoomBg">
+                    <!-- Top Bar Header with Online Count Badge & Exit Button -->
                     <div class="live-room-top-bar">
-                        <div class="live-room-header">
-                            <img id="liveRoomOwnerAvatar" class="live-room-avatar" src="" alt="">
-                            <div class="live-room-title" id="liveRoomTitleDisplay">عنوان الغرفة</div>
+                        <!-- Online Users Badge -->
+                        <div class="room-online-badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            <span id="onlineCountNum">1</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="room-online-badge">
-                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                <span id="onlineCountBadge">0</span>
-                            </div>
-                            <div class="leave-room-btn" onclick="leaveCurrentRoom()" title="مغادرة الغرفة">
-                                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                            </div>
+
+                        <!-- Power/Exit Vector Icon Button in Top-Left (Opens Confirmation Dialog) -->
+                        <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج من الغرفة">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
                         </div>
                     </div>
 
+                    <!-- 10 Microphones Grid Raised Higher -->
                     <div class="mics-grid-container">
-                        <div class="mics-row" id="micsRow1"></div>
-                        <div class="mics-row" id="micsRow2"></div>
+                        <!-- Top Row: Mics 1 to 5 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)">
+                                <div class="mic-circle" id="micCircle-1">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">1</span>
+                            </div>
+                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)">
+                                <div class="mic-circle" id="micCircle-2">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">2</span>
+                            </div>
+                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)">
+                                <div class="mic-circle" id="micCircle-3">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">3</span>
+                            </div>
+                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)">
+                                <div class="mic-circle" id="micCircle-4">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">4</span>
+                            </div>
+                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)">
+                                <div class="mic-circle" id="micCircle-5">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">5</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Row: Mics 6 to 10 -->
+                        <div class="mics-row">
+                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)">
+                                <div class="mic-circle" id="micCircle-6">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">6</span>
+                            </div>
+                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)">
+                                <div class="mic-circle" id="micCircle-7">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">7</span>
+                            </div>
+                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)">
+                                <div class="mic-circle" id="micCircle-8">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">8</span>
+                            </div>
+                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)">
+                                <div class="mic-circle" id="micCircle-9">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">9</span>
+                            </div>
+                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)">
+                                <div class="mic-circle" id="micCircle-10">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span class="mic-number">10</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="room-footer-panel">
-                        <div class="room-chat-box" id="roomChatMessagesBox">
-                            <div class="chat-msg"><span>نظام SIMOMi:</span> مرحباً بك في البث المباشر!</div>
+                    <!-- ROOM COMMENTS & CHAT SECTION AT THE BOTTOM -->
+                    <div class="room-comments-section">
+                        <div class="comments-list" id="commentsListContainer">
+                            <div class="comment-bubble">
+                                <span class="comment-user">النظام:</span> أهلاً بك في الغرفة الصوتية! اكتب تعليقك للجميع.
+                            </div>
                         </div>
-                        <div class="room-chat-input-row">
-                            <input type="text" id="roomChatInput" placeholder="اكتب رسالة للغرفة..." onkeypress="handleChatKeyPress(event)">
-                            <button onclick="sendRoomChatMessage()">إرسال</button>
+                        <div class="comment-input-row">
+                            <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
+                            <button type="button" class="send-comment-btn" onclick="sendRoomComment()" title="إرسال التعليق">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
+            <!-- STEP 11: MESSAGES VIEW -->
+            <div id="messagesView" class="view-step hidden-view">
+                <div class="step-title">الرسائل</div>
+                <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
+            </div>
+
+            <!-- STEP 12: ACCOUNT PROFILE VIEW -->
+            <div id="profileView" class="view-step hidden-view">
+                <div class="profile-card">
+                    <div class="profile-img-large">
+                        <img id="profileAvatarImg" src="" alt="Profile">
+                    </div>
+                    <div class="profile-display-name" id="profileNameTxt">اسم المستخدم</div>
+                    <div class="profile-display-email" id="profileEmailTxt">user@vlymax.app</div>
+
+                    <div class="profile-data-box">
+                        <div class="data-row">
+                            <span class="data-label">الجنس</span>
+                            <span class="data-val" id="profileGenderTxt">-</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">العمر</span>
+                            <span class="data-val" id="profileAgeTxt">-</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">حالة الحساب</span>
+                            <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION SHEET MODAL FOR MIC SEAT CONTROL -->
+            <div class="modal-overlay" id="micModalOverlay">
+                <div class="action-sheet">
+                    <div class="action-sheet-title" id="menuMicTitle">التحكم بالميكروفون</div>
+                    
+                    <button type="button" class="sheet-btn" id="takeMicBtn" onclick="actionTakeMic()">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                        <span>الصعود إلى الميكروفون</span>
+                    </button>
+                    
+                    <button type="button" class="sheet-btn" id="lockMicBtn" onclick="actionToggleLockMic()">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span id="lockBtnTxt">قفل / إغلاق الميكروفون</span>
+                    </button>
+
+                    <button type="button" class="sheet-btn danger" id="leaveMicBtn" onclick="actionLeaveMic()" style="display:none;">
+                        <svg class="svg-icon" style="stroke:#EF4444;" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <span>مغادرة الميكروفون</span>
+                    </button>
+
+                    <button type="button" class="sheet-btn cancel" onclick="closeMicMenu()">إلغاء</button>
+                </div>
+            </div>
+
+            <!-- EXIT CONFIRMATION MODAL -->
+            <div class="confirm-modal-overlay" id="exitConfirmModal">
+                <div class="confirm-dialog">
+                    <div class="confirm-dialog-title">تأكيد الخروج</div>
+                    <div class="confirm-dialog-text">هل أنت متأكد أنك تريد مغادرة الغرفة الصوتية؟</div>
+                    <div class="confirm-dialog-buttons">
+                        <button type="button" class="confirm-btn yes" onclick="confirmExitRoom(true)">نعم</button>
+                        <button type="button" class="confirm-btn no" onclick="confirmExitRoom(false)">لا</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM NAVIGATION BAR WITH WHITE VECTOR ICONS -->
+            <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
+                <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
+                    <!-- أيقونة منزل -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')">
+                    <!-- أيقونة محادثة/رسائل -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>رسائل</span>
+                </div>
+                <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')">
+                    <!-- أيقونة حسابي/مستخدم -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>حسابي</span>
+                </div>
+            </div>
+
+            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Auth Integrated</div>
         </div>
     </div>
 
-    <!-- Firebase Integration -->
+    <!-- FIREBASE MODULE SYSTEM -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase/app.js";
-        import { getDatabase, ref, set, get, onValue, push, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase/database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDoPrnf3HXH8zipsJ5ROXApWu20Vm56QhY",
@@ -1040,295 +1569,410 @@
             projectId: "vlymax",
             storageBucket: "vlymax.firebasestorage.app",
             messagingSenderId: "825269785341",
-            appId: "1:825269785341:web:50a6da668b933ffe94e494"
+            appId: "1:825269785341:web:74b34d4f6366a1f594e494"
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const auth = getAuth(app);
 
-        window.currentUserData = {
-            uid: 'user_' + Math.random().toString(36.substring(2, 9)),
-            name: 'مستخدم جديد',
+        window.firebaseAuth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+    </script>
+
+    <!-- APP SCRIPT LOGIC -->
+    <script>
+        const userData = {
+            email: '',
             gender: 'male',
-            age: 22,
-            avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200'
+            name: '',
+            dob: { day: 1, month: 1, year: 2000 },
+            age: 0,
+            avatarSrc: 'https://via.placeholder.com/150',
+            roomName: '',
+            roomAvatarSrc: '',
+            roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
         };
-        window.currentRoomId = null;
-        window.selectedBgUrl = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600';
-        let userPresenceRef = null;
+
+        let selectedMicIndex = null;
+        let myTakenMicIndex = null;
+
+        const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`;
+        const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
 
         window.addEventListener('DOMContentLoaded', () => {
-            const daySel = document.getElementById('birthDay');
-            const yearSel = document.getElementById('birthYear');
-            for(let i=1; i<=31; i++) {
-                let opt = document.createElement('option'); opt.value = i; opt.textContent = i;
-                if(i === 12) opt.selected = true; daySel.appendChild(opt);
-            }
-            const currentYear = new Date().getFullYear();
-            for(let i=currentYear; i>=currentYear-90; i--) {
-                let opt = document.createElement('option'); opt.value = i; opt.textContent = i;
-                if(i === 2000) opt.selected = true; yearSel.appendChild(opt);
-            }
+            const daySel = document.getElementById('daySelect');
+            const monthSel = document.getElementById('monthSelect');
+            const yearSel = document.getElementById('yearSelect');
+
+            for(let i=1; i<=31; i++) daySel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=1; i<=12; i++) monthSel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=2026; i>=1950; i--) yearSel.innerHTML += `<option value="${i}">${i}</option>`;
+            
             calculateAge();
-            renderMicSeats();
-            listenToRoomsList();
         });
 
-        window.goToStep = function(stepName) {
-            ['stepAuth', 'stepGender', 'stepName', 'stepBirthdate', 'stepAvatar', 'stepGoldCard', 'stepDashboard', 'stepCreateRoom', 'stepLiveRoom'].forEach(s => {
-                const el = document.getElementById(s);
-                if(el) { el.classList.add('hidden-view'); el.classList.remove('active-view'); }
+        function goToStep(stepId) {
+            document.querySelectorAll('.view-step').forEach(el => {
+                el.classList.remove('active-view');
+                el.classList.add('hidden-view');
             });
-            let targetEl = document.getElementById('step' + stepName.charAt(0).toUpperCase() + stepName.slice(1));
-            if(targetEl) { targetEl.classList.remove('hidden-view'); targetEl.classList.add('active-view'); }
-            
-            const container = document.getElementById('appContainer');
-            if(stepName === 'liveRoom') container.classList.add('clean-mode');
-            else container.classList.remove('clean-mode');
-        };
+            const target = document.getElementById(stepId);
+            target.classList.remove('hidden-view');
+            target.classList.add('active-view');
 
-        window.togglePassword = function() {
-            const p = document.getElementById('authPassword');
-            p.type = p.type === 'password' ? 'text' : 'password';
-        };
+            const navBar = document.getElementById('bottomNav');
+            const cardContainer = document.getElementById('cardContainer');
+            const brandHeader = document.getElementById('mainBrandHeader');
 
-        window.selectGender = function(g) {
-            window.currentUserData.gender = g;
-            document.getElementById('genderMale').classList.remove('selected');
-            document.getElementById('genderFemale').classList.remove('selected');
-            document.getElementById(g === 'male' ? 'genderMale' : 'genderFemale').classList.add('selected');
-        };
+            if(stepId === 'liveRoomView') {
+                navBar.style.display = 'none';
+                brandHeader.style.display = 'none';
+                cardContainer.classList.add('clean-mode');
+            } else {
+                brandHeader.style.display = 'block';
+                if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView') {
+                    navBar.style.display = 'flex';
+                    cardContainer.classList.add('clean-mode');
+                } else {
+                    navBar.style.display = 'none';
+                    cardContainer.classList.remove('clean-mode');
+                }
+            }
 
-        window.checkNameInput = function() {
-            const val = document.getElementById('userNameInput').value;
-            document.getElementById('nameCounter').textContent = val.length;
+            if(stepId === 'liveRoomView') {
+                navBar.style.display = 'none';
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            if(tab === 'home') {
+                document.getElementById('navHomeBtn').classList.add('active');
+                goToStep('homeMainView');
+            } else if(tab === 'messages') {
+                document.getElementById('navMsgBtn').classList.add('active');
+                goToStep('messagesView');
+            } else if(tab === 'profile') {
+                document.getElementById('navProfileBtn').classList.add('active');
+                
+                document.getElementById('profileNameTxt').innerText = userData.name || 'مستخدم جديد';
+                document.getElementById('profileEmailTxt').innerText = userData.email || 'user@vlymax.app';
+                document.getElementById('profileGenderTxt').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+                document.getElementById('profileAgeTxt').innerText = userData.age + ' سنة';
+                if(userData.avatarSrc) {
+                    document.getElementById('profileAvatarImg').src = userData.avatarSrc;
+                }
+
+                goToStep('profileView');
+            }
+        }
+
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            userData.email = email;
+            const errorDiv = document.getElementById('authError');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorDiv.style.display = 'none';
+            loginBtn.innerText = "جاري التحقق...";
+
+            try {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                goToStep('genderView');
+            } catch (err) {
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                    try {
+                        await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                        goToStep('genderView');
+                    } catch (createErr) {
+                        errorDiv.innerText = "كلمة المرور ضعيفة أو الإيميل غير صحيح!";
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.innerText = "حدث خطأ: " + err.message;
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
+            }
+        }
+
+        async function handleFullLogout() {
+            if(confirm('هل أنت تأكد من إرادة تسجيل الخروج؟')) {
+                try {
+                    if (window.firebaseAuth) {
+                        await window.signOut(window.firebaseAuth);
+                    }
+                } catch(e) {
+                    console.log('Logout error:', e);
+                }
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                goToStep('loginView');
+            }
+        }
+
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
+        }
+
+        function selectGender(gender) {
+            userData.gender = gender;
+            document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
+            document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
+        }
+
+        function validateNameInput(input) {
             const wrapper = document.getElementById('nameWrapper');
-            if(val.trim().length >= 2) {
+            const counter = document.getElementById('charCounter');
+            const val = input.value;
+            counter.innerText = `${val.length} / 20 حرف`;
+            if (val.trim().length >= 3) {
                 wrapper.classList.add('valid');
-                window.currentUserData.name = val.trim();
             } else {
                 wrapper.classList.remove('valid');
             }
-        };
+        }
 
-        window.calculateAge = function() {
-            const y = parseInt(document.getElementById('birthYear').value);
-            const age = new Date().getFullYear() - y;
-            window.currentUserData.age = age;
-            const badge = document.getElementById('ageBadgeDisplay');
-            badge.textContent = `العمر: ${age} سنة`;
+        function saveNameAndNext() {
+            const input = document.getElementById('userNameInput');
+            if (input.value.trim().length >= 3) {
+                userData.name = input.value.trim();
+                goToStep('dobView');
+            } else {
+                alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل');
+            }
+        }
+
+        function calculateAge() {
+            const day = parseInt(document.getElementById('daySelect').value);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const year = parseInt(document.getElementById('yearSelect').value);
+
+            const birth = new Date(year, month - 1, day);
+            const today = new Date(2026, 9, 10);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+            userData.age = age;
+            const badge = document.getElementById('ageBadge');
+            badge.innerText = `العمر: ${age} سنة`;
             badge.classList.add('show');
-        };
+        }
 
-        window.previewAvatar = function(event) {
-            const file = event.target.files[0];
-            if(file) {
+        function previewImage(e) {
+            const file = e.target.files[0];
+            if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    window.currentUserData.avatar = e.target.result;
-                    const img = document.getElementById('avatarPreviewImg');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    document.getElementById('avatarPlaceholder').style.display = 'none';
+                reader.onload = function(evt) {
+                    document.getElementById('avatarPreview').src = evt.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
+                    userData.avatarSrc = evt.target.result;
                 };
                 reader.readAsDataURL(file);
             }
-        };
+        }
 
-        window.buildGoldCardAndProceed = function() {
-            const nameField = document.getElementById('userNameInput').value.trim();
-            if(nameField) window.currentUserData.name = nameField;
-            document.getElementById('cardAvatarDisplay').src = window.currentUserData.avatar;
-            document.getElementById('cardNameDisplay').textContent = window.currentUserData.name;
-            document.getElementById('cardInfoDisplay').textContent = `العمر: ${window.currentUserData.age} | الجنس: ${window.currentUserData.gender === 'male' ? 'ذكر' : 'أنثى'}`;
-            window.goToStep('goldCard');
-        };
+        function previewRoomImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('roomAvatarPreview').src = evt.target.result;
+                    document.getElementById('roomAvatarPreview').style.display = 'block';
+                    document.getElementById('roomUploadPlaceholder').style.display = 'none';
+                    userData.roomAvatarSrc = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
-        window.enterDashboard = function() { window.goToStep('dashboard'); };
-        window.logoutApp = function() { window.location.reload(); };
+        function goToRoomBgStep() {
+            const roomName = document.getElementById('roomNameInput').value.trim();
+            if (!roomName) {
+                alert('الرجاء إدخال اسم الغرفة');
+                return;
+            }
+            userData.roomName = roomName;
+            goToStep('roomBgView');
+        }
 
-        window.selectRoomBg = function(el, url) {
-            document.querySelectorAll('.bg-option').forEach(o => o.classList.remove('selected'));
+        function selectBgOption(el, bgValue) {
+            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
-            window.selectedBgUrl = url;
-        };
-
-        window.createNewLiveRoom = function() {
-            const roomTitle = document.getElementById('roomNameInput').value.trim() || `${window.currentUserData.name} غرفة البث`;
-            const roomsRef = ref(db, 'rooms');
-            const newRoomRef = push(roomsRef);
-            set(newRoomRef, {
-                id: newRoomRef.key,
-                title: roomTitle,
-                ownerName: window.currentUserData.name,
-                ownerAvatar: window.currentUserData.avatar,
-                bgUrl: window.selectedBgUrl,
-                createdAt: Date.now()
-            }).then(() => {
-                window.joinRoom(newRoomRef.key);
-            });
-        };
-
-        function listenToRoomsList() {
-            onValue(ref(db, 'rooms'), snapshot => {
-                const container = document.getElementById('roomsListContainer');
-                container.innerHTML = '';
-                if(!snapshot.exists()) {
-                    container.innerHTML = '<div style="text-align:center; color:#9CA3AF; font-size:13px; margin-top:20px;">لا توجد غرف نشطة حالياً. أنشئ غرفة جديدة!</div>';
-                    return;
-                }
-                snapshot.forEach(child => {
-                    const room = child.val();
-                    const item = document.createElement('div');
-                    item.className = 'room-card-item';
-                    item.onclick = () => window.joinRoom(room.id);
-                    item.innerHTML = `
-                        <div class="room-card-info">
-                            <img src="${room.ownerAvatar}" class="room-card-thumb" alt="">
-                            <div>
-                                <div class="room-card-title">${room.title}</div>
-                                <div class="room-card-owner">المضيف: ${room.ownerName}</div>
-                            </div>
-                        </div>
-                        <div class="join-badge">انضمام</div>
-                    `;
-                    container.appendChild(item);
-                });
-            });
+            userData.roomBg = bgValue;
         }
 
-        window.joinRoom = function(roomId) {
-            window.currentRoomId = roomId;
-            get(ref(db, `rooms/${roomId}`)).then(snapshot => {
-                if(snapshot.exists()) {
-                    const room = snapshot.val();
-                    document.getElementById('liveRoomTitleDisplay').textContent = room.title;
-                    document.getElementById('liveRoomOwnerAvatar').src = room.ownerAvatar;
-                    document.getElementById('activeRoomContainerBg').style.backgroundImage = `url('${room.bgUrl}')`;
-                    
-                    // Register user in live presence counter
-                    userPresenceRef = ref(db, `rooms/${roomId}/presence/${window.currentUserData.uid}`);
-                    set(userPresenceRef, { name: window.currentUserData.name });
-                    onDisconnect(userPresenceRef).remove();
-
-                    setupRoomRealtimeListeners(roomId);
-                    window.goToStep('liveRoom');
-                }
-            });
-        };
-
-        window.leaveCurrentRoom = function() {
-            if(window.currentRoomId) {
-                if(userPresenceRef) set(userPresenceRef, null);
-                // Free any mic taken by user
-                get(ref(db, `rooms/${window.currentRoomId}/mics`)).then(snap => {
-                    if(snap.exists()) {
-                        snap.forEach(mChild => {
-                            if(mChild.val().uid === window.currentUserData.uid) {
-                                set(ref(db, `rooms/${window.currentRoomId}/mics/${mChild.key}`), null);
-                            }
-                        });
-                    }
-                });
-            }
-            window.currentRoomId = null;
-            window.goToStep('dashboard');
-        };
-
-        function renderMicSeats() {
-            const row1 = document.getElementById('micsRow1');
-            const row2 = document.getElementById('micsRow2');
-            row1.innerHTML = ''; row2.innerHTML = '';
-            for(let i=1; i<=10; i++) {
-                const seat = document.createElement('div');
-                seat.className = 'mic-seat';
-                seat.id = `micSeat_${i}`;
-                seat.onclick = () => toggleMicSeat(i);
-                seat.innerHTML = `
-                    <div class="mic-circle" id="micCircle_${i}">
-                        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-                    </div>
-                    <div class="mic-name" id="micName_${i}">ميكروفون ${i}</div>
-                `;
-                if(i <= 5) row1.appendChild(seat); else row2.appendChild(seat);
+        function previewRoomBg(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    userData.roomBg = `url('${evt.target.result}')`;
+                    alert('تم اختيار الخلفية بنجاح!');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        window.toggleMicSeat = function(micIndex) {
-            if(!window.currentRoomId) return;
-            const micRef = ref(db, `rooms/${window.currentRoomId}/mics/${micIndex}`);
-            get(micRef).then(snap => {
-                if(snap.exists() && snap.val().uid === window.currentUserData.uid) {
-                    set(micRef, null);
-                } else if(!snap.exists()) {
-                    set(micRef, { uid: window.currentUserData.uid, name: window.currentUserData.name, avatar: window.currentUserData.avatar });
-                }
-            });
-        };
-
-        function setupRoomRealtimeListeners(roomId) {
-            // Live Presence Counter Listener
-            onValue(ref(db, `rooms/${roomId}/presence`), snapshot => {
-                const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-                document.getElementById('onlineCountBadge').textContent = count;
-            });
-
-            // Mics Listener
-            onValue(ref(db, `rooms/${roomId}/mics`), snapshot => {
-                for(let i=1; i<=10; i++) {
-                    const circle = document.getElementById(`micCircle_${i}`);
-                    const nameTag = document.getElementById(`micName_${i}`);
-                    circle.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`;
-                    nameTag.textContent = `ميكروفون ${i}`;
-                    document.getElementById(`micSeat_${i}`).classList.remove('occupied');
-                }
-                if(snapshot.exists()) {
-                    snapshot.forEach(child => {
-                        const mIndex = child.key;
-                        const mData = child.val();
-                        const circle = document.getElementById(`micCircle_${mIndex}`);
-                        const nameTag = document.getElementById(`micName_${mIndex}`);
-                        if(circle && mData) {
-                            circle.innerHTML = `<img src="${mData.avatar}" alt="">`;
-                            nameTag.textContent = mData.name;
-                            document.getElementById(`micSeat_${mIndex}`).classList.add('occupied');
-                        }
-                    });
-                }
-            });
-
-            // Chat Listener
-            onValue(ref(db, `rooms/${roomId}/chat`), snapshot => {
-                const chatBox = document.getElementById('roomChatMessagesBox');
-                chatBox.innerHTML = '<div class="chat-msg"><span>نظام SIMOMi:</span> متصل بالبث المباشر الحي.</div>';
-                if(snapshot.exists()) {
-                    snapshot.forEach(child => {
-                        const msg = child.val();
-                        const div = document.createElement('div');
-                        div.className = 'chat-msg';
-                        div.innerHTML = `<span>${msg.sender}:</span> ${msg.text}`;
-                        chatBox.appendChild(div);
-                    });
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }
-            });
+        function launchLiveRoom() {
+            const roomContainer = document.getElementById('liveRoomBg');
+            if (userData.roomBg.startsWith('linear-gradient') || userData.roomBg.startsWith('url')) {
+                roomContainer.style.background = userData.roomBg;
+                roomContainer.style.backgroundSize = 'cover';
+                roomContainer.style.backgroundPosition = 'center';
+            }
+            
+            myTakenMicIndex = null;
+            updateOnlineCount();
+            goToStep('liveRoomView');
         }
 
-        window.sendRoomChatMessage = function() {
-            const input = document.getElementById('roomChatInput');
-            const text = input.value.trim();
-            if(!text || !window.currentRoomId) return;
-            push(ref(db, `rooms/${window.currentRoomId}/chat`), {
-                sender: window.currentUserData.name,
-                text: text,
-                timestamp: Date.now()
-            });
-            input.value = '';
-        };
+        function updateOnlineCount() {
+            let occupiedSeats = document.querySelectorAll('.mic-seat.occupied').length;
+            let totalOnline = 1 + occupiedSeats;
+            document.getElementById('onlineCountNum').innerText = totalOnline;
+        }
 
-        window.handleChatKeyPress = function(e) {
-            if(e.key === 'Enter') window.sendRoomChatMessage();
-        };
+        function sendRoomComment() {
+            const inputEl = document.getElementById('roomCommentInput');
+            const commentText = inputEl.value.trim();
+            if (!commentText) return;
+
+            const container = document.getElementById('commentsListContainer');
+            const senderName = userData.name || 'زائر';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'comment-bubble';
+            bubble.innerHTML = `<span class="comment-user">${senderName}:</span> ${escapeHtml(commentText)}`;
+
+            container.appendChild(bubble);
+            container.scrollTop = container.scrollHeight;
+            inputEl.value = '';
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function openExitConfirmModal() {
+            document.getElementById('exitConfirmModal').classList.add('active');
+        }
+
+        function confirmExitRoom(isYes) {
+            document.getElementById('exitConfirmModal').classList.remove('active');
+            if (isYes) {
+                myTakenMicIndex = null;
+                switchTab('home');
+            }
+        }
+
+        function openMicMenu(index) {
+            selectedMicIndex = index;
+            const seatEl = document.getElementById(`seat-${index}`);
+            document.getElementById('menuMicTitle').innerText = `إدارة الميكروفون رقم ${index}`;
+            
+            const isOccupied = seatEl.classList.contains('occupied');
+            const isLocked = seatEl.classList.contains('locked');
+            
+            const takeBtn = document.getElementById('takeMicBtn');
+            const leaveBtn = document.getElementById('leaveMicBtn');
+
+            if (myTakenMicIndex !== null) {
+                if (myTakenMicIndex === index) {
+                    takeBtn.style.display = 'none';
+                    leaveBtn.style.display = 'flex';
+                } else {
+                    takeBtn.style.display = 'none';
+                    leaveBtn.style.display = 'none';
+                }
+            } else {
+                takeBtn.style.display = (!isOccupied && !isLocked) ? 'flex' : 'none';
+                leaveBtn.style.display = isOccupied ? 'flex' : 'none';
+            }
+
+            document.getElementById('lockBtnTxt').innerText = isLocked ? 'فتح الميكروفون 🔓' : 'قفل الميكروفون 🔒';
+            document.getElementById('micModalOverlay').classList.add('active');
+        }
+
+        function closeMicMenu() {
+            document.getElementById('micModalOverlay').classList.remove('active');
+        }
+
+        function actionTakeMic() {
+            if (!selectedMicIndex) return;
+
+            if (myTakenMicIndex !== null) {
+                alert('أنت جالس بالفعل في ميكروفون رقم ' + myTakenMicIndex + '، يجب عليك مغادرته أولاً!');
+                closeMicMenu();
+                return;
+            }
+
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            seatEl.classList.add('occupied');
+            circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+            
+            myTakenMicIndex = selectedMicIndex;
+            closeMicMenu();
+            updateOnlineCount();
+        }
+
+        function actionLeaveMic() {
+            if (!selectedMicIndex) return;
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            seatEl.classList.remove('occupied');
+            circle.innerHTML = seatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
+            
+            if (myTakenMicIndex === selectedMicIndex) {
+                myTakenMicIndex = null;
+            }
+
+            closeMicMenu();
+            updateOnlineCount();
+        }
+
+        function actionToggleLockMic() {
+            if (!selectedMicIndex) return;
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            if (seatEl.classList.contains('locked')) {
+                seatEl.classList.remove('locked');
+                if (!seatEl.classList.contains('occupied')) circle.innerHTML = micSvgHTML;
+            } else {
+                seatEl.classList.add('locked');
+                seatEl.classList.remove('occupied');
+                circle.innerHTML = lockSvgHTML;
+                
+                if (myTakenMicIndex === selectedMicIndex) {
+                    myTakenMicIndex = null;
+                }
+            }
+            closeMicMenu();
+            updateOnlineCount();
+        }
+
+        function generateGoldCard() {
+            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
+            document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+            document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            if (userData.avatarSrc) {
+                document.getElementById('finalCardAvatar').src = userData.avatarSrc;
+            }
+            goToStep('cardResultView');
+        }
     </script>
 </body>
 </html>
