@@ -576,7 +576,7 @@
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
-        /* LIVE VOICE ROOM (10 MICS) */
+        /* LIVE VOICE ROOM */
         .live-room-container {
             position: relative;
             width: 100%;
@@ -600,6 +600,37 @@
             justify-content: space-between;
             width: 100%;
             flex-shrink: 0;
+        }
+
+        /* ROOM INFO CONTAINER IN TOP RIGHT */
+        .live-room-info-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(10px);
+            padding: 5px 12px 5px 6px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 200px;
+        }
+
+        .live-room-info-badge img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #F59E0B;
+            flex-shrink: 0;
+        }
+
+        .live-room-info-badge span {
+            font-size: 12px;
+            font-weight: 800;
+            color: #FFFFFF;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .top-left-actions {
@@ -739,7 +770,7 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
 
-        /* ROOM COMMENTS & CHAT SECTION WITH COLLAPSE TOGGLE BAR */
+        /* ROOM COMMENTS & CHAT SECTION */
         .room-comments-section {
             background: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(12px);
@@ -1363,8 +1394,14 @@
             <!-- STEP 10: LIVE VOICE ROOM VIEW -->
             <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
                 <div class="live-room-container" id="liveRoomBg">
-                    <!-- Top Bar Header with Exit Button & Online Count Badge Below It -->
+                    <!-- Top Bar Header with Room Badge on Top Left and Actions on Top Right -->
                     <div class="live-room-top-bar">
+                        <!-- ROOM IMAGE & NAME BADGE -->
+                        <div class="live-room-info-badge">
+                            <img id="liveRoomInfoImg" src="https://via.placeholder.com/150" alt="Room">
+                            <span id="liveRoomInfoName">غرفة الصوت</span>
+                        </div>
+
                         <div class="top-left-actions">
                             <!-- Power/Exit Vector Icon Button -->
                             <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج من الغرفة">
@@ -1862,6 +1899,14 @@
                 roomContainer.style.backgroundPosition = 'center';
             }
             
+            // Set Dynamic Room Name & Avatar in Live Room
+            document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
+            if (userData.roomAvatarSrc) {
+                document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc;
+            } else {
+                document.getElementById('liveRoomInfoImg').src = 'https://via.placeholder.com/150';
+            }
+
             myTakenMicIndex = null;
             updateOnlineCount();
             goToStep('liveRoomView');
