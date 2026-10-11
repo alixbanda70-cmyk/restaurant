@@ -515,7 +515,7 @@
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
-        /* LIVE VOICE ROOM (10 MICS - PERFECTLY CONTAINED) */
+        /* LIVE VOICE ROOM (10 MICS) */
         .live-room-container {
             position: relative;
             width: 100%;
@@ -557,7 +557,7 @@
             color: #FFF;
         }
 
-        /* Mics Grid inside background */
+        /* Mics Grid */
         .mics-grid-container {
             display: flex;
             flex-direction: column;
@@ -596,6 +596,7 @@
             border: 1.5px solid rgba(255, 255, 255, 0.35);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s;
         }
 
         .mic-circle img {
@@ -612,12 +613,82 @@
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
         }
 
+        .mic-seat.locked .mic-circle {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #EF4444;
+        }
+
         .mic-number {
             font-size: 10px;
             font-weight: 800;
             color: #E5E7EB;
             text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
+
+        /* MIC CONTROL ACTION SHEET MODAL */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: modalUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes modalUp {
+            from { opacity: 0; transform: translateY(100px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .action-sheet {
+            background: #131722;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 20px 20px 30px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-sheet-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #F59E0B;
+            margin-bottom: 6px;
+        }
+
+        .sheet-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #FFF;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .sheet-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .sheet-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #EF4444; }
+        .sheet-btn.cancel { background: transparent; border: none; color: #9CA3AF; margin-top: 4px; }
 
         /* PROFILE VIEW */
         .profile-card {
@@ -942,7 +1013,7 @@
                 </div>
             </div>
 
-            <!-- STEP 10: LIVE VOICE ROOM VIEW (10 MICS INSIDE BACKGROUND) -->
+            <!-- STEP 10: LIVE VOICE ROOM VIEW (10 NORMAL MICS) -->
             <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
                 <div class="live-room-container" id="liveRoomBg">
                     <div class="live-room-header">
@@ -950,27 +1021,27 @@
                         <span class="live-room-title" id="liveRoomHeaderTitle">غرفة الدردشة</span>
                     </div>
 
-                    <!-- 10 Microphones Grid (5 Top, 5 Bottom) Properly Contained -->
+                    <!-- 10 Microphones Grid (5 Top, 5 Bottom) -->
                     <div class="mics-grid-container">
                         <!-- Top Row: Mics 1 to 5 -->
                         <div class="mics-row">
-                            <div class="mic-seat" onclick="toggleMicSeat(1, this)">
+                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)">
                                 <div class="mic-circle" id="micCircle-1">🎙️</div>
                                 <span class="mic-number">1</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(2, this)">
+                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)">
                                 <div class="mic-circle" id="micCircle-2">🎙️</div>
                                 <span class="mic-number">2</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(3, this)">
+                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)">
                                 <div class="mic-circle" id="micCircle-3">🎙️</div>
                                 <span class="mic-number">3</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(4, this)">
+                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)">
                                 <div class="mic-circle" id="micCircle-4">🎙️</div>
                                 <span class="mic-number">4</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(5, this)">
+                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)">
                                 <div class="mic-circle" id="micCircle-5">🎙️</div>
                                 <span class="mic-number">5</span>
                             </div>
@@ -978,23 +1049,23 @@
 
                         <!-- Bottom Row: Mics 6 to 10 -->
                         <div class="mics-row">
-                            <div class="mic-seat" onclick="toggleMicSeat(6, this)">
+                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)">
                                 <div class="mic-circle" id="micCircle-6">🎙️</div>
                                 <span class="mic-number">6</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(7, this)">
+                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)">
                                 <div class="mic-circle" id="micCircle-7">🎙️</div>
                                 <span class="mic-number">7</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(8, this)">
+                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)">
                                 <div class="mic-circle" id="micCircle-8">🎙️</div>
                                 <span class="mic-number">8</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(9, this)">
-                                <div class="mic-circle" id="micCircle-9">🔒</div>
+                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)">
+                                <div class="mic-circle" id="micCircle-9">🎙️</div>
                                 <span class="mic-number">9</span>
                             </div>
-                            <div class="mic-seat" onclick="toggleMicSeat(10, this)">
+                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)">
                                 <div class="mic-circle" id="micCircle-10">🎙️</div>
                                 <span class="mic-number">10</span>
                             </div>
@@ -1035,6 +1106,27 @@
                             <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- ACTION SHEET MODAL FOR MIC SEAT CONTROL -->
+            <div class="modal-overlay" id="micModalOverlay">
+                <div class="action-sheet">
+                    <div class="action-sheet-title" id="menuMicTitle">التحكم بالميكروفون</div>
+                    
+                    <button type="button" class="sheet-btn" id="takeMicBtn" onclick="actionTakeMic()">
+                        <span>🎙️</span> <span>الصعود إلى الميكروفون</span>
+                    </button>
+                    
+                    <button type="button" class="sheet-btn" id="lockMicBtn" onclick="actionToggleLockMic()">
+                        <span>🔒</span> <span id="lockBtnTxt">قفل / إغلاق الميكروفون</span>
+                    </button>
+
+                    <button type="button" class="sheet-btn danger" id="leaveMicBtn" onclick="actionLeaveMic()" style="display:none;">
+                        <span>🚪</span> <span>مغادرة الميكروفون</span>
+                    </button>
+
+                    <button type="button" class="sheet-btn cancel" onclick="closeMicMenu()">إلغاء</button>
                 </div>
             </div>
 
@@ -1097,6 +1189,8 @@
             roomAvatarSrc: '',
             roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
         };
+
+        let selectedMicIndex = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const daySel = document.getElementById('daySelect');
@@ -1309,15 +1403,60 @@
             goToStep('liveRoomView');
         }
 
-        function toggleMicSeat(micIndex, seatEl) {
-            const circle = document.getElementById(`micCircle-${micIndex}`);
-            if (seatEl.classList.contains('occupied')) {
-                seatEl.classList.remove('occupied');
-                circle.innerHTML = micIndex === 9 ? '🔒' : '🎙️';
+        // MIC SEAT CONTROL ACTION MENU
+        function openMicMenu(index) {
+            selectedMicIndex = index;
+            const seatEl = document.getElementById(`seat-${index}`);
+            document.getElementById('menuMicTitle').innerText = `إدارة الميكروفون رقم ${index}`;
+            
+            const isOccupied = seatEl.classList.contains('occupied');
+            const isLocked = seatEl.classList.contains('locked');
+
+            document.getElementById('takeMicBtn').style.display = (!isOccupied && !isLocked) ? 'flex' : 'none';
+            document.getElementById('leaveMicBtn').style.display = isOccupied ? 'flex' : 'none';
+            document.getElementById('lockBtnTxt').innerText = isLocked ? 'فتح الميكروفون 🔓' : 'قفل الميكروفون 🔒';
+
+            document.getElementById('micModalOverlay').classList.add('active');
+        }
+
+        function closeMicMenu() {
+            document.getElementById('micModalOverlay').classList.remove('active');
+        }
+
+        function actionTakeMic() {
+            if (!selectedMicIndex) return;
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            seatEl.classList.add('occupied');
+            circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+            closeMicMenu();
+        }
+
+        function actionLeaveMic() {
+            if (!selectedMicIndex) return;
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            seatEl.classList.remove('occupied');
+            circle.innerHTML = seatEl.classList.contains('locked') ? '🔒' : '🎙️';
+            closeMicMenu();
+        }
+
+        function actionToggleLockMic() {
+            if (!selectedMicIndex) return;
+            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+            const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
+            
+            if (seatEl.classList.contains('locked')) {
+                seatEl.classList.remove('locked');
+                if (!seatEl.classList.contains('occupied')) circle.innerHTML = '🎙️';
             } else {
-                seatEl.classList.add('occupied');
-                circle.innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+                seatEl.classList.add('locked');
+                seatEl.classList.remove('occupied');
+                circle.innerHTML = '🔒';
             }
+            closeMicMenu();
         }
 
         function generateGoldCard() {
