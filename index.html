@@ -382,7 +382,7 @@
         .upload-placeholder-content { text-align: center; pointer-events: none; }
         .upload-icon { font-size: 26px; margin-bottom: 4px; display: block; }
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
-        #avatarInput, #roomAvatarInput, #roomBgInput { display: none; }
+        #avatarInput, #roomAvatarInput, #roomBgInput, #profileAvatarInput { display: none; }
 
         /* GOLD CARD UI */
         .gold-card-wrapper {
@@ -1038,38 +1038,60 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* PROFILE VIEW */
+        /* EDITABLE PROFILE VIEW */
         .profile-card {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            padding-bottom: 20px;
         }
 
         .profile-img-large {
-            width: 84px;
-            height: 84px;
+            position: relative;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             border: 3px solid #F59E0B;
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             background: #222;
+            cursor: pointer;
         }
 
         .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
-
-        .profile-display-name {
-            font-size: 19px;
-            font-weight: 900;
+        
+        .profile-img-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
             color: #FFF;
-            margin-bottom: 2px;
+            font-size: 10px;
+            text-align: center;
+            padding: 3px 0;
+            font-weight: bold;
         }
 
-        .profile-display-email {
-            font-size: 12px;
-            color: #9CA3AF;
+        .profile-edit-name-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 12px;
+            color: #FFF;
+            font-size: 18px;
+            font-weight: 800;
+            text-align: center;
+            padding: 8px 12px;
+            width: 80%;
             margin-bottom: 18px;
+            outline: none;
+        }
+
+        .profile-edit-name-input:focus {
+            border-color: #F59E0B;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .profile-data-box {
@@ -1077,23 +1099,54 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 14px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 14px;
         }
 
         .data-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 13px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
         .data-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .data-label { color: #9CA3AF; }
-        .data-val { color: #F59E0B; font-weight: 800; }
+        .data-label { color: #9CA3AF; font-weight: 700; }
+        
+        .profile-edit-select, .profile-edit-input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #F59E0B;
+            font-weight: 800;
+            padding: 6px 10px;
+            outline: none;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .profile-edit-select option {
+            background: #0D1117;
+            color: #FFF;
+        }
+
+        .save-profile-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border: none;
+            border-radius: 12px;
+            color: #FFF;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
 
         /* BOTTOM NAVIGATION BAR */
         .bottom-nav-bar {
@@ -1530,29 +1583,44 @@
                 <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
             </div>
 
-            <!-- STEP 12: ACCOUNT PROFILE VIEW -->
+            <!-- STEP 12: EDITABLE ACCOUNT PROFILE VIEW -->
             <div id="profileView" class="view-step hidden-view">
                 <div class="profile-card">
-                    <div class="profile-img-large">
-                        <img id="profileAvatarImg" src="" alt="Profile">
+                    <!-- Avatar Preview & Edit Zone -->
+                    <div class="profile-img-large" onclick="document.getElementById('profileAvatarInput').click()">
+                        <img id="profileAvatarImg" src="https://via.placeholder.com/150" alt="Profile">
+                        <div class="profile-img-overlay">تغيير الصورة</div>
                     </div>
-                    <div class="profile-display-name" id="profileNameTxt">اسم المستخدم</div>
-                    <div class="profile-display-email" id="profileEmailTxt">user@vlymax.app</div>
+                    <input type="file" id="profileAvatarInput" accept="image/*" onchange="previewProfileImage(event)">
+
+                    <!-- Editable Name Field -->
+                    <input type="text" id="profileNameInput" class="profile-edit-name-input" placeholder="اسم المستخدم">
 
                     <div class="profile-data-box">
+                        <!-- Editable Gender Field -->
                         <div class="data-row">
                             <span class="data-label">الجنس</span>
-                            <span class="data-val" id="profileGenderTxt">-</span>
+                            <select id="profileGenderSelect" class="profile-edit-select">
+                                <option value="male">ذكر</option>
+                                <option value="female">أنثى</option>
+                            </select>
                         </div>
+
+                        <!-- Editable Age Field -->
                         <div class="data-row">
                             <span class="data-label">العمر</span>
-                            <span class="data-val" id="profileAgeTxt">-</span>
+                            <input type="number" id="profileAgeInput" class="profile-edit-input" min="1" max="100" style="width: 70px;">
                         </div>
+
                         <div class="data-row">
                             <span class="data-label">حالة الحساب</span>
                             <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
                         </div>
                     </div>
+
+                    <button type="button" class="save-profile-btn" onclick="saveProfileChanges()">
+                        حفظ التغييرات 💾
+                    </button>
                 </div>
             </div>
 
@@ -1726,16 +1794,53 @@
             } else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
                 
-                document.getElementById('profileNameTxt').innerText = userData.name || 'مستخدم جديد';
-                document.getElementById('profileEmailTxt').innerText = userData.email || 'user@vlymax.app';
-                document.getElementById('profileGenderTxt').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
-                document.getElementById('profileAgeTxt').innerText = userData.age + ' سنة';
+                // Populate Profile fields for editing
+                document.getElementById('profileNameInput').value = userData.name || 'مستخدم جديد';
+                document.getElementById('profileGenderSelect').value = userData.gender || 'male';
+                document.getElementById('profileAgeInput').value = userData.age || 0;
                 if(userData.avatarSrc) {
                     document.getElementById('profileAvatarImg').src = userData.avatarSrc;
                 }
 
                 goToStep('profileView');
             }
+        }
+
+        function previewProfileImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('profileAvatarImg').src = evt.target.result;
+                    userData.avatarSrc = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveProfileChanges() {
+            const newName = document.getElementById('profileNameInput').value.trim();
+            const newGender = document.getElementById('profileGenderSelect').value;
+            const newAge = parseInt(document.getElementById('profileAgeInput').value) || 0;
+
+            if (!newName) {
+                alert('الرجاء كتابة اسم صحيح');
+                return;
+            }
+
+            userData.name = newName;
+            userData.gender = newGender;
+            userData.age = newAge;
+
+            // Update Gold Card
+            document.getElementById('finalCardName').innerText = userData.name;
+            document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
+            document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
+            if (userData.avatarSrc) {
+                document.getElementById('finalCardAvatar').src = userData.avatarSrc;
+            }
+
+            alert('تم حفظ التغييرات بنجاح! ✨');
         }
 
         async function handleLoginSubmit(event) {
