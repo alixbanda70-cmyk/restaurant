@@ -576,7 +576,7 @@
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
         }
 
-        /* LIVE VOICE ROOM (10 MICS RAISED HIGHER) */
+        /* LIVE VOICE ROOM (10 MICS) */
         .live-room-container {
             position: relative;
             width: 100%;
@@ -609,32 +609,7 @@
             align-items: flex-start;
         }
 
-        .live-room-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            padding: 6px 12px;
-            border-radius: 20px;
-            width: fit-content;
-        }
-
-        .live-room-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid #F59E0B;
-        }
-
-        .live-room-title {
-            font-size: 13px;
-            font-weight: 800;
-            color: #FFF;
-        }
-
-        /* Online Users Count Badge (Moved under exit button) */
+        /* Online Users Count Badge */
         .room-online-badge {
             display: flex;
             align-items: center;
@@ -764,19 +739,60 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
 
-        /* ROOM COMMENTS & CHAT SECTION - EXPANDED */
+        /* ROOM COMMENTS & CHAT SECTION WITH COLLAPSE TOGGLE BAR */
         .room-comments-section {
             background: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 18px;
-            padding: 12px;
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            height: 210px;
+            gap: 8px;
             margin-top: auto;
             margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .comments-toggle-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 800;
+            color: #F59E0B;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .comments-toggle-bar svg {
+            width: 18px;
+            height: 18px;
+            stroke: #F59E0B;
+            stroke-width: 2.2;
+            fill: none;
+            transition: transform 0.3s ease;
+        }
+
+        .comments-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: 170px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .room-comments-section.collapsed .comments-body {
+            height: 0;
+            opacity: 0;
+            margin-top: 0;
+            pointer-events: none;
+        }
+
+        .room-comments-section.collapsed .comments-toggle-bar svg {
+            transform: rotate(180deg);
         }
 
         .comments-list {
@@ -1048,7 +1064,7 @@
         .data-label { color: #9CA3AF; }
         .data-val { color: #F59E0B; font-weight: 800; }
 
-        /* BOTTOM NAVIGATION BAR WITH WHITE VECTOR ICONS */
+        /* BOTTOM NAVIGATION BAR */
         .bottom-nav-bar {
             width: calc(100% + 32px);
             margin-left: -16px;
@@ -1359,7 +1375,7 @@
                                 </svg>
                             </div>
 
-                            <!-- Online Users Count Badge (Moved under exit button) -->
+                            <!-- Online Users Count Badge -->
                             <div class="room-online-badge">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -1443,21 +1459,29 @@
                         </div>
                     </div>
 
-                    <!-- ROOM COMMENTS & CHAT SECTION -->
-                    <div class="room-comments-section">
-                        <div class="comments-list" id="commentsListContainer">
-                            <div class="comment-bubble">
-                                <span class="comment-user">النظام:</span> أهلاً بك في الغرفة الصوتية! اكتب تعليقك للجميع.
-                            </div>
+                    <!-- ROOM COMMENTS & CHAT SECTION WITH COLLAPSE TOGGLE -->
+                    <div class="room-comments-section" id="roomCommentsSection">
+                        <div class="comments-toggle-bar" onclick="toggleCommentsSection()">
+                            <span>التعليقات والمحادثة</span>
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
                         </div>
-                        <div class="comment-input-row">
-                            <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
-                            <button type="button" class="send-comment-btn" onclick="sendRoomComment()" title="إرسال التعليق">
-                                <svg viewBox="0 0 24 24">
-                                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                </svg>
-                            </button>
+                        <div class="comments-body">
+                            <div class="comments-list" id="commentsListContainer">
+                                <div class="comment-bubble">
+                                    <span class="comment-user">النظام:</span> أهلاً بك في الغرفة الصوتية! اكتب تعليقك للجميع.
+                                </div>
+                            </div>
+                            <div class="comment-input-row">
+                                <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
+                                <button type="button" class="send-comment-btn" onclick="sendRoomComment()" title="إرسال التعليق">
+                                    <svg viewBox="0 0 24 24">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1531,7 +1555,7 @@
                 </div>
             </div>
 
-            <!-- BOTTOM NAVIGATION BAR WITH WHITE VECTOR ICONS -->
+            <!-- BOTTOM NAVIGATION BAR -->
             <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
                 <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
                     <svg viewBox="0 0 24 24">
@@ -1619,6 +1643,11 @@
             calculateAge();
         });
 
+        function toggleCommentsSection() {
+            const section = document.getElementById('roomCommentsSection');
+            section.classList.toggle('collapsed');
+        }
+
         function goToStep(stepId) {
             document.querySelectorAll('.view-step').forEach(el => {
                 el.classList.remove('active-view');
@@ -1645,10 +1674,6 @@
                     navBar.style.display = 'none';
                     cardContainer.classList.remove('clean-mode');
                 }
-            }
-
-            if(stepId === 'liveRoomView') {
-                navBar.style.display = 'none';
             }
         }
 
