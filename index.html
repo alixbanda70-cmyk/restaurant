@@ -1380,45 +1380,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK & New Config Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAiKCN1o0XhqWvbKIcylNF1YyI_361YIck",
-            authDomain: "rasail-69be0.firebaseapp.com",
-            projectId: "rasail-69be0",
-            storageBucket: "rasail-69be0.firebasestorage.app",
-            messagingSenderId: "720968231645",
-            appId: "1:720968231645:web:33dbabcfbcd522cb840934",
-            measurementId: "G-S92KW34J95"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        window.firebaseAuth = getAuth(app);
-        window.db = getFirestore(app);
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-        window.doc = doc;
-        window.getDoc = getDoc;
-        window.setDoc = setDoc;
-        window.updateDoc = updateDoc;
-        window.collection = collection;
-        window.query = query;
-        window.where = where;
-        window.getDocs = getDocs;
-        window.addDoc = addDoc;
-        window.onSnapshot = onSnapshot;
-        window.orderBy = orderBy;
-    </script>
-
     <script>
         const userData = {
-            id: '', email: '', gender: 'male', name: '',
-            dob: { day: 1, month: 1, year: 2000 }, age: 0,
+            id: '1234567', email: '', gender: 'male', name: 'زائر',
+            dob: { day: 1, month: 1, year: 2000 }, age: 26,
             avatarSrc: 'https://via.placeholder.com/150',
             roomName: '', roomAvatarSrc: '',
             roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
@@ -1431,7 +1396,6 @@
         let peer = null;
         let localStream = null;
         let currentCall = null;
-        let unsubscribeMessages = null;
 
         const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>`;
         const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
@@ -1451,23 +1415,24 @@
             calculateAge();
         });
 
-        async function searchUserById() {
+        function searchUserById() {
             const searchInput = document.getElementById('searchUserIdInput').value.trim();
             if (!searchInput) { alert('أدخل ID المكون من 7 أرقام'); return; }
-            try {
-                const q = window.query(window.collection(window.db, "users"), window.where("id", "==", searchInput));
-                const querySnapshot = await window.getDocs(q);
-                if (!querySnapshot.empty) {
-                    const userDoc = querySnapshot.docs[0].data();
-                    searchedTargetUser = userDoc;
-                    document.getElementById('searchedNameTxt').innerText = userDoc.name || 'بدون اسم';
-                    document.getElementById('searchedIdTxt').innerText = 'ID: ' + userDoc.id;
-                    document.getElementById('searchedGenderTxt').innerText = userDoc.gender === 'male' ? 'ذكر' : 'أنثى';
-                    document.getElementById('searchedAgeTxt').innerText = (userDoc.age || 0) + ' سنة';
-                    document.getElementById('searchedAvatarImg').src = userDoc.avatarSrc || 'https://via.placeholder.com/150';
-                    document.getElementById('searchProfileModal').classList.add('active');
-                } else { alert('لم يتم العثور على أي حساب بهذا الـ ID'); }
-            } catch(e) { alert('خطأ في البحث'); }
+            
+            // محاكاة البحث محلياً بدون Firebase
+            searchedTargetUser = {
+                id: searchInput,
+                name: 'مستخدم ' + searchInput,
+                gender: 'male',
+                age: 25,
+                avatarSrc: 'https://via.placeholder.com/150'
+            };
+            document.getElementById('searchedNameTxt').innerText = searchedTargetUser.name;
+            document.getElementById('searchedIdTxt').innerText = 'ID: ' + searchedTargetUser.id;
+            document.getElementById('searchedGenderTxt').innerText = 'ذكر';
+            document.getElementById('searchedAgeTxt').innerText = '25 سنة';
+            document.getElementById('searchedAvatarImg').src = searchedTargetUser.avatarSrc;
+            document.getElementById('searchProfileModal').classList.add('active');
         }
 
         function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
@@ -1477,64 +1442,32 @@
             activeDMUser = searchedTargetUser;
             closeSearchModal();
 
-            document.getElementById('dmUserName').innerText = activeDMUser.name || 'مستخدم';
+            document.getElementById('dmUserName').innerText = activeDMUser.name;
             document.getElementById('dmUserId').innerText = 'ID: ' + activeDMUser.id;
-            document.getElementById('dmUserAvatar').src = activeDMUser.avatarSrc || 'https://via.placeholder.com/150';
+            document.getElementById('dmUserAvatar').src = activeDMUser.avatarSrc;
             
-            switchTab('messages');
-            loadDirectMessages();
-        }
-
-        // جلب وعرض الرسائل المباشرة حصرياً بين المستخدم الحالي والمستخدم المبحوث عنه في قاعدة البيانات
-        function loadDirectMessages() {
-            if (!activeDMUser || !userData.id) return;
             const chatBox = document.getElementById('dmChatBox');
-            chatBox.innerHTML = `<div class="dm-no-chat-text" id="dmNoChatTxt">جاري تحميل المحادثة...</div>`;
-
-            if (unsubscribeMessages) unsubscribeMessages();
-
-            // معرف فريد للمحادثة يجمع بين ID الطرفين لضمان الخصوصية
-            const chatId = [userData.id, activeDMUser.id].sort().join('_');
-            const msgsRef = window.collection(window.db, "chats", chatId, "messages");
-            const q = window.query(msgsRef, window.orderBy("timestamp", "asc"));
-
-            unsubscribeMessages = window.onSnapshot(q, (snapshot) => {
-                chatBox.innerHTML = '';
-                if (snapshot.empty) {
-                    chatBox.innerHTML = `<div class="dm-no-chat-text" id="dmNoChatTxt">لا توجد رسائل بعد، ابدأ المحادثة الآن!</div>`;
-                    return;
-                }
-                snapshot.forEach((docSnap) => {
-                    const msg = docSnap.data();
-                    const isMe = msg.senderId === userData.id;
-                    chatBox.innerHTML += `<div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">${msg.text}</div>`;
-                });
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
+            chatBox.innerHTML = `<div class="dm-no-chat-text">بدأت المحادثة مع ${activeDMUser.name}... اكتب رسالتك أدناه!</div>`;
+            switchTab('messages');
         }
 
-        async function sendDirectMessage() {
+        function sendDirectMessage() {
             const msgInput = document.getElementById('dmInputMsg');
             const msgText = msgInput.value.trim();
             if (!msgText) return;
 
             if (!activeDMUser) {
-                alert('الرجاء البحث عن مستخدم بواسطة الـ ID أولاً لبدء محادثة!');
+                alert('الرجاء اختيار مستخدم أولاً!');
                 return;
             }
 
-            try {
-                const chatId = [userData.id, activeDMUser.id].sort().join('_');
-                await window.addDoc(window.collection(window.db, "chats", chatId, "messages"), {
-                    senderId: userData.id,
-                    receiverId: activeDMUser.id,
-                    text: msgText,
-                    timestamp: Date.now()
-                });
-                msgInput.value = '';
-            } catch (e) {
-                alert('فشل إرسال الرسالة، تأكد من الاتصال بالإنترنت.');
-            }
+            const chatBox = document.getElementById('dmChatBox');
+            const noChatTxt = document.getElementById('dmNoChatTxt');
+            if (noChatTxt) noChatTxt.remove();
+
+            chatBox.innerHTML += `<div class="dm-msg-bubble me">${msgText}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            msgInput.value = '';
         }
 
         function toggleCommentsSection() { document.getElementById('roomCommentsSection').classList.toggle('collapsed'); }
@@ -1570,11 +1503,7 @@
         function switchTab(tab) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(tab === 'home') { document.getElementById('navHomeBtn').classList.add('active'); goToStep('homeMainView'); }
-            else if(tab === 'messages') { 
-                document.getElementById('navMsgBtn').classList.add('active'); 
-                goToStep('messagesView'); 
-                if (activeDMUser) loadDirectMessages();
-            }
+            else if(tab === 'messages') { document.getElementById('navMsgBtn').classList.add('active'); goToStep('messagesView'); }
             else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
                 document.getElementById('profileNameInput').value = userData.name || '';
@@ -1595,50 +1524,24 @@
             }
         }
 
-        async function saveProfileChanges() {
+        function saveProfileChanges() {
             userData.name = document.getElementById('profileNameInput').value.trim();
             userData.gender = document.getElementById('profileGenderSelect').value;
             userData.age = parseInt(document.getElementById('profileAgeInput').value) || 0;
-            const currentUser = window.firebaseAuth.currentUser;
-            if (currentUser) {
-                await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
-                    name: userData.name, gender: userData.gender, age: userData.age, avatarSrc: userData.avatarSrc
-                });
-            }
-            alert('تم الحفظ بنجاح! ✨');
+            alert('تم الحفظ بنجاح محلياً! ✨');
         }
 
-        async function handleLoginSubmit(event) {
+        function handleLoginSubmit(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
             userData.email = email;
-            const errorDiv = document.getElementById('authError');
-            errorDiv.style.display = 'none';
-            try {
-                let userCred;
-                try { userCred = await window.signInWithEmailAndPassword(window.firebaseAuth, email, password); }
-                catch(e) { userCred = await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password); }
-                const uid = userCred.user.uid;
-                const userSnap = await window.getDoc(window.doc(window.db, "users", uid));
-                if (userSnap.exists()) {
-                    const data = userSnap.data();
-                    userData.id = data.id; userData.name = data.name || '';
-                    userData.gender = data.gender || 'male'; userData.age = data.age || 0;
-                    userData.avatarSrc = data.avatarSrc || 'https://via.placeholder.com/150';
-                } else {
-                    userData.id = generate7DigitId();
-                    await window.setDoc(window.doc(window.db, "users", uid), {
-                        id: userData.id, email: email, name: '', gender: 'male', age: 0, avatarSrc: 'https://via.placeholder.com/150'
-                    });
-                }
-                goToStep('genderView');
-            } catch (err) { errorDiv.innerText = "خطأ: " + err.message; errorDiv.style.display = 'block'; }
+            userData.id = generate7DigitId();
+            userData.name = email.split('@')[0];
+            goToStep('genderView');
         }
 
-        async function handleFullLogout() {
+        function handleFullLogout() {
             if(confirm('هل تريد تسجيل الخروج؟')) {
-                try { await window.signOut(window.firebaseAuth); } catch(e) {}
                 goToStep('loginView');
             }
         }
@@ -1650,12 +1553,10 @@
             document.getElementById('nameWrapper').classList.toggle('valid', input.value.trim().length >= 3);
         }
 
-        async function saveNameAndNext() {
+        function saveNameAndNext() {
             const input = document.getElementById('userNameInput');
             if (input.value.trim().length >= 3) {
                 userData.name = input.value.trim();
-                const currentUser = window.firebaseAuth.currentUser;
-                if (currentUser) await window.updateDoc(window.doc(window.db, "users", currentUser.uid), { name: userData.name });
                 goToStep('dobView');
             } else { alert('أدخل 3 أحرف على الأقل'); }
         }
@@ -1670,17 +1571,15 @@
             badge.classList.add('show');
         }
 
-        async function previewImage(e) {
+        function previewImage(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = async evt => {
+                reader.onload = evt => {
                     document.getElementById('avatarPreview').src = evt.target.result;
                     document.getElementById('avatarPreview').style.display = 'block';
                     document.getElementById('uploadPlaceholder').style.display = 'none';
                     userData.avatarSrc = evt.target.result;
-                    const currentUser = window.firebaseAuth.currentUser;
-                    if (currentUser) await window.updateDoc(window.doc(window.db, "users", currentUser.uid), { avatarSrc: userData.avatarSrc });
                 };
                 reader.readAsDataURL(file);
             }
