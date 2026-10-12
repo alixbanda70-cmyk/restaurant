@@ -2159,9 +2159,21 @@
             const leaveBtn = document.getElementById('leaveMicBtn');
 
             if (myTakenMicIndex !== null) {
-                takeBtn.style.display = (myTakenMicIndex === index) ? 'none' : 'none';
-                leaveBtn.style.display = (myTakenMicIndex === index) ? 'flex' : 'none';
+                if (myTakenMicIndex === index) {
+                    takeBtn.style.display = 'none';
+                    leaveBtn.style.display = 'flex';
+                } else {
+                    // الانتقال المباشر إذا كان المايك فارغ وغير مقفل
+                    if (!isOccupied && !isLocked) {
+                        takeBtn.innerText = "الانتقال إلى هذا الميكروفون 🔄";
+                        takeBtn.style.display = 'flex';
+                    } else {
+                        takeBtn.style.display = 'none';
+                    }
+                    leaveBtn.style.display = 'none';
+                }
             } else {
+                takeBtn.innerText = "الصعود إلى الميكروفون";
                 takeBtn.style.display = (!isOccupied && !isLocked) ? 'flex' : 'none';
                 leaveBtn.style.display = isOccupied ? 'flex' : 'none';
             }
@@ -2173,11 +2185,20 @@
 
         function actionTakeMic() {
             if (!selectedMicIndex) return;
-            if (myTakenMicIndex !== null) { alert('أنت جالس في ميكروفون آخر!'); closeMicMenu(); return; }
+
+            // إذا كان المستخدم يجلس بالفعل على مايك آخر، نفرّغ المايك القديم أولاً
+            if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
+                const oldSeatEl = document.getElementById(`seat-${myTakenMicIndex}`);
+                oldSeatEl.classList.remove('occupied');
+                document.getElementById(`micCircle-${myTakenMicIndex}`).innerHTML = oldSeatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
+            }
+
+            // الجلوس على المايك الجديد
             const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
             seatEl.classList.add('occupied');
             document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
             myTakenMicIndex = selectedMicIndex;
+
             closeMicMenu();
             updateOnlineCount();
         }
