@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Futuristic Multi-Step Auth & Gold Card 2026</title>
+    <title>SIMOMi - Live Voice Room with PeerJS 2026</title>
+    <!-- مكتبة PeerJS للصوت المباشر المجاني -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         /* Base Reset */
         * {
@@ -35,11 +37,6 @@
             stroke-linejoin: round;
             display: inline-block;
             vertical-align: middle;
-        }
-
-        .svg-icon.lg {
-            width: 22px;
-            height: 22px;
         }
 
         .aurora-bg {
@@ -86,7 +83,6 @@
             flex-direction: column;
         }
 
-        /* TOP HEADER BAR (LOGOUT BUTTON ONLY ABOVE SIMOMi) */
         .top-header-actions-bar {
             display: flex;
             justify-content: flex-end;
@@ -116,11 +112,6 @@
             stroke: #FFFFFF;
             stroke-width: 2.2;
             fill: none;
-        }
-
-        .logout-small-btn:hover {
-            background: #EF4444;
-            color: #FFF;
         }
 
         .brand {
@@ -260,7 +251,6 @@
             justify-content: center;
         }
 
-        /* SVG MALE & FEMALE ICONS STYLING */
         .gender-card .gender-symbol-icon {
             width: 48px;
             height: 48px;
@@ -270,22 +260,13 @@
             transition: all 0.3s ease;
         }
 
-        .gender-card#cardMale .gender-symbol-icon {
-            stroke: #3B82F6;
-        }
-
-        .gender-card#cardFemale .gender-symbol-icon {
-            stroke: #EC4899;
-        }
+        .gender-card#cardMale .gender-symbol-icon { stroke: #3B82F6; }
+        .gender-card#cardFemale .gender-symbol-icon { stroke: #EC4899; }
 
         .gender-card.selected {
             background: rgba(239, 68, 68, 0.12);
             border-color: #EF4444;
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-        }
-
-        .gender-card.selected .gender-symbol-icon {
-            transform: scale(1.1);
         }
 
         .gender-card .checkmark {
@@ -374,10 +355,7 @@
             text-align: center;
         }
 
-        .date-select-wrapper select option {
-            background: #0D1117;
-            color: #FFFFFF;
-        }
+        .date-select-wrapper select option { background: #0D1117; color: #FFFFFF; }
 
         .date-label {
             display: block;
@@ -533,7 +511,6 @@
 
         .footer-tag { text-align: center; margin-top: auto; padding: 12px 0; font-size: 11px; color: #4B5563; }
 
-        /* TOP GLOBAL ID SEARCH BAR */
         .top-global-search-box {
             display: none;
             gap: 8px;
@@ -563,11 +540,6 @@
             outline: none;
         }
 
-        .id-search-input:focus {
-            border-color: #F59E0B;
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
-        }
-
         .search-icon-inside {
             position: absolute;
             right: 12px;
@@ -585,7 +557,6 @@
             font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
             white-space: nowrap;
         }
 
@@ -604,10 +575,7 @@
             padding: 20px;
         }
 
-        .user-profile-modal-overlay.active {
-            display: flex;
-            animation: fadeInScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
+        .user-profile-modal-overlay.active { display: flex; }
 
         .searched-profile-card {
             background: #131722;
@@ -617,8 +585,6 @@
             width: 100%;
             max-width: 320px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
-            position: relative;
         }
 
         .searched-avatar {
@@ -628,22 +594,10 @@
             border: 3px solid #F59E0B;
             object-fit: cover;
             margin-bottom: 12px;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
         }
 
-        .searched-name {
-            font-size: 18px;
-            font-weight: 900;
-            color: #FFF;
-            margin-bottom: 4px;
-        }
-
-        .searched-id-tag {
-            font-size: 13px;
-            color: #F59E0B;
-            font-weight: 800;
-            margin-bottom: 14px;
-        }
+        .searched-name { font-size: 18px; font-weight: 900; color: #FFF; margin-bottom: 4px; }
+        .searched-id-tag { font-size: 13px; color: #F59E0B; font-weight: 800; margin-bottom: 14px; }
 
         .searched-details-box {
             background: rgba(255, 255, 255, 0.04);
@@ -664,7 +618,6 @@
             border-radius: 12px;
             color: #FFF;
             font-weight: 800;
-            font-size: 13px;
             cursor: pointer;
         }
 
@@ -678,7 +631,6 @@
             font-weight: 900;
             border: none;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -686,13 +638,7 @@
             margin-bottom: 20px;
         }
 
-        .create-room-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: #07090E;
-            stroke-width: 2.2;
-            fill: none;
-        }
+        .create-room-btn svg { width: 20px; height: 20px; stroke: #07090E; stroke-width: 2.2; fill: none; }
 
         .bg-grid {
             display: grid;
@@ -710,10 +656,7 @@
             background-position: center;
         }
 
-        .bg-option.selected {
-            border-color: #F59E0B;
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
-        }
+        .bg-option.selected { border-color: #F59E0B; }
 
         .live-room-container {
             position: relative;
@@ -727,7 +670,6 @@
             flex-direction: column;
             justify-content: flex-start;
             box-sizing: border-box;
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.6);
             overflow: hidden;
             margin-bottom: 10px;
         }
@@ -789,16 +731,9 @@
             color: #FFF;
             font-size: 13px;
             font-weight: 800;
-            width: fit-content;
         }
 
-        .room-online-badge svg {
-            width: 16px;
-            height: 16px;
-            stroke: #F59E0B;
-            stroke-width: 2.2;
-            fill: none;
-        }
+        .room-online-badge svg { width: 16px; height: 16px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
 
         .leave-room-btn {
             width: 36px;
@@ -806,28 +741,14 @@
             border-radius: 50%;
             background: rgba(239, 68, 68, 0.25);
             border: 1.5px solid rgba(239, 68, 68, 0.6);
-            backdrop-filter: blur(8px);
             color: #EF4444;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
-        .leave-room-btn svg {
-            width: 18px;
-            height: 18px;
-            stroke: #FFFFFF;
-            stroke-width: 2.2;
-            fill: none;
-        }
-
-        .leave-room-btn:hover {
-            background: #EF4444;
-            transform: scale(1.08);
-        }
+        .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
 
         .mics-grid-container {
             display: flex;
@@ -868,35 +789,13 @@
             border: 1.5px solid rgba(255, 255, 255, 0.35);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s;
         }
 
-        .mic-circle svg {
-            width: 20px;
-            height: 20px;
-            stroke: #FFFFFF;
-            stroke-width: 2;
-            fill: none;
-        }
+        .mic-circle svg { width: 20px; height: 20px; stroke: #FFFFFF; stroke-width: 2; fill: none; }
+        .mic-circle img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
 
-        .mic-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .mic-seat.occupied .mic-circle {
-            border-color: #10B981;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
-        }
-
-        .mic-seat.locked .mic-circle {
-            background: rgba(239, 68, 68, 0.25);
-            border-color: #EF4444;
-        }
+        .mic-seat.occupied .mic-circle { border-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
+        .mic-seat.locked .mic-circle { background: rgba(239, 68, 68, 0.25); border-color: #EF4444; }
 
         .mic-number {
             font-size: 10px;
@@ -921,7 +820,6 @@
             gap: 8px;
             margin-top: auto;
             margin-bottom: 5px;
-            transition: all 0.3s ease;
         }
 
         .comments-toggle-bar {
@@ -936,390 +834,106 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .comments-toggle-bar svg {
-            width: 18px;
-            height: 18px;
-            stroke: #F59E0B;
-            stroke-width: 2.2;
-            fill: none;
-            transition: transform 0.3s ease;
-        }
+        .comments-toggle-bar svg { width: 18px; height: 18px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
 
         .comments-body {
             display: flex;
             flex-direction: column;
             gap: 8px;
             height: 170px;
-            transition: all 0.3s ease;
             overflow: hidden;
         }
 
-        .room-comments-section.collapsed .comments-body {
-            height: 0;
-            opacity: 0;
-            margin-top: 0;
-            pointer-events: none;
-        }
+        .room-comments-section.collapsed .comments-body { height: 0; opacity: 0; margin-top: 0; pointer-events: none; }
+        .room-comments-section.collapsed .comments-toggle-bar svg { transform: rotate(180deg); }
 
-        .room-comments-section.collapsed .comments-toggle-bar svg {
-            transform: rotate(180deg);
-        }
+        .comments-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; flex: 1; padding-left: 4px; }
+        .comment-bubble { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 6px 10px; font-size: 12px; color: #FFF; }
+        .comment-user { color: #F59E0B; font-weight: 800; margin-left: 6px; }
 
-        .comments-list {
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
-            padding-left: 4px;
-        }
-
-        .comment-bubble {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 6px 10px;
-            font-size: 12px;
-            color: #FFF;
-            word-break: break-word;
-        }
-
-        .comment-user {
-            color: #F59E0B;
-            font-weight: 800;
-            margin-left: 6px;
-        }
-
-        .comment-input-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .comment-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 8px 12px;
-            color: #FFF;
-            font-size: 13px;
-            outline: none;
-        }
-
-        .comment-input:focus {
-            border-color: #F59E0B;
-        }
+        .comment-input-row { display: flex; gap: 8px; align-items: center; }
+        .comment-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 8px 12px; color: #FFF; font-size: 13px; outline: none; }
 
         .send-comment-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
+            width: 36px; height: 36px; border-radius: 12px;
             background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: none;
-            color: #07090E;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            border: none; color: #07090E; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-
-        .send-comment-btn svg {
-            width: 18px;
-            height: 18px;
-            stroke: #07090E;
-            stroke-width: 2.2;
-            fill: none;
-        }
+        .send-comment-btn svg { width: 18px; height: 18px; stroke: #07090E; stroke-width: 2.2; fill: none; }
 
         .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
-            justify-content: flex-end;
-            flex-direction: column;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 100;
+            display: none; justify-content: flex-end; flex-direction: column;
         }
-
-        .modal-overlay.active {
-            display: flex;
-            animation: modalUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes modalUp {
-            from { opacity: 0; transform: translateY(100px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .modal-overlay.active { display: flex; }
 
         .action-sheet {
-            background: #131722;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            padding: 20px 20px 30px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            background: #131722; border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding: 20px 20px 30px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; flex-direction: column; gap: 12px;
         }
-
-        .action-sheet-title {
-            text-align: center;
-            font-size: 15px;
-            font-weight: 800;
-            color: #F59E0B;
-            margin-bottom: 6px;
-        }
+        .action-sheet-title { text-align: center; font-size: 15px; font-weight: 800; color: #F59E0B; margin-bottom: 6px; }
 
         .sheet-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.04);
-            color: #FFF;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background 0.2s;
+            width: 100%; padding: 14px; border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.04);
+            color: #FFF; font-size: 14px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-
-        .sheet-btn:hover { background: rgba(255, 255, 255, 0.1); }
         .sheet-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #EF4444; }
         .sheet-btn.cancel { background: transparent; border: none; color: #9CA3AF; margin-top: 4px; }
 
         .confirm-modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 200;
+            display: none; justify-content: center; align-items: center; padding: 20px;
         }
-
-        .confirm-modal-overlay.active {
-            display: flex;
-            animation: fadeInScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        .confirm-modal-overlay.active { display: flex; }
 
         .confirm-dialog {
-            background: #131722;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            padding: 24px 20px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            background: #131722; border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px; text-align: center;
         }
+        .confirm-dialog-title { font-size: 17px; font-weight: 900; color: #FFFFFF; margin-bottom: 8px; }
+        .confirm-dialog-text { font-size: 13px; color: #9CA3AF; margin-bottom: 20px; }
+        .confirm-dialog-buttons { display: flex; gap: 12px; }
 
-        .confirm-dialog-title {
-            font-size: 17px;
-            font-weight: 900;
-            color: #FFFFFF;
-            margin-bottom: 8px;
-        }
+        .confirm-btn { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; border: none; }
+        .confirm-btn.yes { background: #EF4444; color: #FFF; }
+        .confirm-btn.no { background: rgba(255, 255, 255, 0.08); color: #E5E7EB; }
 
-        .confirm-dialog-text {
-            font-size: 13px;
-            color: #9CA3AF;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .confirm-dialog-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .confirm-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            border: none;
-        }
-
-        .confirm-btn.yes {
-            background: #EF4444;
-            color: #FFF;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-        }
-
-        .confirm-btn.no {
-            background: rgba(255, 255, 255, 0.08);
-            color: #E5E7EB;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .profile-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding-bottom: 20px;
-        }
-
+        .profile-card { display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 20px; }
         .profile-img-large {
-            position: relative;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 3px solid #F59E0B;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
-            overflow: hidden;
-            margin-bottom: 12px;
-            background: #222;
-            cursor: pointer;
+            position: relative; width: 90px; height: 90px; border-radius: 50%;
+            border: 3px solid #F59E0B; overflow: hidden; margin-bottom: 12px; background: #222; cursor: pointer;
         }
-
         .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .profile-img-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            color: #FFF;
-            font-size: 10px;
-            text-align: center;
-            padding: 3px 0;
-            font-weight: bold;
-        }
+        .profile-img-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.6); color: #FFF; font-size: 10px; text-align: center; padding: 3px 0; font-weight: bold; }
 
         .profile-edit-name-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: 12px;
-            color: #FFF;
-            font-size: 18px;
-            font-weight: 800;
-            text-align: center;
-            padding: 8px 12px;
-            width: 80%;
-            margin-bottom: 18px;
-            outline: none;
-        }
-
-        .profile-edit-name-input:focus {
-            border-color: #F59E0B;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 12px; color: #FFF; font-size: 18px; font-weight: 800; text-align: center; padding: 8px 12px; width: 80%; margin-bottom: 18px; outline: none;
         }
 
         .profile-data-box {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+            width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px;
         }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 10px;
-        }
-
-        .data-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .data-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px; }
         .data-label { color: #9CA3AF; font-weight: 700; }
-        
-        .profile-edit-select, .profile-edit-input {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            color: #F59E0B;
-            font-weight: 800;
-            padding: 6px 10px;
-            outline: none;
-            text-align: center;
-            font-size: 13px;
-        }
+        .profile-edit-select, .profile-edit-input { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: #F59E0B; font-weight: 800; padding: 6px 10px; text-align: center; font-size: 13px; outline: none; }
+        .profile-edit-select option { background: #0D1117; color: #FFF; }
 
-        .profile-edit-select option {
-            background: #0D1117;
-            color: #FFF;
-        }
-
-        .save-profile-btn {
-            margin-top: 16px;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            border: none;
-            border-radius: 12px;
-            color: #FFF;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
+        .save-profile-btn { margin-top: 16px; width: 100%; padding: 12px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; border-radius: 12px; color: #FFF; font-weight: 800; font-size: 14px; cursor: pointer; }
 
         .bottom-nav-bar {
-            width: calc(100% + 32px);
-            margin-left: -16px;
-            margin-right: -16px;
-            height: 65px;
-            background: rgba(13, 17, 23, 0.98);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 20;
-            margin-top: auto;
-            flex-shrink: 0;
+            width: calc(100% + 32px); margin-left: -16px; margin-right: -16px; height: 65px;
+            background: rgba(13, 17, 23, 0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; justify-content: space-around; align-items: center; z-index: 20; margin-top: auto; flex-shrink: 0;
         }
-
-        .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 11px;
-            color: #6B7280;
-            cursor: pointer;
-            transition: color 0.3s;
-            gap: 4px;
-        }
-
-        .nav-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: #6B7280;
-            stroke-width: 2;
-            fill: none;
-            transition: stroke 0.3s;
-        }
-
+        .nav-btn { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #6B7280; cursor: pointer; gap: 4px; }
+        .nav-btn svg { width: 22px; height: 22px; stroke: #6B7280; stroke-width: 2; fill: none; }
         .nav-btn.active { color: #F59E0B; font-weight: 800; }
         .nav-btn.active svg { stroke: #F59E0B; }
     </style>
@@ -1331,7 +945,6 @@
     <div class="card-container" id="cardContainer">
         <div class="glass-card" id="card">
             
-            <!-- TOP BAR: LOGOUT BUTTON ONLY (ABOVE SIMOMi LOGO) -->
             <div class="top-header-actions-bar" id="topHeaderBar" style="display: none;">
                 <button type="button" class="logout-small-btn" onclick="handleFullLogout()">
                     <svg viewBox="0 0 24 24">
@@ -1343,13 +956,11 @@
                 </button>
             </div>
 
-            <!-- GLOBAL BRAND LOGO -->
             <div class="brand" id="mainBrandHeader">
                 <div class="logo-title">SIMOMi</div>
-                <div class="subtitle">دردشـة صـوتـيـة</div>
+                <div class="subtitle">دردشـة صـوتـيـة مـبـاشـرة</div>
             </div>
 
-            <!-- GLOBAL ID SEARCH BAR (DIRECTLY UNDER SIMOMi LOGO) -->
             <div class="top-global-search-box" id="globalSearchBox">
                 <div class="id-search-input-wrapper">
                     <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="بحث بـ ID المستخدم (7 أرقام)..." autocomplete="off">
@@ -1361,257 +972,175 @@
                 <button type="button" class="id-search-btn" onclick="searchUserById()">بحث 🔍</button>
             </div>
 
-            <!-- STEP 1: Login View -->
+            <!-- STEP 1: Login -->
             <div id="loginView" class="view-step active-view">
                 <form onsubmit="handleLoginSubmit(event)">
                     <div class="input-box">
                         <input type="email" id="email" placeholder=" " required autocomplete="off">
                         <label for="email">البريد الإلكتروني</label>
                     </div>
-
                     <div class="input-box">
                         <input type="password" id="password" placeholder=" " required>
                         <label for="password">كلمة المرور</label>
                         <span class="password-toggle" onclick="togglePassword()">👁️</span>
                     </div>
-
                     <div id="authError" class="auth-error"></div>
-
                     <div class="btn-wrapper">
-                        <button type="submit" id="loginBtn" class="magnetic-btn">
-                            تسجيل الدخول / إنشيء حسابك
-                        </button>
+                        <button type="submit" id="loginBtn" class="magnetic-btn">تسجيل الدخول / إنشيء حسابك</button>
                     </div>
                 </form>
             </div>
 
-            <!-- STEP 2: Gender Selection View -->
+            <!-- STEP 2: Gender -->
             <div id="genderView" class="view-step hidden-view">
                 <div class="gender-title">تحديد الهوية</div>
-                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك الصوتي</div>
-
+                <div class="gender-subtitle">اختر جنسك لمتابعة إعداد حسابك</div>
                 <div class="gender-grid">
                     <div class="gender-card" id="cardMale" onclick="selectGender('male')">
                         <div class="checkmark">✓</div>
-                        <!-- SVG Male Symbol -->
-                        <svg class="gender-symbol-icon" viewBox="0 0 24 24">
-                            <circle cx="10" cy="14" r="5"></circle>
-                            <line x1="19" y1="5" x2="13.6" y2="10.4"></line>
-                            <polyline points="14 5 19 5 19 10"></polyline>
-                        </svg>
+                        <svg class="gender-symbol-icon" viewBox="0 0 24 24"><circle cx="10" cy="14" r="5"></circle><line x1="19" y1="5" x2="13.6" y2="10.4"></line><polyline points="14 5 19 5 19 10"></polyline></svg>
                         <div style="font-weight: 800; color: #FFF;">ذكر</div>
                     </div>
                     <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
                         <div class="checkmark">✓</div>
-                        <!-- SVG Female Symbol -->
-                        <svg class="gender-symbol-icon" viewBox="0 0 24 24">
-                            <circle cx="12" cy="9" r="5"></circle>
-                            <line x1="12" y1="14" x2="12" y2="21"></line>
-                            <line x1="9" y1="18" x2="15" y2="18"></line>
-                        </svg>
+                        <svg class="gender-symbol-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"></circle><line x1="12" y1="14" x2="12" y2="21"></line><line x1="9" y1="18" x2="15" y2="18"></line></svg>
                         <div style="font-weight: 800; color: #FFF;">أنثى</div>
                     </div>
                 </div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="goToStep('nameView')">
-                        متابعة
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="goToStep('nameView')">متابعة</button>
                 </div>
             </div>
 
-            <!-- STEP 3: Name Entry View -->
+            <!-- STEP 3: Name -->
             <div id="nameView" class="view-step hidden-view">
                 <div class="step-title">الاسم الشخصي</div>
-                <div class="step-subtitle">أدخل اسمك ليظهر في بطاقتك الخاصة</div>
-
+                <div class="step-subtitle">أدخل اسمك ليظهر في الميكروفونات والبطاقة</div>
                 <div class="name-field-wrapper" id="nameWrapper">
                     <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
                     <span class="name-icon">👤</span>
                     <span class="status-check">✓</span>
                 </div>
                 <div class="counter-tag" id="charCounter">0 / 20 حرف</div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="saveNameAndNext()">
-                        متابعة
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="saveNameAndNext()">متابعة</button>
                 </div>
             </div>
 
-            <!-- STEP 4: Date of Birth View -->
+            <!-- STEP 4: DOB -->
             <div id="dobView" class="view-step hidden-view">
                 <div class="step-title">تاريخ الميلاد</div>
-                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر الفعلي</div>
-
+                <div class="step-subtitle">حدد تاريخ ميلادك لحساب العمر</div>
                 <div class="date-picker-grid">
-                    <div class="date-select-wrapper">
-                        <span class="date-label">اليوم</span>
-                        <select id="daySelect" onchange="calculateAge()"></select>
-                    </div>
-                    <div class="date-select-wrapper">
-                        <span class="date-label">الشهر</span>
-                        <select id="monthSelect" onchange="calculateAge()"></select>
-                    </div>
-                    <div class="date-select-wrapper">
-                        <span class="date-label">السنة</span>
-                        <select id="yearSelect" onchange="calculateAge()"></select>
-                    </div>
+                    <div class="date-select-wrapper"><span class="date-label">اليوم</span><select id="daySelect" onchange="calculateAge()"></select></div>
+                    <div class="date-select-wrapper"><span class="date-label">الشهر</span><select id="monthSelect" onchange="calculateAge()"></select></div>
+                    <div class="date-select-wrapper"><span class="date-label">السنة</span><select id="yearSelect" onchange="calculateAge()"></select></div>
                 </div>
-
                 <div class="age-badge" id="ageBadge">العمر: 0 سنة</div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="goToStep('avatarView')">
-                        متابعة
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="goToStep('avatarView')">متابعة</button>
                 </div>
             </div>
 
-            <!-- STEP 5: Avatar Selection View -->
+            <!-- STEP 5: Avatar -->
             <div id="avatarView" class="view-step hidden-view">
                 <div class="step-title">الصورة الشخصية</div>
-                <div class="step-subtitle">اختر صورة بروفايلك أو ارفع واحدة جديدة</div>
-
+                <div class="step-subtitle">اختر صورتك لتظهر في الميكروفونات</div>
                 <div class="upload-container">
                     <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
                         <img id="avatarPreview" src="" alt="Avatar">
-                        <div class="upload-placeholder-content" id="uploadPlaceholder">
-                            <span class="upload-icon">📷</span>
-                            <span class="upload-text">رفع صورة</span>
-                        </div>
+                        <div class="upload-placeholder-content" id="uploadPlaceholder"><span class="upload-icon">📷</span><span class="upload-text">رفع صورة</span></div>
                     </div>
                     <input type="file" id="avatarInput" accept="image/*" onchange="previewImage(event)">
                 </div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="generateGoldCard()">
-                        إنشاء البطاقة الذهبية ✨
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="generateGoldCard()">إنشاء البطاقة الذهبية ✨</button>
                 </div>
             </div>
 
-            <!-- STEP 6: Gold ID Card Result -->
+            <!-- STEP 6: Card Result -->
             <div id="cardResultView" class="view-step hidden-view">
                 <div class="step-title">بطاقتك الرقمية</div>
-                <div class="step-subtitle">مرحباً بك رسمياً في المنصة الصوتية SIMOMi</div>
-
+                <div class="step-subtitle">مرحباً بك في المنصة الصوتية SIMOMi</div>
                 <div class="gold-card-wrapper">
-                    <div class="gold-id-card" id="goldCard">
-                        <div class="card-header-row">
-                            <div class="card-chip"></div>
-                            <div class="card-brand-tag">SIMOMi PASS</div>
-                        </div>
+                    <div class="gold-id-card">
+                        <div class="card-header-row"><div class="card-chip"></div><div class="card-brand-tag">SIMOMi PASS</div></div>
                         <div class="card-body-row">
-                            <div class="card-avatar-box">
-                                <img id="finalCardAvatar" src="" alt="Profile">
-                            </div>
+                            <div class="card-avatar-box"><img id="finalCardAvatar" src="" alt="Profile"></div>
                             <div class="card-details">
                                 <div class="card-name" id="finalCardName">الاسم</div>
-                                <div class="card-info-grid">
-                                    <span id="finalCardGender">الجنس</span> • 
-                                    <span id="finalCardAge">العمر</span>
-                                </div>
+                                <div class="card-info-grid"><span id="finalCardGender">الجنس</span> • <span id="finalCardAge">العمر</span></div>
                             </div>
                         </div>
-                        <div class="card-footer-row">
-                            <span id="finalCardId">ID: 0000000</span>
-                            <span>VERIFIED USER ✓</span>
-                        </div>
+                        <div class="card-footer-row"><span id="finalCardId">ID: 0000000</span><span>VERIFIED ✓</span></div>
                     </div>
                 </div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="goToStep('homeMainView')">
-                        دخول المنصة 🚀
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="goToStep('homeMainView')">دخول المنصة 🚀</button>
                 </div>
             </div>
 
-            <!-- STEP 7: MAIN HOME DASHBOARD -->
+            <!-- STEP 7: Home Dashboard -->
             <div id="homeMainView" class="view-step hidden-view">
-                <!-- CREATE ROOM BUTTON -->
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                        <line x1="12" y1="19" x2="12" y2="23"></line>
-                        <line x1="8" y1="23" x2="16" y2="23"></line>
-                    </svg>
-                    <span>إنشاء غرفة دردشة</span>
+                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <span>إنشاء غرفة دردشة صوتية</span>
                 </button>
             </div>
 
-            <!-- SEARCHED USER PROFILE MODAL -->
+            <!-- SEARCH PROFILE MODAL -->
             <div class="user-profile-modal-overlay" id="searchProfileModal">
                 <div class="searched-profile-card">
                     <img id="searchedAvatarImg" class="searched-avatar" src="https://via.placeholder.com/150" alt="Avatar">
                     <div class="searched-name" id="searchedNameTxt">الاسم</div>
                     <div class="searched-id-tag" id="searchedIdTxt">ID: 0000000</div>
-                    
                     <div class="searched-details-box">
                         <span>الجنس: <strong id="searchedGenderTxt" style="color: #FFF;">-</strong></span>
                         <span>العمر: <strong id="searchedAgeTxt" style="color: #FFF;">-</strong></span>
                     </div>
-
                     <button type="button" class="close-searched-btn" onclick="closeSearchModal()">إغلاق</button>
                 </div>
             </div>
 
-            <!-- STEP 8: CREATE ROOM CONFIG VIEW -->
+            <!-- STEP 8: Create Room -->
             <div id="createRoomView" class="view-step hidden-view">
                 <div class="step-title">إنشاء غرفة جديدة</div>
-                <div class="step-subtitle">اختر صورة الغرفة وأدخل اسمها</div>
-
+                <div class="step-subtitle">صورة الغرفة واسمها</div>
                 <div class="upload-container">
                     <div class="avatar-upload-zone" onclick="document.getElementById('roomAvatarInput').click()">
-                        <img id="roomAvatarPreview" src="" alt="Room Avatar">
-                        <div class="upload-placeholder-content" id="roomUploadPlaceholder">
-                            <span class="upload-icon">🏛️</span>
-                            <span class="upload-text">صورة الغرفة</span>
-                        </div>
+                        <img id="roomAvatarPreview" src="" alt="Room">
+                        <div class="upload-placeholder-content" id="roomUploadPlaceholder"><span class="upload-icon">🏛️</span><span class="upload-text">صورة الغرفة</span></div>
                     </div>
                     <input type="file" id="roomAvatarInput" accept="image/*" onchange="previewRoomImage(event)">
                 </div>
-
                 <div class="input-box">
                     <input type="text" id="roomNameInput" placeholder=" " required autocomplete="off">
                     <label for="roomNameInput">اسم الغرفة الصوتية...</label>
                 </div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="goToRoomBgStep()">
-                        متابعة لاختيار الخلفية 🎨
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="goToRoomBgStep()">متابعة لاختيار الخلفية 🎨</button>
                 </div>
             </div>
 
-            <!-- STEP 9: CHOOSE ROOM BACKGROUND VIEW -->
+            <!-- STEP 9: Room Background -->
             <div id="roomBgView" class="view-step hidden-view">
                 <div class="step-title">خلفية الغرفة</div>
-                <div class="step-subtitle">اختر خلفية مميزة لغرفتك الصوتية</div>
-
+                <div class="step-subtitle">اختر خلفية غرفتك الصوتية</div>
                 <div class="bg-grid">
                     <div class="bg-option selected" style="background-image: linear-gradient(135deg, #1e3c72, #2a5298);" onclick="selectBgOption(this, 'linear-gradient(135deg, #1e3c72, #2a5298)')"></div>
                     <div class="bg-option" style="background-image: linear-gradient(135deg, #2b5876, #4e4376);" onclick="selectBgOption(this, 'linear-gradient(135deg, #2b5876, #4e4376)')"></div>
                     <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
                 </div>
-
                 <div class="upload-container" style="margin-bottom: 16px;">
-                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">
-                        📷 رفع خلفية خاصة
-                    </button>
+                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">📷 رفع خلفية خاصة</button>
                     <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
                 </div>
-
                 <div class="btn-wrapper">
-                    <button type="button" class="magnetic-btn" onclick="launchLiveRoom()">
-                        إطلاق الغرفة الآن 🚀
-                    </button>
+                    <button type="button" class="magnetic-btn" onclick="launchLiveRoom()">إطلاق الغرفة الآن 🚀</button>
                 </div>
             </div>
 
-            <!-- STEP 10: LIVE VOICE ROOM VIEW -->
+            <!-- STEP 10: Live Voice Room with PeerJS -->
             <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
                 <div class="live-room-container" id="liveRoomBg">
                     <div class="live-room-top-bar">
@@ -1619,23 +1148,12 @@
                             <img id="liveRoomInfoImg" src="https://via.placeholder.com/150" alt="Room">
                             <span id="liveRoomInfoName">غرفة الصوت</span>
                         </div>
-
                         <div class="top-left-actions">
-                            <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج من الغرفة">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                    <polyline points="16 17 21 12 16 7"></polyline>
-                                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                                </svg>
+                            <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج">
+                                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                             </div>
-
                             <div class="room-online-badge">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
+                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                                 <span id="onlineCountNum">1</span>
                             </div>
                         </div>
@@ -1643,21 +1161,23 @@
 
                     <div class="mics-grid-container">
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-1">1</span></div>
-                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-2">2</span></div>
-                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-3">3</span></div>
-                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-4">4</span></div>
-                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-5">5</span></div>
+                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-1">1</span></div>
+                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-2">2</span></div>
+                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-3">3</span></div>
+                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-4">4</span></div>
+                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-5">5</span></div>
                         </div>
-
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-6">6</span></div>
-                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-7">7</span></div>
-                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-8">8</span></div>
-                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-9">9</span></div>
-                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-10">10</span></div>
+                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-6">6</span></div>
+                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-7">7</span></div>
+                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-8">8</span></div>
+                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-9">9</span></div>
+                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-10">10</span></div>
                         </div>
                     </div>
+
+                    <!-- عنصر الصوت المخفي لتشغيل صوت المتحدث الآخر عبر الإنترنت -->
+                    <audio id="remoteAudio" autoplay style="display:none;"></audio>
 
                     <div class="room-comments-section" id="roomCommentsSection">
                         <div class="comments-toggle-bar" onclick="toggleCommentsSection()">
@@ -1666,28 +1186,24 @@
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble">
-                                    <span class="comment-user">النظام:</span> أهلاً بك في الغرفة الصوتية! اكتب تعليقك للجميع.
-                                </div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! الصعود للميكروفون يشغل الصوت المباشر تلقائياً.</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
-                                <button type="button" class="send-comment-btn" onclick="sendRoomComment()" title="إرسال التعليق">
-                                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                                </button>
+                                <button type="button" class="send-comment-btn" onclick="sendRoomComment()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STEP 11: MESSAGES VIEW -->
+            <!-- STEP 11: Messages -->
             <div id="messagesView" class="view-step hidden-view">
                 <div class="step-title">الرسائل</div>
-                <div class="step-subtitle">جميع المحادثات والرسائل الخاصة بك</div>
+                <div class="step-subtitle">جميع المحادثات الخاصة بك</div>
             </div>
 
-            <!-- STEP 12: PROFILE VIEW -->
+            <!-- STEP 12: Profile -->
             <div id="profileView" class="view-step hidden-view">
                 <div class="profile-card">
                     <div class="profile-img-large" onclick="document.getElementById('profileAvatarInput').click()">
@@ -1695,53 +1211,33 @@
                         <div class="profile-img-overlay">تغيير الصورة</div>
                     </div>
                     <input type="file" id="profileAvatarInput" accept="image/*" onchange="previewProfileImage(event)">
-
                     <input type="text" id="profileNameInput" class="profile-edit-name-input" placeholder="اسم المستخدم">
-
                     <div class="profile-data-box">
-                        <div class="data-row">
-                            <span class="data-label">معرف الحساب (ID)</span>
-                            <span class="data-val" id="profileUserIdTxt" style="color: #F59E0B; font-size: 15px;">-</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-label">الجنس</span>
-                            <select id="profileGenderSelect" class="profile-edit-select">
-                                <option value="male">ذكر</option>
-                                <option value="female">أنثى</option>
-                            </select>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-label">العمر</span>
-                            <input type="number" id="profileAgeInput" class="profile-edit-input" min="1" max="100" style="width: 70px;">
-                        </div>
-                        <div class="data-row">
-                            <span class="data-label">حالة الحساب</span>
-                            <span class="data-val" style="color: #10B981;">VIP موثق ✓</span>
-                        </div>
+                        <div class="data-row"><span class="data-label">معرف الحساب (ID)</span><span class="data-val" id="profileUserIdTxt" style="color: #F59E0B;">-</span></div>
+                        <div class="data-row"><span class="data-label">الجنس</span><select id="profileGenderSelect" class="profile-edit-select"><option value="male">ذكر</option><option value="female">أنثى</option></select></div>
+                        <div class="data-row"><span class="data-label">العمر</span><input type="number" id="profileAgeInput" class="profile-edit-input" min="1" max="100" style="width: 70px;"></div>
+                        <div class="data-row"><span class="data-label">حالة الحساب</span><span class="data-val" style="color: #10B981;">VIP موثق ✓</span></div>
                     </div>
-
-                    <button type="button" class="save-profile-btn" onclick="saveProfileChanges()">
-                        حفظ التغييرات 💾
-                    </button>
+                    <button type="button" class="save-profile-btn" onclick="saveProfileChanges()">حفظ التغييرات 💾</button>
                 </div>
             </div>
 
-            <!-- MIC CONTROL ACTION SHEET MODAL -->
+            <!-- MIC MODAL -->
             <div class="modal-overlay" id="micModalOverlay">
                 <div class="action-sheet">
                     <div class="action-sheet-title" id="menuMicTitle">التحكم بالميكروفون</div>
-                    <button type="button" class="sheet-btn" id="takeMicBtn" onclick="actionTakeMic()">الصعود إلى الميكروفون</button>
+                    <button type="button" class="sheet-btn" id="takeMicBtn" onclick="actionTakeMic()">الصعود إلى الميكروفون والبث الصوتي 🎙️</button>
                     <button type="button" class="sheet-btn" id="lockMicBtn" onclick="actionToggleLockMic()"><span id="lockBtnTxt">قفل / إغلاق الميكروفون</span></button>
                     <button type="button" class="sheet-btn danger" id="leaveMicBtn" onclick="actionLeaveMic()" style="display:none;">مغادرة الميكروفون</button>
                     <button type="button" class="sheet-btn cancel" onclick="closeMicMenu()">إلغاء</button>
                 </div>
             </div>
 
-            <!-- EXIT CONFIRMATION MODAL -->
+            <!-- EXIT MODAL -->
             <div class="confirm-modal-overlay" id="exitConfirmModal">
                 <div class="confirm-dialog">
                     <div class="confirm-dialog-title">تأكيد الخروج</div>
-                    <div class="confirm-dialog-text">هل أنت متأكد أنك تريد مغادرة الغرفة الصوتية؟</div>
+                    <div class="confirm-dialog-text">هل تريد مغادرة الغرفة وإنهاء البث الصوتي؟</div>
                     <div class="confirm-dialog-buttons">
                         <button type="button" class="confirm-btn yes" onclick="confirmExitRoom(true)">نعم</button>
                         <button type="button" class="confirm-btn no" onclick="confirmExitRoom(false)">لا</button>
@@ -1749,26 +1245,18 @@
                 </div>
             </div>
 
-            <!-- BOTTOM NAVIGATION BAR -->
+            <!-- BOTTOM NAVIGATION -->
             <div class="bottom-nav-bar" id="bottomNav" style="display: none;">
-                <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')">
-                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span>الرئيسية</span>
-                </div>
-                <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')">
-                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    <span>رسائل</span>
-                </div>
-                <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')">
-                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span>حسابي</span>
-                </div>
+                <div class="nav-btn active" id="navHomeBtn" onclick="switchTab('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span>الرئيسية</span></div>
+                <div class="nav-btn" id="navMsgBtn" onclick="switchTab('messages')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>رسائل</span></div>
+                <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>حسابي</span></div>
             </div>
 
-            <div class="footer-tag" id="footerTag">SIMOMi Engine v2.0 • Firebase Firestore Active</div>
+            <div class="footer-tag">SIMOMi Engine v2.0 • PeerJS Voice Connected</div>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1811,7 +1299,11 @@
 
         let selectedMicIndex = null;
         let myTakenMicIndex = null;
-        const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`;
+        let peer = null;
+        let localStream = null;
+        let currentCall = null;
+
+        const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>`;
         const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
 
         function generate7DigitId() {
@@ -1831,45 +1323,27 @@
 
         async function searchUserById() {
             const searchInput = document.getElementById('searchUserIdInput').value.trim();
-            if (!searchInput) {
-                alert('الرجاء إدخال ID مكون من 7 أرقام للبحث');
-                return;
-            }
+            if (!searchInput) { alert('أدخل ID المكون من 7 أرقام'); return; }
             try {
-                const usersRef = window.collection(window.db, "users");
-                const q = window.query(usersRef, window.where("id", "==", searchInput));
+                const q = window.query(window.collection(window.db, "users"), window.where("id", "==", searchInput));
                 const querySnapshot = await window.getDocs(q);
-
                 if (!querySnapshot.empty) {
                     const userDoc = querySnapshot.docs[0].data();
-                    document.getElementById('searchedNameTxt').innerText = userDoc.name || 'مستخدم بدون اسم';
+                    document.getElementById('searchedNameTxt').innerText = userDoc.name || 'بدون اسم';
                     document.getElementById('searchedIdTxt').innerText = 'ID: ' + userDoc.id;
                     document.getElementById('searchedGenderTxt').innerText = userDoc.gender === 'male' ? 'ذكر' : 'أنثى';
                     document.getElementById('searchedAgeTxt').innerText = (userDoc.age || 0) + ' سنة';
                     document.getElementById('searchedAvatarImg').src = userDoc.avatarSrc || 'https://via.placeholder.com/150';
                     document.getElementById('searchProfileModal').classList.add('active');
-                } else {
-                    alert('لم يتم العثور على أي حساب بهذا الـ ID (' + searchInput + ')');
-                }
-            } catch(e) {
-                console.error("Search error: ", e);
-                alert('حدث خطأ أثناء البحث، يرجى المحاولة لاحقاً');
-            }
+                } else { alert('لم يتم العثور على أي حساب بهذا الـ ID'); }
+            } catch(e) { alert('خطأ في البحث'); }
         }
 
-        function closeSearchModal() {
-            document.getElementById('searchProfileModal').classList.remove('active');
-        }
-
-        function toggleCommentsSection() {
-            document.getElementById('roomCommentsSection').classList.toggle('collapsed');
-        }
+        function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
+        function toggleCommentsSection() { document.getElementById('roomCommentsSection').classList.toggle('collapsed'); }
 
         function goToStep(stepId) {
-            document.querySelectorAll('.view-step').forEach(el => {
-                el.classList.remove('active-view');
-                el.classList.add('hidden-view');
-            });
+            document.querySelectorAll('.view-step').forEach(el => { el.classList.remove('active-view'); el.classList.add('hidden-view'); });
             const target = document.getElementById(stepId);
             target.classList.remove('hidden-view');
             target.classList.add('active-view');
@@ -1881,47 +1355,28 @@
             const mainBrandHeader = document.getElementById('mainBrandHeader');
 
             if(stepId === 'liveRoomView') {
-                navBar.style.display = 'none';
-                globalSearchBox.style.display = 'none';
-                topHeaderBar.style.display = 'none';
-                mainBrandHeader.style.display = 'none';
+                navBar.style.display = 'none'; globalSearchBox.style.display = 'none'; topHeaderBar.style.display = 'none'; mainBrandHeader.style.display = 'none';
                 cardContainer.classList.add('clean-mode');
             } else {
-                if(stepId === 'homeMainView') {
-                    globalSearchBox.style.display = 'flex';
-                    mainBrandHeader.style.display = 'block';
-                    topHeaderBar.style.display = 'flex';
-                } else if(stepId === 'messagesView' || stepId === 'profileView') {
-                    globalSearchBox.style.display = 'none';
-                    mainBrandHeader.style.display = 'none';
-                    topHeaderBar.style.display = 'flex';
-                } else {
-                    globalSearchBox.style.display = 'none';
-                    mainBrandHeader.style.display = 'block';
-                    topHeaderBar.style.display = 'none';
-                }
+                if(stepId === 'homeMainView') { globalSearchBox.style.display = 'flex'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'flex'; }
+                else if(stepId === 'messagesView' || stepId === 'profileView') { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'none'; topHeaderBar.style.display = 'flex'; }
+                else { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'none'; }
 
-                if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView' || stepId === 'createRoomView' || stepId === 'roomBgView') {
-                    navBar.style.display = 'flex';
-                    cardContainer.classList.add('clean-mode');
+                if(['homeMainView', 'messagesView', 'profileView', 'createRoomView', 'roomBgView'].includes(stepId)) {
+                    navBar.style.display = 'flex'; cardContainer.classList.add('clean-mode');
                 } else {
-                    navBar.style.display = 'none';
-                    cardContainer.classList.remove('clean-mode');
+                    navBar.style.display = 'none'; cardContainer.classList.remove('clean-mode');
                 }
             }
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            if(tab === 'home') {
-                document.getElementById('navHomeBtn').classList.add('active');
-                goToStep('homeMainView');
-            } else if(tab === 'messages') {
-                document.getElementById('navMsgBtn').classList.add('active');
-                goToStep('messagesView');
-            } else if(tab === 'profile') {
+            if(tab === 'home') { document.getElementById('navHomeBtn').classList.add('active'); goToStep('homeMainView'); }
+            else if(tab === 'messages') { document.getElementById('navMsgBtn').classList.add('active'); goToStep('messagesView'); }
+            else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
-                document.getElementById('profileNameInput').value = userData.name || 'مستخدم جديد';
+                document.getElementById('profileNameInput').value = userData.name || '';
                 document.getElementById('profileGenderSelect').value = userData.gender || 'male';
                 document.getElementById('profileAgeInput').value = userData.age || 0;
                 document.getElementById('profileUserIdTxt').innerText = userData.id || '0000000';
@@ -1934,31 +1389,22 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('profileAvatarImg').src = evt.target.result;
-                    userData.avatarSrc = evt.target.result;
-                };
+                reader.onload = evt => { document.getElementById('profileAvatarImg').src = evt.target.result; userData.avatarSrc = evt.target.result; };
                 reader.readAsDataURL(file);
             }
         }
 
         async function saveProfileChanges() {
-            const newName = document.getElementById('profileNameInput').value.trim();
-            const newGender = document.getElementById('profileGenderSelect').value;
-            const newAge = parseInt(document.getElementById('profileAgeInput').value) || 0;
-
-            if (!newName) { alert('الرجاء كتابة اسم صحيح'); return; }
-            userData.name = newName; userData.gender = newGender; userData.age = newAge;
-
+            userData.name = document.getElementById('profileNameInput').value.trim();
+            userData.gender = document.getElementById('profileGenderSelect').value;
+            userData.age = parseInt(document.getElementById('profileAgeInput').value) || 0;
             const currentUser = window.firebaseAuth.currentUser;
             if (currentUser) {
-                try {
-                    await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
-                        name: userData.name, gender: userData.gender, age: userData.age, avatarSrc: userData.avatarSrc
-                    });
-                } catch(e) { console.log(e); }
+                await window.updateDoc(window.doc(window.db, "users", currentUser.uid), {
+                    name: userData.name, gender: userData.gender, age: userData.age, avatarSrc: userData.avatarSrc
+                });
             }
-            alert('تم حفظ التغييرات بنجاح! ✨');
+            alert('تم الحفظ بنجاح! ✨');
         }
 
         async function handleLoginSubmit(event) {
@@ -1967,21 +1413,13 @@
             const password = document.getElementById('password').value;
             userData.email = email;
             const errorDiv = document.getElementById('authError');
-            const loginBtn = document.getElementById('loginBtn');
             errorDiv.style.display = 'none';
-            loginBtn.innerText = "جاري التحقق...";
-
             try {
                 let userCred;
-                try {
-                    userCred = await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
-                } catch(signInErr) {
-                    userCred = await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
-                }
+                try { userCred = await window.signInWithEmailAndPassword(window.firebaseAuth, email, password); }
+                catch(e) { userCred = await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password); }
                 const uid = userCred.user.uid;
-                const userDocRef = window.doc(window.db, "users", uid);
-                const userSnap = await window.getDoc(userDocRef);
-
+                const userSnap = await window.getDoc(window.doc(window.db, "users", uid));
                 if (userSnap.exists()) {
                     const data = userSnap.data();
                     userData.id = data.id; userData.name = data.name || '';
@@ -1989,48 +1427,26 @@
                     userData.avatarSrc = data.avatarSrc || 'https://via.placeholder.com/150';
                 } else {
                     userData.id = generate7DigitId();
-                    await window.setDoc(userDocRef, {
+                    await window.setDoc(window.doc(window.db, "users", uid), {
                         id: userData.id, email: email, name: '', gender: 'male', age: 0, avatarSrc: 'https://via.placeholder.com/150'
                     });
                 }
                 goToStep('genderView');
-            } catch (err) {
-                errorDiv.innerText = "خطأ: " + err.message;
-                errorDiv.style.display = 'block';
-            } finally {
-                loginBtn.innerText = "تسجيل الدخول / إنشيء حسابك";
-            }
+            } catch (err) { errorDiv.innerText = "خطأ: " + err.message; errorDiv.style.display = 'block'; }
         }
 
         async function handleFullLogout() {
-            if(confirm('هل أنت تأكد من تسجيل الخروج؟')) {
+            if(confirm('هل تريد تسجيل الخروج؟')) {
                 try { await window.signOut(window.firebaseAuth); } catch(e) {}
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
-                userData.id = '';
-                document.getElementById('globalSearchBox').style.display = 'none';
-                document.getElementById('topHeaderBar').style.display = 'none';
                 goToStep('loginView');
             }
         }
 
-        function togglePassword() {
-            const passInput = document.getElementById('password');
-            passInput.type = passInput.type === 'password' ? 'text' : 'password';
-        }
-
-        function selectGender(gender) {
-            userData.gender = gender;
-            document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
-            document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
-        }
-
+        function togglePassword() { const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; }
+        function selectGender(g) { userData.gender = g; document.getElementById('cardMale').classList.toggle('selected', g === 'male'); document.getElementById('cardFemale').classList.toggle('selected', g === 'female'); }
         function validateNameInput(input) {
-            const wrapper = document.getElementById('nameWrapper');
-            const counter = document.getElementById('charCounter');
-            counter.innerText = `${input.value.length} / 20 حرف`;
-            if (input.value.trim().length >= 3) wrapper.classList.add('valid');
-            else wrapper.classList.remove('valid');
+            document.getElementById('charCounter').innerText = `${input.value.length} / 20 حرف`;
+            document.getElementById('nameWrapper').classList.toggle('valid', input.value.trim().length >= 3);
         }
 
         async function saveNameAndNext() {
@@ -2040,18 +1456,13 @@
                 const currentUser = window.firebaseAuth.currentUser;
                 if (currentUser) await window.updateDoc(window.doc(window.db, "users", currentUser.uid), { name: userData.name });
                 goToStep('dobView');
-            } else { alert('الرجاء إدخال اسم يتكون من 3 أحرف على الأقل'); }
+            } else { alert('أدخل 3 أحرف على الأقل'); }
         }
 
         function calculateAge() {
-            const day = parseInt(document.getElementById('daySelect').value);
-            const month = parseInt(document.getElementById('monthSelect').value);
-            const year = parseInt(document.getElementById('yearSelect').value);
-            const birth = new Date(year, month - 1, day);
-            const today = new Date(2026, 9, 10);
+            const d = document.getElementById('daySelect').value, m = document.getElementById('monthSelect').value, y = document.getElementById('yearSelect').value;
+            const birth = new Date(y, m - 1, d), today = new Date(2026, 9, 10);
             let age = today.getFullYear() - birth.getFullYear();
-            const m = today.getMonth() - birth.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
             userData.age = age;
             const badge = document.getElementById('ageBadge');
             badge.innerText = `العمر: ${age} سنة`;
@@ -2062,7 +1473,7 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = async function(evt) {
+                reader.onload = async evt => {
                     document.getElementById('avatarPreview').src = evt.target.result;
                     document.getElementById('avatarPreview').style.display = 'block';
                     document.getElementById('uploadPlaceholder').style.display = 'none';
@@ -2078,7 +1489,7 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(evt) {
+                reader.onload = evt => {
                     document.getElementById('roomAvatarPreview').src = evt.target.result;
                     document.getElementById('roomAvatarPreview').style.display = 'block';
                     document.getElementById('roomUploadPlaceholder').style.display = 'none';
@@ -2089,26 +1500,18 @@
         }
 
         function goToRoomBgStep() {
-            const roomName = document.getElementById('roomNameInput').value.trim();
-            if (!roomName) { alert('الرجاء إدخال اسم الغرفة'); return; }
-            userData.roomName = roomName;
+            const rName = document.getElementById('roomNameInput').value.trim();
+            if (!rName) { alert('أدخل اسم الغرفة'); return; }
+            userData.roomName = rName;
             goToStep('roomBgView');
         }
 
-        function selectBgOption(el, bgValue) {
-            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            userData.roomBg = bgValue;
-        }
-
+        function selectBgOption(el, bg) { document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); userData.roomBg = bg; }
         function previewRoomBg(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(evt) {
-                    userData.roomBg = `url('${evt.target.result}')`;
-                    alert('تم اختيار الخلفية بنجاح!');
-                };
+                reader.onload = evt => { userData.roomBg = `url('${evt.target.result}')`; alert('تم اختيار الخلفية!'); };
                 reader.readAsDataURL(file);
             }
         }
@@ -2117,12 +1520,32 @@
             const roomContainer = document.getElementById('liveRoomBg');
             roomContainer.style.background = userData.roomBg;
             roomContainer.style.backgroundSize = 'cover';
-            roomContainer.style.backgroundPosition = 'center';
             document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
             document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
             myTakenMicIndex = null;
             updateOnlineCount();
+            initPeerJS();
             goToStep('liveRoomView');
+        }
+
+        // تهيئة اتصال PeerJS المجاني للصوت المباشر
+        function initPeerJS() {
+            // إنشاء كائن Peer باستخدام معرّف فريد يعتمد على ID المستخدم
+            peer = new Peer('simomi-user-' + userData.id);
+
+            peer.on('call', async (call) => {
+                currentCall = call;
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    localStream = stream;
+                    call.answer(stream); // الرد على المكالمة الصوتية وإرسال الصوت المحلي
+                    call.on('stream', remoteStream => {
+                        document.getElementById('remoteAudio').srcObject = remoteStream;
+                    });
+                } catch(err) {
+                    console.error("Mic access error: ", err);
+                }
+            });
         }
 
         function updateOnlineCount() {
@@ -2131,90 +1554,85 @@
         }
 
         function sendRoomComment() {
-            const inputEl = document.getElementById('roomCommentInput');
-            const commentText = inputEl.value.trim();
-            if (!commentText) return;
+            const input = document.getElementById('roomCommentInput');
+            if (!input.value.trim()) return;
             const container = document.getElementById('commentsListContainer');
-            const bubble = document.createElement('div');
-            bubble.className = 'comment-bubble';
-            bubble.innerHTML = `<span class="comment-user">${userData.name || 'زائر'}:</span> ${escapeHtml(commentText)}`;
-            container.appendChild(bubble);
+            container.innerHTML += `<div class="comment-bubble"><span class="comment-user">${userData.name || 'زائر'}:</span> ${input.value}</div>`;
             container.scrollTop = container.scrollHeight;
-            inputEl.value = '';
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            input.value = '';
         }
 
         function openExitConfirmModal() { document.getElementById('exitConfirmModal').classList.add('active'); }
-
         function confirmExitRoom(isYes) {
             document.getElementById('exitConfirmModal').classList.remove('active');
-            if (isYes) { myTakenMicIndex = null; switchTab('home'); }
+            if (isYes) {
+                if (localStream) localStream.getTracks().forEach(track => track.stop());
+                if (peer) peer.destroy();
+                myTakenMicIndex = null;
+                switchTab('home');
+            }
         }
 
         function openMicMenu(index) {
             selectedMicIndex = index;
             const seatEl = document.getElementById(`seat-${index}`);
-            document.getElementById('menuMicTitle').innerText = `إدارة الميكروفون رقم ${index}`;
-            const isOccupied = seatEl.classList.contains('occupied');
-            const isLocked = seatEl.classList.contains('locked');
-            const takeBtn = document.getElementById('takeMicBtn');
-            const leaveBtn = document.getElementById('leaveMicBtn');
+            document.getElementById('menuMicTitle').innerText = `الميكروفون رقم ${index}`;
+            const isOcc = seatEl.classList.contains('occupied'), isLock = seatEl.classList.contains('locked');
+            const takeBtn = document.getElementById('takeMicBtn'), leaveBtn = document.getElementById('leaveMicBtn');
 
             if (myTakenMicIndex !== null) {
-                if (myTakenMicIndex === index) {
-                    takeBtn.style.display = 'none';
-                    leaveBtn.style.display = 'flex';
-                } else {
-                    if (!isOccupied && !isLocked) {
-                        takeBtn.innerText = "الانتقال إلى هذا الميكروفون 🔄";
-                        takeBtn.style.display = 'flex';
-                    } else {
-                        takeBtn.style.display = 'none';
-                    }
+                if (myTakenMicIndex === index) { takeBtn.style.display = 'none'; leaveBtn.style.display = 'flex'; }
+                else {
+                    takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none';
                     leaveBtn.style.display = 'none';
                 }
             } else {
-                takeBtn.innerText = "الصعود إلى الميكروفون";
-                takeBtn.style.display = (!isOccupied && !isLocked) ? 'flex' : 'none';
-                leaveBtn.style.display = isOccupied ? 'flex' : 'none';
+                takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none';
+                leaveBtn.style.display = isOcc ? 'flex' : 'none';
             }
-            document.getElementById('lockBtnTxt').innerText = isLocked ? 'فتح الميكروفون 🔓' : 'قفل الميكروفون 🔒';
+            document.getElementById('lockBtnTxt').innerText = isLock ? 'فتح الميكروفون 🔓' : 'قفل الميكروفون 🔒';
             document.getElementById('micModalOverlay').classList.add('active');
         }
 
         function closeMicMenu() { document.getElementById('micModalOverlay').classList.remove('active'); }
 
-        function actionTakeMic() {
+        async function actionTakeMic() {
             if (!selectedMicIndex) return;
 
-            // إذا كان المستخدم يجلس بالفعل على مايك آخر، نفرّغ المايك القديم ونعيد رقمه الأصلي
-            if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
-                const oldSeatEl = document.getElementById(`seat-${myTakenMicIndex}`);
-                oldSeatEl.classList.remove('occupied');
-                document.getElementById(`micCircle-${myTakenMicIndex}`).innerHTML = oldSeatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
-                document.getElementById(`micTag-${myTakenMicIndex}`).innerText = myTakenMicIndex; // إرجاع رقم المايك الأصلي
+            try {
+                // طلب إذن الميكروفون من الهاتف
+                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+
+                if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
+                    const oldSeat = document.getElementById(`seat-${myTakenMicIndex}`);
+                    oldSeat.classList.remove('occupied');
+                    document.getElementById(`micCircle-${myTakenMicIndex}`).innerHTML = micSvgHTML;
+                    document.getElementById(`micTag-${myTakenMicIndex}`).innerText = myTakenMicIndex;
+                }
+
+                const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
+                seatEl.classList.add('occupied');
+                document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+                document.getElementById(`micTag-${selectedMicIndex}`).innerText = userData.name || 'أنا';
+                myTakenMicIndex = selectedMicIndex;
+
+                // إجراء مكالمة تجريبية أو ربط مع متحدث آخر عبر PeerJS (كمثال، إذا كان شخص آخر في المايك 1 أو 2)
+                // يمكنك الاتصال بأي معرف آخر عبر: peer.call('simomi-user-ID', localStream);
+
+                closeMicMenu();
+                updateOnlineCount();
+            } catch(e) {
+                alert('الرجاء السماح بالوصول إلى الميكروفون للبث المباشر!');
             }
-
-            // الجلوس على المايك الجديد وعرض اسم المستخدم تحته
-            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
-            seatEl.classList.add('occupied');
-            document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
-            document.getElementById(`micTag-${selectedMicIndex}`).innerText = userData.name || 'مستخدم'; // إظهار الاسم تحت المايك
-            myTakenMicIndex = selectedMicIndex;
-
-            closeMicMenu();
-            updateOnlineCount();
         }
 
         function actionLeaveMic() {
             if (!selectedMicIndex) return;
+            if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
             const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
             seatEl.classList.remove('occupied');
-            document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = seatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
-            document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex; // إرجاع رقم المايك عند المغادرة
+            document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = micSvgHTML;
+            document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex;
             if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
             closeMicMenu();
             updateOnlineCount();
@@ -2226,15 +1644,13 @@
             const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
             if (seatEl.classList.contains('locked')) {
                 seatEl.classList.remove('locked');
-                if (!seatEl.classList.contains('occupied')) {
-                    circle.innerHTML = micSvgHTML;
-                    document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex;
-                }
+                circle.innerHTML = micSvgHTML;
+                document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex;
             } else {
                 seatEl.classList.add('locked');
                 seatEl.classList.remove('occupied');
                 circle.innerHTML = lockSvgHTML;
-                document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex; // إرجاع الرقم
+                document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex;
                 if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
             }
             closeMicMenu();
@@ -2242,12 +1658,11 @@
         }
 
         function generateGoldCard() {
-            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم جديد';
+            document.getElementById('finalCardName').innerText = userData.name || 'مستخدم';
             document.getElementById('finalCardGender').innerText = userData.gender === 'male' ? 'ذكر' : 'أنثى';
             document.getElementById('finalCardAge').innerText = userData.age + ' سنة';
-            document.getElementById('finalCardId').innerText = 'ID: ' + (userData.id || '0000000');
+            document.getElementById('finalCardId').innerText = 'ID: ' + userData.id;
             if (userData.avatarSrc) document.getElementById('finalCardAvatar').src = userData.avatarSrc;
-            
             goToStep('cardResultView');
         }
     </script>
