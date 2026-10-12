@@ -254,14 +254,38 @@
             padding: 24px 16px;
             text-align: center;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .gender-card .avatar { font-size: 42px; margin-bottom: 10px; display: block; }
+        /* SVG MALE & FEMALE ICONS STYLING */
+        .gender-card .gender-symbol-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            stroke-width: 2.5;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .gender-card#cardMale .gender-symbol-icon {
+            stroke: #3B82F6;
+        }
+
+        .gender-card#cardFemale .gender-symbol-icon {
+            stroke: #EC4899;
+        }
 
         .gender-card.selected {
             background: rgba(239, 68, 68, 0.12);
             border-color: #EF4444;
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .gender-card.selected .gender-symbol-icon {
+            transform: scale(1.1);
         }
 
         .gender-card .checkmark {
@@ -1364,12 +1388,22 @@
                 <div class="gender-grid">
                     <div class="gender-card" id="cardMale" onclick="selectGender('male')">
                         <div class="checkmark">✓</div>
-                        <span class="avatar">👨‍💻</span>
+                        <!-- SVG Male Symbol -->
+                        <svg class="gender-symbol-icon" viewBox="0 0 24 24">
+                            <circle cx="10" cy="14" r="5"></circle>
+                            <line x1="19" y1="5" x2="13.6" y2="10.4"></line>
+                            <polyline points="14 5 19 5 19 10"></polyline>
+                        </svg>
                         <div style="font-weight: 800; color: #FFF;">ذكر</div>
                     </div>
                     <div class="gender-card" id="cardFemale" onclick="selectGender('female')">
                         <div class="checkmark">✓</div>
-                        <span class="avatar">👩‍💻</span>
+                        <!-- SVG Female Symbol -->
+                        <svg class="gender-symbol-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="9" r="5"></circle>
+                            <line x1="12" y1="14" x2="12" y2="21"></line>
+                            <line x1="9" y1="18" x2="15" y2="18"></line>
+                        </svg>
                         <div style="font-weight: 800; color: #FFF;">أنثى</div>
                     </div>
                 </div>
@@ -1848,19 +1882,15 @@
                 mainBrandHeader.style.display = 'none';
                 cardContainer.classList.add('clean-mode');
             } else {
-                // التحكم بظهور الشعار والبحث حسب الصفحة
                 if(stepId === 'homeMainView') {
-                    // إظهار البحث والاسم والتوجيه بالرئيسية فقط
                     globalSearchBox.style.display = 'flex';
                     mainBrandHeader.style.display = 'block';
                     topHeaderBar.style.display = 'flex';
                 } else if(stepId === 'messagesView' || stepId === 'profileView') {
-                    // إخفاء البحث وشعار SIMOMi بصفحات الرسائل وحسابي
                     globalSearchBox.style.display = 'none';
                     mainBrandHeader.style.display = 'none';
                     topHeaderBar.style.display = 'flex';
                 } else {
-                    // باقي الخطوات المبدئية كالإنشاء والتسجيل
                     globalSearchBox.style.display = 'none';
                     mainBrandHeader.style.display = 'block';
                     topHeaderBar.style.display = 'none';
