@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Live Voice Room with PeerJS 2026</title>
-    <!-- مكتبة PeerJS للصوت المباشر المجاني -->
+    <title>SIMOMi - Live Voice Room & Direct Messaging 2026</title>
+    <!-- مكتبة PeerJS للصوت المباشر -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         /* Base Reset */
@@ -607,7 +607,30 @@
             color: #9CA3AF;
             display: flex;
             justify-content: space-around;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
+        }
+
+        .profile-action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .send-direct-msg-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            border: none;
+            border-radius: 12px;
+            color: #FFF;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .close-searched-btn {
@@ -861,6 +884,87 @@
         }
         .send-comment-btn svg { width: 18px; height: 18px; stroke: #07090E; stroke-width: 2.2; fill: none; }
 
+        /* DIRECT MESSAGES STYLING */
+        .dm-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            gap: 12px;
+        }
+
+        .dm-header-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dm-header-badge img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #F59E0B;
+            object-fit: cover;
+        }
+
+        .dm-header-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #FFF;
+        }
+
+        .dm-header-sub {
+            font-size: 11px;
+            color: #F59E0B;
+            font-weight: 700;
+        }
+
+        .dm-chat-box {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dm-msg-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .dm-msg-bubble.me {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            color: #FFF;
+            border-bottom-right-radius: 4px;
+        }
+
+        .dm-msg-bubble.other {
+            align-self: flex-end;
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFF;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom-left-radius: 4px;
+        }
+
+        .dm-no-chat-text {
+            text-align: center;
+            color: #6B7280;
+            font-size: 13px;
+            margin: auto;
+            font-weight: 700;
+        }
+
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 100;
@@ -1098,7 +1202,12 @@
                         <span>الجنس: <strong id="searchedGenderTxt" style="color: #FFF;">-</strong></span>
                         <span>العمر: <strong id="searchedAgeTxt" style="color: #FFF;">-</strong></span>
                     </div>
-                    <button type="button" class="close-searched-btn" onclick="closeSearchModal()">إغلاق</button>
+                    <div class="profile-action-btns">
+                        <button type="button" class="send-direct-msg-btn" onclick="openDirectMessageFromProfile()">
+                            💬 إرسال رسالة خاصة
+                        </button>
+                        <button type="button" class="close-searched-btn" onclick="closeSearchModal()">إغلاق</button>
+                    </div>
                 </div>
             </div>
 
@@ -1176,7 +1285,6 @@
                         </div>
                     </div>
 
-                    <!-- عنصر الصوت المخفي لتشغيل صوت المتحدث الآخر عبر الإنترنت -->
                     <audio id="remoteAudio" autoplay style="display:none;"></audio>
 
                     <div class="room-comments-section" id="roomCommentsSection">
@@ -1197,10 +1305,26 @@
                 </div>
             </div>
 
-            <!-- STEP 11: Messages -->
+            <!-- STEP 11: Messages (Direct Messaging View) -->
             <div id="messagesView" class="view-step hidden-view">
-                <div class="step-title">الرسائل</div>
-                <div class="step-subtitle">جميع المحادثات الخاصة بك</div>
+                <div class="dm-container">
+                    <div class="dm-header-badge" id="dmHeaderBadge">
+                        <img id="dmUserAvatar" src="https://via.placeholder.com/150" alt="Avatar">
+                        <div>
+                            <div class="dm-header-title" id="dmUserName">حدد مستخدماً للمحادثة</div>
+                            <div class="dm-header-sub" id="dmUserId">ID: -</div>
+                        </div>
+                    </div>
+
+                    <div class="dm-chat-box" id="dmChatBox">
+                        <div class="dm-no-chat-text" id="dmNoChatTxt">ابحث عن مستخدم عبر ID واضغط على "إرسال رسالة" لبدء المحادثة معه!</div>
+                    </div>
+
+                    <div class="comment-input-row">
+                        <input type="text" id="dmInputMsg" class="comment-input" placeholder="اكتب رسالة خاصة..." autocomplete="off">
+                        <button type="button" class="send-comment-btn" onclick="sendDirectMessage()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+                    </div>
+                </div>
             </div>
 
             <!-- STEP 12: Profile -->
@@ -1297,6 +1421,8 @@
             roomBg: 'linear-gradient(135deg, #1e3c72, #2a5298)'
         };
 
+        let searchedTargetUser = null; // بيانات المستخدم المبحوث عنه
+        let activeDMUser = null; // المستخدم النشط حالياً في المحادثة الخاصة
         let selectedMicIndex = null;
         let myTakenMicIndex = null;
         let peer = null;
@@ -1329,6 +1455,7 @@
                 const querySnapshot = await window.getDocs(q);
                 if (!querySnapshot.empty) {
                     const userDoc = querySnapshot.docs[0].data();
+                    searchedTargetUser = userDoc;
                     document.getElementById('searchedNameTxt').innerText = userDoc.name || 'بدون اسم';
                     document.getElementById('searchedIdTxt').innerText = 'ID: ' + userDoc.id;
                     document.getElementById('searchedGenderTxt').innerText = userDoc.gender === 'male' ? 'ذكر' : 'أنثى';
@@ -1340,6 +1467,45 @@
         }
 
         function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
+
+        // التوجيه المباشر إلى صفحة الرسائل مع المستخدم المبحوث عنه
+        function openDirectMessageFromProfile() {
+            if (!searchedTargetUser) return;
+            activeDMUser = searchedTargetUser;
+            closeSearchModal();
+
+            // تحديث واجهة الرسائل فوراً
+            document.getElementById('dmUserName').innerText = activeDMUser.name || 'مستخدم';
+            document.getElementById('dmUserId').innerText = 'ID: ' + activeDMUser.id;
+            document.getElementById('dmUserAvatar').src = activeDMUser.avatarSrc || 'https://via.placeholder.com/150';
+            
+            const chatBox = document.getElementById('dmChatBox');
+            chatBox.innerHTML = `<div class="dm-no-chat-text">بدأت المحادثة مع ${activeDMUser.name}... اكتب رسالتك أدناه!</div>`;
+
+            // الانقال لتبويب الرسائل
+            switchTab('messages');
+        }
+
+        function sendDirectMessage() {
+            const msgInput = document.getElementById('dmInputMsg');
+            const msgText = msgInput.value.trim();
+            if (!msgText) return;
+
+            if (!activeDMUser) {
+                alert('الرجاء البحث عن مستخدم بواسطة الـ ID أولاً لبدء محادثة!');
+                return;
+            }
+
+            const chatBox = document.getElementById('dmChatBox');
+            const noChatTxt = document.getElementById('dmNoChatTxt');
+            if (noChatTxt) noChatTxt.remove();
+
+            // إضافة الفقاعة المباشرة للرسالة
+            chatBox.innerHTML += `<div class="dm-msg-bubble me">${msgText}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            msgInput.value = '';
+        }
+
         function toggleCommentsSection() { document.getElementById('roomCommentsSection').classList.toggle('collapsed'); }
 
         function goToStep(stepId) {
@@ -1528,9 +1694,7 @@
             goToStep('liveRoomView');
         }
 
-        // تهيئة اتصال PeerJS المجاني للصوت المباشر
         function initPeerJS() {
-            // إنشاء كائن Peer باستخدام معرّف فريد يعتمد على ID المستخدم
             peer = new Peer('simomi-user-' + userData.id);
 
             peer.on('call', async (call) => {
@@ -1538,7 +1702,7 @@
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
                     localStream = stream;
-                    call.answer(stream); // الرد على المكالمة الصوتية وإرسال الصوت المحلي
+                    call.answer(stream);
                     call.on('stream', remoteStream => {
                         document.getElementById('remoteAudio').srcObject = remoteStream;
                     });
@@ -1600,7 +1764,6 @@
             if (!selectedMicIndex) return;
 
             try {
-                // طلب إذن الميكروفون من الهاتف
                 localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 
                 if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
@@ -1615,9 +1778,6 @@
                 document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
                 document.getElementById(`micTag-${selectedMicIndex}`).innerText = userData.name || 'أنا';
                 myTakenMicIndex = selectedMicIndex;
-
-                // إجراء مكالمة تجريبية أو ربط مع متحدث آخر عبر PeerJS (كمثال، إذا كان شخص آخر في المايك 1 أو 2)
-                // يمكنك الاتصال بأي معرف آخر عبر: peer.call('simomi-user-ID', localStream);
 
                 closeMicMenu();
                 updateOnlineCount();
