@@ -1494,7 +1494,7 @@
                 <!-- CREATE ROOM BUTTON -->
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                         <line x1="12" y1="19" x2="12" y2="23"></line>
                         <line x1="8" y1="23" x2="16" y2="23"></line>
@@ -1845,15 +1845,24 @@
                 navBar.style.display = 'none';
                 globalSearchBox.style.display = 'none';
                 topHeaderBar.style.display = 'none';
-                mainBrandHeader.style.display = 'none'; /* إخفاء اسم الشعار والعنوان الفرعي داخل الغرفة فقط */
+                mainBrandHeader.style.display = 'none';
                 cardContainer.classList.add('clean-mode');
             } else {
-                mainBrandHeader.style.display = 'block'; /* إعادة إظهاره خارج الغرفة */
-                if(stepId === 'homeMainView' || stepId === 'messagesView' || stepId === 'profileView') {
+                // التحكم بظهور الشعار والبحث حسب الصفحة
+                if(stepId === 'homeMainView') {
+                    // إظهار البحث والاسم والتوجيه بالرئيسية فقط
                     globalSearchBox.style.display = 'flex';
+                    mainBrandHeader.style.display = 'block';
+                    topHeaderBar.style.display = 'flex';
+                } else if(stepId === 'messagesView' || stepId === 'profileView') {
+                    // إخفاء البحث وشعار SIMOMi بصفحات الرسائل وحسابي
+                    globalSearchBox.style.display = 'none';
+                    mainBrandHeader.style.display = 'none';
                     topHeaderBar.style.display = 'flex';
                 } else {
+                    // باقي الخطوات المبدئية كالإنشاء والتسجيل
                     globalSearchBox.style.display = 'none';
+                    mainBrandHeader.style.display = 'block';
                     topHeaderBar.style.display = 'none';
                 }
 
@@ -2177,9 +2186,6 @@
             document.getElementById('finalCardId').innerText = 'ID: ' + (userData.id || '0000000');
             if (userData.avatarSrc) document.getElementById('finalCardAvatar').src = userData.avatarSrc;
             
-            // Show global search bar and top header bar once entering main platform
-            document.getElementById('globalSearchBox').style.display = 'flex';
-            document.getElementById('topHeaderBar').style.display = 'flex';
             goToStep('cardResultView');
         }
     </script>
