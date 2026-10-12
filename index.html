@@ -851,7 +851,7 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            width: 50px;
+            width: 60px;
         }
 
         .mic-circle {
@@ -903,6 +903,11 @@
             font-weight: 800;
             color: #E5E7EB;
             text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 58px;
+            text-align: center;
         }
 
         .room-comments-section {
@@ -1638,19 +1643,19 @@
 
                     <div class="mics-grid-container">
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">1</span></div>
-                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">2</span></div>
-                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">3</span></div>
-                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">4</span></div>
-                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">5</span></div>
+                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-1">1</span></div>
+                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-2">2</span></div>
+                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-3">3</span></div>
+                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-4">4</span></div>
+                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-5">5</span></div>
                         </div>
 
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">6</span></div>
-                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">7</span></div>
-                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">8</span></div>
-                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">9</span></div>
-                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number">10</span></div>
+                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-6">6</span></div>
+                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-7">7</span></div>
+                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-8">8</span></div>
+                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-9">9</span></div>
+                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><span class="mic-number" id="micTag-10">10</span></div>
                         </div>
                     </div>
 
@@ -2163,7 +2168,6 @@
                     takeBtn.style.display = 'none';
                     leaveBtn.style.display = 'flex';
                 } else {
-                    // الانتقال المباشر إذا كان المايك فارغ وغير مقفل
                     if (!isOccupied && !isLocked) {
                         takeBtn.innerText = "الانتقال إلى هذا الميكروفون 🔄";
                         takeBtn.style.display = 'flex';
@@ -2186,17 +2190,19 @@
         function actionTakeMic() {
             if (!selectedMicIndex) return;
 
-            // إذا كان المستخدم يجلس بالفعل على مايك آخر، نفرّغ المايك القديم أولاً
+            // إذا كان المستخدم يجلس بالفعل على مايك آخر، نفرّغ المايك القديم ونعيد رقمه الأصلي
             if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
                 const oldSeatEl = document.getElementById(`seat-${myTakenMicIndex}`);
                 oldSeatEl.classList.remove('occupied');
                 document.getElementById(`micCircle-${myTakenMicIndex}`).innerHTML = oldSeatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
+                document.getElementById(`micTag-${myTakenMicIndex}`).innerText = myTakenMicIndex; // إرجاع رقم المايك الأصلي
             }
 
-            // الجلوس على المايك الجديد
+            // الجلوس على المايك الجديد وعرض اسم المستخدم تحته
             const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
             seatEl.classList.add('occupied');
             document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = `<img src="${userData.avatarSrc}" alt="Avatar">`;
+            document.getElementById(`micTag-${selectedMicIndex}`).innerText = userData.name || 'مستخدم'; // إظهار الاسم تحت المايك
             myTakenMicIndex = selectedMicIndex;
 
             closeMicMenu();
@@ -2208,6 +2214,7 @@
             const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
             seatEl.classList.remove('occupied');
             document.getElementById(`micCircle-${selectedMicIndex}`).innerHTML = seatEl.classList.contains('locked') ? lockSvgHTML : micSvgHTML;
+            document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex; // إرجاع رقم المايك عند المغادرة
             if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
             closeMicMenu();
             updateOnlineCount();
@@ -2219,11 +2226,15 @@
             const circle = document.getElementById(`micCircle-${selectedMicIndex}`);
             if (seatEl.classList.contains('locked')) {
                 seatEl.classList.remove('locked');
-                if (!seatEl.classList.contains('occupied')) circle.innerHTML = micSvgHTML;
+                if (!seatEl.classList.contains('occupied')) {
+                    circle.innerHTML = micSvgHTML;
+                    document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex;
+                }
             } else {
                 seatEl.classList.add('locked');
                 seatEl.classList.remove('occupied');
                 circle.innerHTML = lockSvgHTML;
+                document.getElementById(`micTag-${selectedMicIndex}`).innerText = selectedMicIndex; // إرجاع الرقم
                 if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
             }
             closeMicMenu();
