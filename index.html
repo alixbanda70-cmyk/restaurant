@@ -816,7 +816,6 @@
 
         .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
 
-        /* شريط المتواجدين مصمم لنصف الشاشة بصور صغيرة جودة عالية */
         .room-audience-bar {
             display: flex;
             align-items: center;
@@ -827,7 +826,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            width: 50%; /* نصف عرض الشاشة بالضبط كما طلبت */
+            width: 50%;
             max-width: 200px;
             overflow-x: auto;
             scrollbar-width: none;
@@ -837,7 +836,6 @@
 
         .room-audience-bar::-webkit-scrollbar { display: none; }
 
-        /* صور صغيرة ومحددة */
         .audience-user-avatar {
             width: 26px;
             height: 26px;
@@ -1471,12 +1469,12 @@
 
                     <div class="room-comments-section" id="roomCommentsSection">
                         <div class="comments-toggle-bar" onclick="toggleCommentsSection()">
-                            <span>التعليقات والمحادثة (عبر Firestore)</span>
+                            <span>التعليقات والمحادثة المباشرة (Firebase)</span>
                             <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم تحديث الشريط ليظهر بنصف العرض وبصوّر مصغّرة.</div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم ربط المحادثة مع Firebase Firestore.</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
@@ -1835,7 +1833,6 @@
             });
         }
 
-        // الانضمام عبر الدعوة
         function joinRoomFromInvite(rName, rAvatar, rBg, rId) {
             userData.roomName = rName;
             userData.roomAvatarSrc = rAvatar;
@@ -1931,14 +1928,17 @@
             openChatRoomUI();
         }
 
+        // إرسال التعليقات عبر Firestore بدقة عالية (مثل الرسائل الخاصة)
         async function sendRoomComment() {
             const input = document.getElementById('roomCommentInput');
-            if (!input.value.trim() || !userData.currentRoomId) return;
+            const commentText = input.value.trim();
+            if (!commentText || !userData.currentRoomId) return;
 
             try {
                 await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "comments"), {
+                    userId: userData.uid,
                     userName: userData.name || 'زائر',
-                    text: input.value.trim(),
+                    text: commentText,
                     createdAt: Date.now()
                 });
                 input.value = '';
@@ -1947,16 +1947,25 @@
             }
         }
 
+        // الاستماع المباشر الفوري لتعليقات الغرفة عبر Firestore
         function listenToRoomComments() {
             const container = document.getElementById('commentsListContainer');
             if (commentsUnsubscribe) commentsUnsubscribe();
             if (!userData.currentRoomId) return;
 
-            const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "comments"), window.fbFns.orderBy("createdAt", "asc"));
+            const q = window.fbFns.query(
+                window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "comments"), 
+                window.fbFns.orderBy("createdAt", "asc")
+            );
+            
             commentsUnsubscribe = window.fbFns.onSnapshot(q, (snapshot) => {
                 container.innerHTML = '';
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! اكتب أول تعليق في الغرفة.</div>`;
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
                     container.innerHTML += `<div class="comment-bubble"><span class="comment-user">${data.userName}:</span> ${data.text}</div>`;
                 });
                 container.scrollTop = container.scrollHeight;
@@ -1995,10 +2004,8 @@
                 audienceContainer.innerHTML = '';
 
                 let totalCount = snapshot.size;
-                // تحديث عداد الأشخاص أعلى الغرفة
                 document.getElementById('onlineCountNum').innerText = totalCount;
 
-                // عرض صور الأعضاء الحاضرين مصغرة بدقة عالية
                 snapshot.forEach((docSnap) => {
                     const member = docSnap.data();
                     const avatarUrl = member.avatarSrc || 'https://via.placeholder.com/150';
@@ -2199,7 +2206,6 @@
             }
         }
 
-        // إطلاق غرفة جديدة وإنشاء معرف فريد مشترك Room ID
         function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
             enterRoomSetup();
@@ -2214,7 +2220,6 @@
             
             myTakenMicIndex = null;
             
-            // تسجيل الدخول لحضور الغرفة
             await joinRoomPresence();
             
             initPeerJS();
@@ -2243,7 +2248,6 @@
         async function confirmExitRoom(isYes) {
             document.getElementById('exitConfirmModal').classList.remove('active');
             if (isYes) {
-                // إزالة المستخدم من المقاعد وحضور الغرفة عند الخروج
                 await leaveRoomPresence();
 
                 if (myTakenMicIndex !== null && userData.currentRoomId) {
