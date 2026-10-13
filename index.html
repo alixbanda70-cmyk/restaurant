@@ -1543,10 +1543,8 @@
                         </div>
                     </div>
 
-                    <!-- شريط الحاضرين: مصمم على نصف الشاشة فقط وبصور صغيرة 26px -->
-                    <div class="room-audience-bar" id="roomAudienceContainer">
-                        <!-- تظهر صور الأعضاء الحاضرين مباشرة وبحجم صغير جداً أنيق -->
-                    </div>
+                    <!-- شريط الحاضرين -->
+                    <div class="room-audience-bar" id="roomAudienceContainer"></div>
 
                     <div class="mics-grid-container">
                         <div class="mics-row">
@@ -1741,10 +1739,15 @@
             }
         }
 
+        // حفظ الغرف المحفوظة حديثاً بشكل آمن وبدون كود الصورة الطويل
         function saveRoomToRecent(rId, rName, rAvatar, rBg) {
             let recentList = JSON.parse(localStorage.getItem('simomi_recent_rooms') || '[]');
             recentList = recentList.filter(r => r.roomId !== rId);
-            recentList.unshift({ roomId: rId, name: rName, avatar: rAvatar, bg: rBg, visitedAt: Date.now() });
+            
+            // نستخدم خلفية آمنة في الذاكرة لتجنب ثقل البيانات
+            const safeBg = (rBg && rBg.startsWith('url(')) ? 'linear-gradient(135deg, #1e3c72, #2a5298)' : rBg;
+
+            recentList.unshift({ roomId: rId, name: rName, avatar: rAvatar, bg: safeBg, visitedAt: Date.now() });
             if (recentList.length > 20) recentList.pop();
             localStorage.setItem('simomi_recent_rooms', JSON.stringify(recentList));
         }
@@ -2003,13 +2006,16 @@
             });
         }
 
+        // دالة الدخول الآمن للغرفة عبر الرابط (تتجاوز المشاكل وتقوم بالدخول المباشر)
         function joinRoomFromInvite(rName, rAvatar, rBg, rId) {
             userData.roomName = rName;
             userData.roomAvatarSrc = rAvatar;
-            userData.roomBg = rBg;
+            
+            // إذا كانت خلفية الغرفة تتضمن صورة محملة ثقيلة، نستبدلها بخلفية افتراضية لضمان سرعة المستلم
+            userData.roomBg = (rBg && rBg.startsWith('url(')) ? 'linear-gradient(135deg, #1e3c72, #2a5298)' : rBg;
             userData.currentRoomId = rId;
 
-            saveRoomToRecent(rId, rName, rAvatar, rBg);
+            saveRoomToRecent(rId, rName, rAvatar, userData.roomBg);
             enterRoomSetup();
         }
 
@@ -2047,14 +2053,16 @@
 
         function closeShareRoomModal() { document.getElementById('shareRoomModalOverlay').classList.remove('active'); }
 
+        // دالة مشاركة الغرفة المعدلة بالكامل لنقل بيانات خفيفة تمكن المستلم من الدخول فوراً
         async function shareRoomWithPartner(partnerUid, partnerName, partnerId, partnerAvatar) {
             const originalActive = activeDMUser;
             activeDMUser = { uid: partnerUid, name: partnerName, id: partnerId, avatarSrc: partnerAvatar };
 
+            // نرسل نص فقط وخلفية افتراضية بالرسالة حتى تتم معالجة الرسالة بسرعة
             const roomData = {
                 name: userData.roomName || 'غرفة الصوت المباشرة',
                 avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
-                bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
+                bg: 'linear-gradient(135deg, #1e3c72, #2a5298)', 
                 roomId: userData.currentRoomId
             };
 
@@ -2370,25 +2378,13 @@
 
         function selectBgOption(el, bg) { document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); userData.roomBg = bg; }
         
-        // دالة رفع خلفية الغرفة مع تصغير حجم الصورة تلقائياً لكي لا تثقل رسائل الدعوة
         function previewRoomBg(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = evt => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = 400;
-                        canvas.height = 700;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const compressedBg = canvas.toDataURL('image/jpeg', 0.6);
-                        userData.roomBg = `url('${compressedBg}')`;
-                        alert('تم اختيار وتقليل حجم الخلفية بنجاح! 📷');
-                    };
-                    img.src = evt.target.result;
+                    userData.roomBg = `url('${evt.target.result}')`;
+                    alert('تم اختيار الخلفية بنجاح! 📷');
                 };
                 reader.readAsDataURL(file);
             }
