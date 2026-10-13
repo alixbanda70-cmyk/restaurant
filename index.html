@@ -696,7 +696,6 @@
 
         .create-room-btn svg { width: 20px; height: 20px; stroke: #07090E; stroke-width: 2.2; fill: none; }
 
-        /* التبويبات الثلاثة تحت زر إنشاء الغرفة */
         .home-tabs-bar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1445,20 +1444,17 @@
 
             <!-- STEP 7: Home Dashboard -->
             <div id="homeMainView" class="view-step hidden-view">
-                <!-- زر إنشاء غرفة -->
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
                     <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
                     <span>إنشاء غرفة دردشة صوتية</span>
                 </button>
 
-                <!-- أزرار التبويبات الثلاثة تحت زر الإنشاء -->
                 <div class="home-tabs-bar">
                     <button type="button" class="home-tab-btn active" id="tabRecentBtn" onclick="switchHomeTab('recent')">مؤخراً</button>
                     <button type="button" class="home-tab-btn" id="tabFollowBtn" onclick="switchHomeTab('follow')">المتابعة</button>
                     <button type="button" class="home-tab-btn" id="tabMyRoomsBtn" onclick="switchHomeTab('myRooms')">الخاصة بي</button>
                 </div>
 
-                <!-- مساحة عرض الغرف المحفوظة حسب التبويب -->
                 <div class="rooms-tab-content" id="roomsTabContainer">
                     <div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف تمت زيارتها مؤخراً..</div>
                 </div>
@@ -1513,7 +1509,7 @@
                     <div class="bg-option" style="background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);" onclick="selectBgOption(this, 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)')"></div>
                 </div>
                 <div class="upload-container" style="margin-bottom: 16px;">
-                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">📷 رفع خلفية خاصة</button>
+                    <button type="button" class="magnetic-btn" style="padding: 12px; font-size: 13px; background: rgba(255,255,255,0.08);" onclick="document.getElementById('roomBgInput').click()">📷 رفع خلفية خاصة من الهاتف</button>
                     <input type="file" id="roomBgInput" accept="image/*" onchange="previewRoomBg(event)">
                 </div>
                 <div class="btn-wrapper">
@@ -1543,7 +1539,6 @@
                         </div>
                     </div>
 
-                    <!-- شريط الحاضرين -->
                     <div class="room-audience-bar" id="roomAudienceContainer"></div>
 
                     <div class="mics-grid-container">
@@ -1677,11 +1672,14 @@
                 <div class="nav-btn" id="navProfileBtn" onclick="switchTab('profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>حسابي</span></div>
             </div>
 
-            <div class="footer-tag">SIMOMi Engine v2.0 • Firebase + PeerJS</div>
+            <div class="footer-tag">SIMOMi Engine v2.0 • ImgBB Cloud + Firebase Engine</div>
         </div>
     </div>
 
     <script>
+        // API Key الخاص بك للحصول على روابط صور خفيفة وفورية
+        const IMGBB_API_KEY = "9cde89ff95f8fdcd5ef20224acf8e3e2";
+
         const userData = {
             uid: '', id: '1234567', email: '', gender: 'male', name: 'زائر',
             dob: { day: 1, month: 1, year: 2000 }, age: 26,
@@ -1702,6 +1700,7 @@
         let inboxUnsubscribe = null;
         let seatsUnsubscribe = null;
         let presenceUnsubscribe = null;
+        let roomStateUnsubscribe = null;
         
         let activeHomeTab = 'recent';
 
@@ -1739,15 +1738,11 @@
             }
         }
 
-        // حفظ الغرف المحفوظة حديثاً بشكل آمن وبدون كود الصورة الطويل
         function saveRoomToRecent(rId, rName, rAvatar, rBg) {
             let recentList = JSON.parse(localStorage.getItem('simomi_recent_rooms') || '[]');
             recentList = recentList.filter(r => r.roomId !== rId);
-            
-            // نستخدم خلفية آمنة في الذاكرة لتجنب ثقل البيانات
-            const safeBg = (rBg && rBg.startsWith('url(')) ? 'linear-gradient(135deg, #1e3c72, #2a5298)' : rBg;
 
-            recentList.unshift({ roomId: rId, name: rName, avatar: rAvatar, bg: safeBg, visitedAt: Date.now() });
+            recentList.unshift({ roomId: rId, name: rName, avatar: rAvatar, bg: rBg, visitedAt: Date.now() });
             if (recentList.length > 20) recentList.pop();
             localStorage.setItem('simomi_recent_rooms', JSON.stringify(recentList));
         }
@@ -2006,16 +2001,13 @@
             });
         }
 
-        // دالة الدخول الآمن للغرفة عبر الرابط (تتجاوز المشاكل وتقوم بالدخول المباشر)
         function joinRoomFromInvite(rName, rAvatar, rBg, rId) {
             userData.roomName = rName;
             userData.roomAvatarSrc = rAvatar;
-            
-            // إذا كانت خلفية الغرفة تتضمن صورة محملة ثقيلة، نستبدلها بخلفية افتراضية لضمان سرعة المستلم
-            userData.roomBg = (rBg && rBg.startsWith('url(')) ? 'linear-gradient(135deg, #1e3c72, #2a5298)' : rBg;
+            userData.roomBg = rBg;
             userData.currentRoomId = rId;
 
-            saveRoomToRecent(rId, rName, rAvatar, userData.roomBg);
+            saveRoomToRecent(rId, rName, rAvatar, rBg);
             enterRoomSetup();
         }
 
@@ -2053,16 +2045,14 @@
 
         function closeShareRoomModal() { document.getElementById('shareRoomModalOverlay').classList.remove('active'); }
 
-        // دالة مشاركة الغرفة المعدلة بالكامل لنقل بيانات خفيفة تمكن المستلم من الدخول فوراً
         async function shareRoomWithPartner(partnerUid, partnerName, partnerId, partnerAvatar) {
             const originalActive = activeDMUser;
             activeDMUser = { uid: partnerUid, name: partnerName, id: partnerId, avatarSrc: partnerAvatar };
 
-            // نرسل نص فقط وخلفية افتراضية بالرسالة حتى تتم معالجة الرسالة بسرعة
             const roomData = {
                 name: userData.roomName || 'غرفة الصوت المباشرة',
                 avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
-                bg: 'linear-gradient(135deg, #1e3c72, #2a5298)', 
+                bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
                 roomId: userData.currentRoomId
             };
 
@@ -2192,6 +2182,26 @@
             });
         }
 
+        // الاستماع لتغيرات خلفية الغرفة واسمها فـ الحين واللحظة لكافة الحاضرين (Real-time Sync)
+        function listenToRoomState() {
+            if (roomStateUnsubscribe) roomStateUnsubscribe();
+            if (!userData.currentRoomId) return;
+
+            const roomRef = window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId);
+            roomStateUnsubscribe = window.fbFns.onSnapshot(roomRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const rData = docSnap.data();
+                    if (rData.bg) {
+                        userData.roomBg = rData.bg;
+                        const roomContainer = document.getElementById('liveRoomBg');
+                        roomContainer.style.background = rData.bg;
+                        roomContainer.style.backgroundSize = 'cover';
+                        roomContainer.style.backgroundPosition = 'center';
+                    }
+                }
+            });
+        }
+
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
@@ -2242,6 +2252,7 @@
                 listenToRoomComments();
                 listenToRoomSeats();
                 listenToRoomPresence();
+                listenToRoomState();
             } else {
                 if(stepId === 'homeMainView') { 
                     globalSearchBox.style.display = 'flex'; 
@@ -2376,21 +2387,57 @@
             goToStep('roomBgView');
         }
 
-        function selectBgOption(el, bg) { document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); userData.roomBg = bg; }
+        async function selectBgOption(el, bg) { 
+            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected')); 
+            el.classList.add('selected'); 
+            userData.roomBg = bg; 
+
+            // تحديث خلفية الغرفة فـ الحين فـ Firebase إذا كانت الغرفة مفتوحة
+            if (userData.currentRoomId) {
+                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
+                    bg: userData.roomBg
+                }, { merge: true });
+            }
+        }
         
-        function previewRoomBg(e) {
+        // دالة رفع خلفية الغرفة عبر API ImgBB للحصول على رابط خفيف وتحديثه عند الجميع فوراً
+        async function previewRoomBg(e) {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = evt => {
-                    userData.roomBg = `url('${evt.target.result}')`;
-                    alert('تم اختيار الخلفية بنجاح! 📷');
-                };
-                reader.readAsDataURL(file);
+                alert('جاري رفع صورة الخلفية إلى السيرفر... يرجى الانتظار ثواني ⏳');
+                
+                const formData = new FormData();
+                formData.append('image', file);
+
+                try {
+                    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        const imgUrl = result.data.url;
+                        userData.roomBg = `url('${imgUrl}')`;
+                        
+                        // تحديث خلفية الغرفة فـ Firebase فوراً لتغير عند الـ 10 الحاضرين
+                        if (userData.currentRoomId) {
+                            await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
+                                bg: userData.roomBg
+                            }, { merge: true });
+                        }
+
+                        alert('تم اختيار ورفع الخلفية بنجاح! 📷✨');
+                    } else {
+                        alert('حدث خطأ أثناء رفع الصورة، حاول مرة أخرى.');
+                    }
+                } catch(err) {
+                    alert('خطأ في الاتصال بالسيرفر أثناء رفع الصورة: ' + err.message);
+                }
             }
         }
 
-        function launchLiveRoom() {
+        async function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
             
             const myRoomObj = {
@@ -2401,6 +2448,16 @@
             };
             localStorage.setItem('simomi_my_created_room', JSON.stringify(myRoomObj));
 
+            // حفظ بيانات الغرفة الأساسية فـ Firebase
+            await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
+                roomId: userData.currentRoomId,
+                name: userData.roomName,
+                avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
+                bg: userData.roomBg,
+                createdBy: userData.uid,
+                createdAt: Date.now()
+            }, { merge: true });
+
             enterRoomSetup();
         }
 
@@ -2408,6 +2465,7 @@
             const roomContainer = document.getElementById('liveRoomBg');
             roomContainer.style.background = userData.roomBg;
             roomContainer.style.backgroundSize = 'cover';
+            roomContainer.style.backgroundPosition = 'center';
             document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
             document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
             
@@ -2453,6 +2511,7 @@
                 if (commentsUnsubscribe) commentsUnsubscribe();
                 if (seatsUnsubscribe) seatsUnsubscribe();
                 if (presenceUnsubscribe) presenceUnsubscribe();
+                if (roomStateUnsubscribe) roomStateUnsubscribe();
                 
                 myTakenMicIndex = null;
                 userData.currentRoomId = '';
