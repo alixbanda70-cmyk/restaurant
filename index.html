@@ -1725,7 +1725,6 @@
             calculateAge();
         });
 
-        // إدارة التبويبات الثلاثة الرئيسية
         function switchHomeTab(tabType) {
             activeHomeTab = tabType;
             document.querySelectorAll('.home-tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1742,7 +1741,6 @@
             }
         }
 
-        // حفظ الغرف التي زارها المستخدم في الذاكرة المحلية (مؤخراً)
         function saveRoomToRecent(rId, rName, rAvatar, rBg) {
             let recentList = JSON.parse(localStorage.getItem('simomi_recent_rooms') || '[]');
             recentList = recentList.filter(r => r.roomId !== rId);
@@ -1767,7 +1765,7 @@
                         <img src="${room.avatar}" class="room-list-avatar" alt="Room">
                         <div class="room-list-info">
                             <div class="room-list-name">🏛️ ${room.name}</div>
-                            <div class="room-list-sub">غرفه زرتها مؤخراً</div>
+                            <div class="room-list-sub">غرفة زرتها مؤخراً</div>
                         </div>
                     </div>
                 `;
@@ -2011,9 +2009,7 @@
             userData.roomBg = rBg;
             userData.currentRoomId = rId;
 
-            // حفظ الغرفة في القائمة الأخيرة عند الدخول إليها
             saveRoomToRecent(rId, rName, rAvatar, rBg);
-
             enterRoomSetup();
         }
 
@@ -2243,7 +2239,7 @@
                     globalSearchBox.style.display = 'flex'; 
                     mainBrandHeader.style.display = 'block'; 
                     topHeaderBar.style.display = 'flex'; 
-                    switchHomeTab(activeHomeTab); // تحديث القائمة المعروضة
+                    switchHomeTab(activeHomeTab);
                 }
                 else if(stepId === 'messagesView' || stepId === 'profileView') { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'none'; topHeaderBar.style.display = 'flex'; }
                 else { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'none'; }
@@ -2373,11 +2369,27 @@
         }
 
         function selectBgOption(el, bg) { document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); userData.roomBg = bg; }
+        
+        // دالة رفع خلفية الغرفة مع تصغير حجم الصورة تلقائياً لكي لا تثقل رسائل الدعوة
         function previewRoomBg(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = evt => { userData.roomBg = `url('${evt.target.result}')`; alert('تم اختيار الخلفية!'); };
+                reader.onload = evt => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 400;
+                        canvas.height = 700;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const compressedBg = canvas.toDataURL('image/jpeg', 0.6);
+                        userData.roomBg = `url('${compressedBg}')`;
+                        alert('تم اختيار وتقليل حجم الخلفية بنجاح! 📷');
+                    };
+                    img.src = evt.target.result;
+                };
                 reader.readAsDataURL(file);
             }
         }
@@ -2385,7 +2397,6 @@
         function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
             
-            // حفظ الغرفة الخاصة بي في الذاكرة المحلية لقسم "الخاصة بي"
             const myRoomObj = {
                 roomId: userData.currentRoomId,
                 name: userData.roomName,
