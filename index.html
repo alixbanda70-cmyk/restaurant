@@ -816,39 +816,41 @@
 
         .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
 
-        /* شريط المتواجدين في الغرفة (أعلى الميكروفونات) */
+        /* شريط المتواجدين مصمم لنصف الشاشة بصور صغيرة جودة عالية */
         .room-audience-bar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            margin-top: 15px;
+            gap: 6px;
+            padding: 4px 8px;
+            margin-top: 10px;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            width: 100%;
+            border-radius: 20px;
+            width: 50%; /* نصف عرض الشاشة بالضبط كما طلبت */
+            max-width: 200px;
             overflow-x: auto;
             scrollbar-width: none;
             flex-shrink: 0;
-            min-height: 52px;
+            height: 38px;
         }
 
         .room-audience-bar::-webkit-scrollbar { display: none; }
 
+        /* صور صغيرة ومحددة */
         .audience-user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            border: 2px solid #F59E0B;
+            border: 1.5px solid #F59E0B;
             object-fit: cover;
             flex-shrink: 0;
-            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
             transition: transform 0.2s;
         }
 
         .audience-user-avatar:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
         .mics-grid-container {
@@ -1443,9 +1445,9 @@
                         </div>
                     </div>
 
-                    <!-- شريط صور الأشخاص المتواجدين بداخل الغرفة (مكان السهم الأحمر) -->
+                    <!-- شريط الحاضرين: مصمم على نصف الشاشة فقط وبصور صغيرة 26px -->
                     <div class="room-audience-bar" id="roomAudienceContainer">
-                        <!-- هنا تظهر صورتك وصور المتواجدين تلقائياً -->
+                        <!-- تظهر صور الأعضاء الحاضرين مباشرة وبحجم صغير جداً أنيق -->
                     </div>
 
                     <div class="mics-grid-container">
@@ -1474,7 +1476,7 @@
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم ربط الغرفة ومزامنة الحضور والصوت مباشرة عبر Firebase.</div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم تحديث الشريط ليظهر بنصف العرض وبصوّر مصغّرة.</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
@@ -1996,7 +1998,7 @@
                 // تحديث عداد الأشخاص أعلى الغرفة
                 document.getElementById('onlineCountNum').innerText = totalCount;
 
-                // عرض صور الأعضاء المتواجدين في شريط الحضور
+                // عرض صور الأعضاء الحاضرين مصغرة بدقة عالية
                 snapshot.forEach((docSnap) => {
                     const member = docSnap.data();
                     const avatarUrl = member.avatarSrc || 'https://via.placeholder.com/150';
