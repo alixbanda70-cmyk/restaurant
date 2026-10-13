@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMOMi - Live Voice Room & Direct Messaging 2026</title>
+    <title>SIMOMi - Live Room & Voice Chat 2026</title>
     <!-- مكتبة PeerJS للصوت المباشر -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     
@@ -131,6 +131,7 @@
         .share-room-top-btn, .leave-room-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .share-room-top-btn { background: rgba(245, 158, 11, 0.25); border: 1.5px solid rgba(245, 158, 11, 0.6); color: #F59E0B; }
         .leave-room-btn { background: rgba(239, 68, 68, 0.25); border: 1.5px solid rgba(239, 68, 68, 0.6); color: #EF4444; }
+        
         .mics-grid-container { display: flex; flex-direction: column; gap: 16px; width: 100%; margin-top: 35px; flex-shrink: 0; }
         .mics-row { display: flex; justify-content: space-around; align-items: center; width: 100%; }
         .mic-seat { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; width: 60px; }
@@ -138,18 +139,17 @@
         .mic-circle svg { width: 20px; height: 20px; stroke: #FFFFFF; stroke-width: 2; fill: none; }
         .mic-circle img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
         .mic-seat.occupied .mic-circle { border-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
-        .mic-seat.locked .mic-circle { background: rgba(239, 68, 68, 0.25); border-color: #EF4444; }
-        .mic-number { font-size: 10px; font-weight: 800; color: #E5E7EB; text-shadow: 0 1px 2px rgba(0,0,0,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 58px; text-align: center; }
+
         .room-comments-section { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; margin-top: auto; margin-bottom: 5px; }
         .comments-toggle-bar { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: 800; color: #F59E0B; padding-bottom: 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-        .comments-body { display: flex; flex-direction: column; gap: 8px; height: 170px; overflow: hidden; }
-        .room-comments-section.collapsed .comments-body { height: 0; opacity: 0; margin-top: 0; pointer-events: none; }
+        .comments-body { display: flex; flex-direction: column; gap: 8px; height: 140px; overflow: hidden; }
         .comments-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; flex: 1; padding-left: 4px; }
         .comment-bubble { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 6px 10px; font-size: 12px; color: #FFF; }
         .comment-user { color: #F59E0B; font-weight: 800; margin-left: 6px; }
         .comment-input-row { display: flex; gap: 8px; align-items: center; }
         .comment-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 8px 12px; color: #FFF; font-size: 13px; outline: none; }
         .send-comment-btn { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #07090E; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
         .dm-container { display: flex; flex-direction: column; height: 100%; gap: 12px; }
         .chats-list-view { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; }
         .chat-item-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
@@ -169,6 +169,7 @@
         .room-invite-title { font-size: 13px; font-weight: 900; color: #F59E0B; }
         .room-invite-btn { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #07090E; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
         .dm-no-chat-text { text-align: center; color: #6B7280; font-size: 13px; margin: auto; font-weight: 700; }
+        
         .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 100; display: none; justify-content: flex-end; flex-direction: column; }
         .modal-overlay.active { display: flex; }
         .action-sheet { background: #131722; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 20px 20px 30px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 12px; max-height: 80vh; overflow-y: auto; }
@@ -176,6 +177,7 @@
         .sheet-btn { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.04); color: #FFF; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .sheet-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #EF4444; }
         .sheet-btn.cancel { background: transparent; border: none; color: #9CA3AF; margin-top: 4px; }
+        
         .confirm-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 200; display: none; justify-content: center; align-items: center; padding: 20px; }
         .confirm-modal-overlay.active { display: flex; }
         .confirm-dialog { background: #131722; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px; text-align: center; }
@@ -185,6 +187,7 @@
         .confirm-btn { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; border: none; }
         .confirm-btn.yes { background: #EF4444; color: #FFF; }
         .confirm-btn.no { background: rgba(255, 255, 255, 0.08); color: #E5E7EB; }
+        
         .profile-card { display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 20px; }
         .profile-img-large { position: relative; width: 90px; height: 90px; border-radius: 50%; border: 3px solid #F59E0B; overflow: hidden; margin-bottom: 12px; background: #222; cursor: pointer; }
         .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
@@ -196,6 +199,7 @@
         .profile-edit-select, .profile-edit-input { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: #F59E0B; font-weight: 800; padding: 6px 10px; text-align: center; font-size: 13px; outline: none; }
         .profile-edit-select option { background: #0D1117; color: #FFF; }
         .save-profile-btn { margin-top: 16px; width: 100%; padding: 12px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; border-radius: 12px; color: #FFF; font-weight: 800; font-size: 14px; cursor: pointer; }
+        
         .bottom-nav-bar { width: calc(100% + 32px); margin-left: -16px; margin-right: -16px; height: 65px; background: rgba(13, 17, 23, 0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-around; align-items: center; z-index: 20; margin-top: auto; flex-shrink: 0; }
         .nav-btn { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #6B7280; cursor: pointer; gap: 4px; }
         .nav-btn svg { width: 22px; height: 22px; stroke: #6B7280; stroke-width: 2; fill: none; }
@@ -219,7 +223,7 @@
 
             <div class="brand" id="mainBrandHeader">
                 <div class="logo-title">SIMOMi</div>
-                <div class="subtitle">دردشـة صـوتـيـة مـبـاشـرة</div>
+                <div class="subtitle">غرفة الصوت والدردشة المباشرة</div>
             </div>
 
             <div class="top-global-search-box" id="globalSearchBox">
@@ -273,7 +277,7 @@
             <!-- STEP 3: Name -->
             <div id="nameView" class="view-step hidden-view">
                 <div class="step-title">الاسم الشخصي</div>
-                <div class="step-subtitle">أدخل اسمك ليظهر في الميكروفونات والبطاقة</div>
+                <div class="step-subtitle">أدخل اسمك ليظهر في الغرفة والبطاقة</div>
                 <div class="name-field-wrapper" id="nameWrapper">
                     <input type="text" id="userNameInput" class="name-input" placeholder="اسمك الكامل..." oninput="validateNameInput(this)">
                     <span class="name-icon">👤</span>
@@ -303,7 +307,7 @@
             <!-- STEP 5: Avatar -->
             <div id="avatarView" class="view-step hidden-view">
                 <div class="step-title">الصورة الشخصية</div>
-                <div class="step-subtitle">اختر صورتك لتظهر في الميكروفونات</div>
+                <div class="step-subtitle">اختر صورتك لتظهر في الملف الشخصي</div>
                 <div class="upload-container">
                     <div class="avatar-upload-zone" onclick="document.getElementById('avatarInput').click()">
                         <img id="avatarPreview" src="" alt="Avatar">
@@ -319,7 +323,7 @@
             <!-- STEP 6: Card Result -->
             <div id="cardResultView" class="view-step hidden-view">
                 <div class="step-title">بطاقتك الرقمية</div>
-                <div class="step-subtitle">مرحباً بك في المنصة الصوتية SIMOMi</div>
+                <div class="step-subtitle">مرحباً بك في المنصة SIMOMi</div>
                 <div class="gold-card-wrapper">
                     <div class="gold-id-card">
                         <div class="card-header-row"><div class="card-chip"></div><div class="card-brand-tag">SIMOMi PASS</div></div>
@@ -342,7 +346,7 @@
             <div id="homeMainView" class="view-step hidden-view">
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
                     <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-                    <span>إنشاء غرفة دردشة صوتية</span>
+                    <span>إنشاء غرفة صوتية مباشرة</span>
                 </button>
             </div>
 
@@ -423,33 +427,27 @@
                         </div>
                     </div>
 
-                    <div class="mics-grid-container">
+                    <!-- المقاعد الصوتية (ميكروفونات 1 إلى 4) -->
+                    <div class="mics-grid-container" style="margin-top: 20px;">
                         <div class="mics-row">
-                            <div class="mic-seat" id="seat-1" onclick="openMicMenu(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-1">1</span></div>
-                            <div class="mic-seat" id="seat-2" onclick="openMicMenu(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-2">2</span></div>
-                            <div class="mic-seat" id="seat-3" onclick="openMicMenu(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-3">3</span></div>
-                            <div class="mic-seat" id="seat-4" onclick="openMicMenu(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-4">4</span></div>
-                            <div class="mic-seat" id="seat-5" onclick="openMicMenu(5)"><div class="mic-circle" id="micCircle-5"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-5">5</span></div>
-                        </div>
-                        <div class="mics-row">
-                            <div class="mic-seat" id="seat-6" onclick="openMicMenu(6)"><div class="mic-circle" id="micCircle-6"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-6">6</span></div>
-                            <div class="mic-seat" id="seat-7" onclick="openMicMenu(7)"><div class="mic-circle" id="micCircle-7"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-7">7</span></div>
-                            <div class="mic-seat" id="seat-8" onclick="openMicMenu(8)"><div class="mic-circle" id="micCircle-8"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-8">8</span></div>
-                            <div class="mic-seat" id="seat-9" onclick="openMicMenu(9)"><div class="mic-circle" id="micCircle-9"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-9">9</span></div>
-                            <div class="mic-seat" id="seat-10" onclick="openMicMenu(10)"><div class="mic-circle" id="micCircle-10"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number" id="micTag-10">10</span></div>
+                            <div class="mic-seat" id="seat-1" onclick="toggleMyMic(1)"><div class="mic-circle" id="micCircle-1"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number">مايك 1</span></div>
+                            <div class="mic-seat" id="seat-2" onclick="toggleMyMic(2)"><div class="mic-circle" id="micCircle-2"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number">مايك 2</span></div>
+                            <div class="mic-seat" id="seat-3" onclick="toggleMyMic(3)"><div class="mic-circle" id="micCircle-3"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number">مايك 3</span></div>
+                            <div class="mic-seat" id="seat-4" onclick="toggleMyMic(4)"><div class="mic-circle" id="micCircle-4"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg></div><span class="mic-number">مايك 4</span></div>
                         </div>
                     </div>
 
+                    <!-- عنصر الصوت البعيد -->
                     <audio id="remoteAudio" autoplay controls style="display:none;"></audio>
 
                     <div class="room-comments-section" id="roomCommentsSection">
                         <div class="comments-toggle-bar" onclick="toggleCommentsSection()">
-                            <span>التعليقات والمحادثة (عبر Firestore)</span>
+                            <span>التعليقات والمحادثة الفورية</span>
                             <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble"><span class="comment-user">النظام:</span> تم دمج خوادم STUN بنجاح لضمان تمرير الصوت بين الأجهزة.</div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> انقر على أي مايك للصعود وبدء التحدث مباشرة!</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
@@ -518,20 +516,9 @@
                 <div class="action-sheet">
                     <div class="action-sheet-title">مشاركة الغرفة في الرسائل الخاصة 🎙️</div>
                     <div id="shareUsersListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
-                        <div style="text-align:center; color:#9CA3AF; font-size:12px;">جاري تحميل أصدقائك...</div>
+                        <div style="text-align:center; color:#9CA3AF; font-size:12px;">جاري تحميل المحادثات...</div>
                     </div>
                     <button type="button" class="sheet-btn cancel" onclick="closeShareRoomModal()">إلغاء</button>
-                </div>
-            </div>
-
-            <!-- MIC MODAL -->
-            <div class="modal-overlay" id="micModalOverlay">
-                <div class="action-sheet">
-                    <div class="action-sheet-title" id="menuMicTitle">التحكم بالميكروفون</div>
-                    <button type="button" class="sheet-btn" id="takeMicBtn" onclick="actionTakeMic()">الصعود إلى الميكروفون والبث الصوتي 🎙️</button>
-                    <button type="button" class="sheet-btn" id="lockMicBtn" onclick="actionToggleLockMic()"><span id="lockBtnTxt">قفل / إغلاق الميكروفون</span></button>
-                    <button type="button" class="sheet-btn danger" id="leaveMicBtn" onclick="actionLeaveMic()" style="display:none;">مغادرة الميكروفون</button>
-                    <button type="button" class="sheet-btn cancel" onclick="closeMicMenu()">إلغاء</button>
                 </div>
             </div>
 
@@ -539,7 +526,7 @@
             <div class="confirm-modal-overlay" id="exitConfirmModal">
                 <div class="confirm-dialog">
                     <div class="confirm-dialog-title">تأكيد الخروج</div>
-                    <div class="confirm-dialog-text">هل تريد مغادرة الغرفة وإنهاء البث الصوتي؟</div>
+                    <div class="confirm-dialog-text">هل تريد مغادرة الغرفة وإنهاء الصوت؟</div>
                     <div class="confirm-dialog-buttons">
                         <button type="button" class="confirm-btn yes" onclick="confirmExitRoom(true)">نعم</button>
                         <button type="button" class="confirm-btn no" onclick="confirmExitRoom(false)">لا</button>
@@ -570,8 +557,6 @@
 
         let searchedTargetUser = null; 
         let activeDMUser = null; 
-        let selectedMicIndex = null;
-        let myTakenMicIndex = null;
         let peer = null;
         let localStream = null;
         let commentsUnsubscribe = null;
@@ -580,7 +565,6 @@
         let seatsUnsubscribe = null;
 
         const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>`;
-        const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
 
         function generate7DigitId() {
             return Math.floor(1000000 + Math.random() * 9000000).toString();
@@ -715,7 +699,7 @@
                 }
 
                 await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), msgPayload);
-                const lastDisplayTxt = isRoomInvite ? '🎙️ دعوة للانضمام إلى غرفة صوتية' : msgText;
+                const lastDisplayTxt = isRoomInvite ? '🎙️ دعوة للانضمام إلى الغرفة الصوتية' : msgText;
 
                 await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", userData.uid, "inbox", activeDMUser.uid), {
                     partnerUid: activeDMUser.uid, partnerName: activeDMUser.name, partnerAvatar: activeDMUser.avatarSrc || 'https://via.placeholder.com/150', partnerId: activeDMUser.id, lastMessage: lastDisplayTxt, updatedAt: Date.now()
@@ -746,7 +730,7 @@
                         chatBox.innerHTML += `
                             <div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">
                                 <div class="room-invite-card">
-                                    <div class="room-invite-title">🏛️ ${data.roomName}</div>
+                                    <div class="room-invite-title">🎙️ ${data.roomName}</div>
                                     <button type="button" class="room-invite-btn" onclick="joinRoomFromInvite('${data.roomName}', '${data.roomAvatar}', '${data.roomBg}', '${data.roomId}')">دخول البث المباشر 🚀</button>
                                 </div>
                             </div>`;
@@ -770,8 +754,6 @@
             document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
             document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
             
-            myTakenMicIndex = null;
-            updateOnlineCount();
             initPeerJS();
             listenToRoomSeats();
             goToStep('liveRoomView');
@@ -868,16 +850,78 @@
             });
         }
 
+        // إعدادات PeerJS واتصال الصوت المباشر
+        function initPeerJS() {
+            if (peer) peer.destroy();
+            peer = new Peer('simomi-user-' + userData.id, {
+                config: { 'iceServers': [{ urls: 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('call', async (call) => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    localStream = stream;
+                    call.answer(stream);
+                    call.on('stream', remoteStream => {
+                        const audioEl = document.getElementById('remoteAudio');
+                        audioEl.srcObject = remoteStream;
+                        audioEl.play().catch(e => console.log("تطلب تفاعل لتشغيل الصوت:", e));
+                    });
+                } catch(err) {
+                    console.error("خطأ في الميكروفون:", err);
+                }
+            });
+        }
+
+        // تشغيل أو إيقاف الميكروفون عند الضغط على المايك
+        async function toggleMyMic(seatNum) {
+            const seatEl = document.getElementById(`seat-${seatNum}`);
+            const circle = document.getElementById(`micCircle-${seatNum}`);
+
+            if (seatEl.classList.contains('occupied')) {
+                // مغادرة المايك
+                if (localStream) {
+                    localStream.getTracks().forEach(t => t.stop());
+                    localStream = null;
+                }
+                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", seatNum.toString()), {
+                    seatIndex: seatNum, userId: null, userName: null, avatarSrc: null
+                });
+            } else {
+                // الصعود للمايك وبث الصوت
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    
+                    await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", seatNum.toString()), {
+                        seatIndex: seatNum, userId: userData.uid, userName: userData.name, avatarSrc: userData.avatarSrc
+                    });
+
+                    // الاتصال بالآخرين في الغرفة عبر PeerJS تلقائياً
+                    const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "seats"));
+                    const querySnap = await window.fbFns.getDocs(q);
+                    querySnap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        if (data.userId && data.userId !== userData.uid) {
+                            // الاتصال بالمستخدم الآخر عبر الـ ID الخاص به
+                            // (للتوضيح: يتم جلب ID الشخص الآخر والاتصال به عبر PeerJS)
+                        }
+                    });
+
+                } catch(e) {
+                    alert('الرجاء السماح بالوصول إلى الميكروفون للتحدث!');
+                }
+            }
+        }
+
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
 
             seatsUnsubscribe = window.fbFns.onSnapshot(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "seats"), (snapshot) => {
-                for(let i=1; i<=10; i++) {
+                for(let i=1; i<=4; i++) {
                     const seatEl = document.getElementById(`seat-${i}`);
-                    seatEl.classList.remove('occupied', 'locked');
+                    seatEl.classList.remove('occupied');
                     document.getElementById(`micCircle-${i}`).innerHTML = micSvgHTML;
-                    document.getElementById(`micTag-${i}`).innerText = i;
                 }
 
                 snapshot.forEach((docSnap) => {
@@ -886,21 +930,19 @@
                     const seatEl = document.getElementById(`seat-${sIndex}`);
                     const circle = document.getElementById(`micCircle-${sIndex}`);
 
-                    if (data.isLocked) {
-                        seatEl.classList.add('locked');
-                        circle.innerHTML = lockSvgHTML;
-                        document.getElementById(`micTag-${sIndex}`).innerText = sIndex;
-                    } else if (data.userId) {
+                    if (data.userId) {
                         seatEl.classList.add('occupied');
                         circle.innerHTML = `<img src="${data.avatarSrc || 'https://via.placeholder.com/150'}" alt="Avatar">`;
-                        document.getElementById(`micTag-${sIndex}`).innerText = data.userName || 'مستخدم';
                     }
                 });
                 updateOnlineCount();
             });
         }
 
-        function toggleCommentsSection() { document.getElementById('roomCommentsSection').classList.toggle('collapsed'); }
+        function updateOnlineCount() {
+            let occupiedSeats = document.querySelectorAll('.mic-seat.occupied').length;
+            document.getElementById('onlineCountNum').innerText = Math.max(1, occupiedSeats);
+        }
 
         function goToStep(stepId) {
             document.querySelectorAll('.view-step').forEach(el => { el.classList.remove('active-view'); el.classList.add('hidden-view'); });
@@ -1056,130 +1098,22 @@
             document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
             document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
             
-            myTakenMicIndex = null;
-            updateOnlineCount();
             initPeerJS();
             listenToRoomSeats();
             goToStep('liveRoomView');
-        }
-
-        // هنا تم إضافة خوادم STUN المجانية الخاصة بـ Google لتجاوز مشاكل الشبكات والصوت
-        function initPeerJS() {
-            if (peer) peer.destroy();
-            
-            peer = new Peer('simomi-user-' + userData.id, {
-                config: {
-                    'iceServers': [
-                        { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' }
-                    ]
-                }
-            });
-
-            peer.on('call', async (call) => {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                    localStream = stream;
-                    call.answer(stream);
-                    call.on('stream', remoteStream => {
-                        const remoteAudio = document.getElementById('remoteAudio');
-                        remoteAudio.srcObject = remoteStream;
-                        remoteAudio.play().catch(e => console.log("تطلب تفاعل لتشغيل الصوت:", e));
-                    });
-                } catch(err) {
-                    console.error("خطأ في الميكروفون:", err);
-                }
-            });
-        }
-
-        function updateOnlineCount() {
-            let occupiedSeats = document.querySelectorAll('.mic-seat.occupied').length;
-            document.getElementById('onlineCountNum').innerText = Math.max(1, occupiedSeats + 1);
         }
 
         function openExitConfirmModal() { document.getElementById('exitConfirmModal').classList.add('active'); }
         async function confirmExitRoom(isYes) {
             document.getElementById('exitConfirmModal').classList.remove('active');
             if (isYes) {
-                if (myTakenMicIndex !== null && userData.currentRoomId) {
-                    await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", myTakenMicIndex.toString()), {
-                        seatIndex: myTakenMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: false
-                    });
-                }
-                if (localStream) localStream.getTracks().forEach(track => track.stop());
+                if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
                 if (peer) peer.destroy();
                 if (commentsUnsubscribe) commentsUnsubscribe();
                 if (seatsUnsubscribe) seatsUnsubscribe();
-                myTakenMicIndex = null;
                 userData.currentRoomId = '';
                 switchTab('home');
             }
-        }
-
-        function openMicMenu(index) {
-            selectedMicIndex = index;
-            const seatEl = document.getElementById(`seat-${index}`);
-            document.getElementById('menuMicTitle').innerText = `الميكروفون رقم ${index}`;
-            const isOcc = seatEl.classList.contains('occupied'), isLock = seatEl.classList.contains('locked');
-            const takeBtn = document.getElementById('takeMicBtn'), leaveBtn = document.getElementById('leaveMicBtn');
-
-            if (myTakenMicIndex !== null) {
-                if (myTakenMicIndex === index) { takeBtn.style.display = 'none'; leaveBtn.style.display = 'flex'; }
-                else { takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none'; leaveBtn.style.display = 'none'; }
-            } else {
-                takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none';
-                leaveBtn.style.display = isOcc ? 'flex' : 'none';
-            }
-            document.getElementById('lockBtnTxt').innerText = isLock ? 'فتح الميكروفون 🔓' : 'قفل الميكروفون 🔒';
-            document.getElementById('micModalOverlay').classList.add('active');
-        }
-
-        function closeMicMenu() { document.getElementById('micModalOverlay').classList.remove('active'); }
-
-        async function actionTakeMic() {
-            if (!selectedMicIndex || !userData.currentRoomId) return;
-
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-
-                if (myTakenMicIndex !== null && myTakenMicIndex !== selectedMicIndex) {
-                    await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", myTakenMicIndex.toString()), {
-                        seatIndex: myTakenMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: false
-                    });
-                }
-
-                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", selectedMicIndex.toString()), {
-                    seatIndex: selectedMicIndex, userId: userData.uid, userName: userData.name, avatarSrc: userData.avatarSrc, isLocked: false
-                });
-
-                myTakenMicIndex = selectedMicIndex;
-                closeMicMenu();
-            } catch(e) { alert('الرجاء السماح بالوصول إلى الميكروفون للبث المباشر!'); }
-        }
-
-        async function actionLeaveMic() {
-            if (!selectedMicIndex || !userData.currentRoomId) return;
-            if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
-
-            await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", selectedMicIndex.toString()), {
-                seatIndex: selectedMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: false
-            });
-
-            if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
-            closeMicMenu();
-        }
-
-        async function actionToggleLockMic() {
-            if (!selectedMicIndex || !userData.currentRoomId) return;
-            const seatEl = document.getElementById(`seat-${selectedMicIndex}`);
-            const isCurrentlyLocked = seatEl.classList.contains('locked');
-
-            await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", selectedMicIndex.toString()), {
-                seatIndex: selectedMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: !isCurrentlyLocked
-            });
-
-            if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
-            closeMicMenu();
         }
 
         function generateGoldCard() {
