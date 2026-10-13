@@ -1409,7 +1409,7 @@
                         </div>
                     </div>
 
-                    <!-- عرض محادثة شخص معين (تظهر عند اختيار شخص من القائمة) -->
+                    <!-- عرض محادثة شخص معين -->
                     <div id="activeChatRoomView" style="display: none; flex-direction: column; height: 100%;">
                         <div class="dm-header-badge">
                             <div class="dm-header-user-info">
@@ -1612,12 +1612,23 @@
 
         function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
 
-        // 3. فتح المحادثة من البروفایل أو من قائمة المحادثات
+        // 3. فتح المحادثة المباشرة من بروفايل البحث
         function openDirectMessageFromProfile() {
             if (!searchedTargetUser) return;
             activeDMUser = searchedTargetUser;
             closeSearchModal();
+
+            // الانتقال المباشر لصفحة الرسائل مع فتح صندوق المحادثة للشخص المختار
+            goToStep('messagesView');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('navMsgBtn').classList.add('active');
+
             openChatRoomUI();
+            
+            // تركيز إدخال الرسائل للكتابة مباشرة
+            setTimeout(() => {
+                document.getElementById('dmInputMsg').focus();
+            }, 300);
         }
 
         function openChatRoomUI() {
@@ -1812,10 +1823,11 @@
                 goToStep('messagesView');
                 
                 // إظهار قائمة المحادثات وإخفاء غرفة الدردشة الفردية عند فتح تبويب الرسائل
-                document.getElementById('activeChatRoomView').style.display = 'none';
-                document.getElementById('chatsListView').style.display = 'flex';
-                activeDMUser = null;
-                loadInboxChatsList();
+                if(!activeDMUser) {
+                    document.getElementById('activeChatRoomView').style.display = 'none';
+                    document.getElementById('chatsListView').style.display = 'flex';
+                    loadInboxChatsList();
+                }
             }
             else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
