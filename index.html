@@ -12,7 +12,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // إعدادات Firebase الخاص بـ SIMOMi
         const firebaseConfig = {
@@ -35,7 +35,7 @@
         window.firebaseDb = db;
         window.fbFns = { 
             createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-            collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc
+            collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc, deleteDoc
         };
     </script>
 
@@ -732,7 +732,7 @@
 
         .live-room-top-bar {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             width: 100%;
             flex-shrink: 0;
@@ -747,7 +747,7 @@
             padding: 5px 12px 5px 6px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            max-width: 180px;
+            max-width: 160px;
         }
 
         .live-room-info-badge img {
@@ -816,12 +816,47 @@
 
         .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
 
+        /* شريط المتواجدين في الغرفة (أعلى الميكروفونات) */
+        .room-audience-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex-shrink: 0;
+            min-height: 52px;
+        }
+
+        .room-audience-bar::-webkit-scrollbar { display: none; }
+
+        .audience-user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #F59E0B;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .audience-user-avatar:hover {
+            transform: scale(1.1);
+        }
+
         .mics-grid-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
             width: 100%;
-            margin-top: 35px;
+            margin-top: 15px;
             flex-shrink: 0;
         }
 
@@ -1390,22 +1425,27 @@
             <div id="liveRoomView" class="view-step hidden-view" style="flex:1;">
                 <div class="live-room-container" id="liveRoomBg">
                     <div class="live-room-top-bar">
-                        <div class="live-room-info-badge">
-                            <img id="liveRoomInfoImg" src="https://via.placeholder.com/150" alt="Room">
-                            <span id="liveRoomInfoName">غرفة الصوت</span>
+                        <div class="room-online-badge">
+                            <span id="onlineCountNum">1</span>
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                         </div>
                         <div class="top-left-actions">
-                            <div class="share-room-top-btn" onclick="openShareRoomModal()" title="مشاركة الغرفة">
-                                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                            </div>
                             <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج">
                                 <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                             </div>
-                            <div class="room-online-badge">
-                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                                <span id="onlineCountNum">1</span>
+                            <div class="share-room-top-btn" onclick="openShareRoomModal()" title="مشاركة الغرفة">
+                                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            </div>
+                            <div class="live-room-info-badge">
+                                <span id="liveRoomInfoName">غرفة الصوت</span>
+                                <img id="liveRoomInfoImg" src="https://via.placeholder.com/150" alt="Room">
                             </div>
                         </div>
+                    </div>
+
+                    <!-- شريط صور الأشخاص المتواجدين بداخل الغرفة (مكان السهم الأحمر) -->
+                    <div class="room-audience-bar" id="roomAudienceContainer">
+                        <!-- هنا تظهر صورتك وصور المتواجدين تلقائياً -->
                     </div>
 
                     <div class="mics-grid-container">
@@ -1434,7 +1474,7 @@
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم ربط الغرفة ومزامنة المقاعد وصوت PeerJS عبر Firebase.</div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم ربط الغرفة ومزامنة الحضور والصوت مباشرة عبر Firebase.</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
@@ -1563,6 +1603,7 @@
         let dmUnsubscribe = null;
         let inboxUnsubscribe = null;
         let seatsUnsubscribe = null;
+        let presenceUnsubscribe = null;
 
         const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>`;
         const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
@@ -1792,24 +1833,14 @@
             });
         }
 
-        // الانضمام عبر الدعوة مع توحيد Room ID
+        // الانضمام عبر الدعوة
         function joinRoomFromInvite(rName, rAvatar, rBg, rId) {
             userData.roomName = rName;
             userData.roomAvatarSrc = rAvatar;
             userData.roomBg = rBg;
             userData.currentRoomId = rId;
 
-            const roomContainer = document.getElementById('liveRoomBg');
-            roomContainer.style.background = userData.roomBg;
-            roomContainer.style.backgroundSize = 'cover';
-            document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
-            document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
-            
-            myTakenMicIndex = null;
-            updateOnlineCount();
-            initPeerJS();
-            listenToRoomSeats();
-            goToStep('liveRoomView');
+            enterRoomSetup();
         }
 
         async function openShareRoomModal() {
@@ -1930,7 +1961,53 @@
             });
         }
 
-        // الاستماع لمزامنة المقاعد وتحديث العداد تلقائياً عبر Firebase
+        // تسجيل الحضور بالغرفة ومزامنة الحاضرين والعدد الإجمالي
+        async function joinRoomPresence() {
+            if (!userData.currentRoomId || !userData.uid) return;
+            const userPresenceRef = window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "members", userData.uid);
+            await window.fbFns.setDoc(userPresenceRef, {
+                uid: userData.uid,
+                name: userData.name || 'زائر',
+                avatarSrc: userData.avatarSrc || 'https://via.placeholder.com/150',
+                joinedAt: Date.now()
+            }, { merge: true });
+        }
+
+        async function leaveRoomPresence() {
+            if (!userData.currentRoomId || !userData.uid) return;
+            const userPresenceRef = window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "members", userData.uid);
+            try {
+                await window.fbFns.deleteDoc(userPresenceRef);
+            } catch(e) {
+                console.error("Error leaving room presence: ", e);
+            }
+        }
+
+        function listenToRoomPresence() {
+            if (presenceUnsubscribe) presenceUnsubscribe();
+            if (!userData.currentRoomId) return;
+
+            const membersRef = window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "members");
+            presenceUnsubscribe = window.fbFns.onSnapshot(membersRef, (snapshot) => {
+                const audienceContainer = document.getElementById('roomAudienceContainer');
+                audienceContainer.innerHTML = '';
+
+                let totalCount = snapshot.size;
+                // تحديث عداد الأشخاص أعلى الغرفة
+                document.getElementById('onlineCountNum').innerText = totalCount;
+
+                // عرض صور الأعضاء المتواجدين في شريط الحضور
+                snapshot.forEach((docSnap) => {
+                    const member = docSnap.data();
+                    const avatarUrl = member.avatarSrc || 'https://via.placeholder.com/150';
+                    audienceContainer.innerHTML += `
+                        <img class="audience-user-avatar" src="${avatarUrl}" title="${member.name}" alt="${member.name}">
+                    `;
+                });
+            });
+        }
+
+        // الاستماع لمزامنة المقاعد عبر Firebase
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
@@ -1943,7 +2020,6 @@
                     document.getElementById(`micTag-${i}`).innerText = i;
                 }
 
-                let occupiedCount = 0;
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     const sIndex = data.seatIndex;
@@ -1957,12 +2033,8 @@
                         seatEl.classList.add('occupied');
                         circle.innerHTML = `<img src="${data.avatarSrc || 'https://via.placeholder.com/150'}" alt="Avatar">`;
                         document.getElementById(`micTag-${sIndex}`).innerText = data.userName || 'مستخدم';
-                        occupiedCount++;
                     }
                 });
-                
-                // تحديث العدد في الأعلى تلقائياً بناءً على الأشخاص الموجودين بالمقاعد
-                document.getElementById('onlineCountNum').innerText = Math.max(1, occupiedCount);
             });
         }
 
@@ -1985,6 +2057,7 @@
                 cardContainer.classList.add('clean-mode');
                 listenToRoomComments();
                 listenToRoomSeats();
+                listenToRoomPresence();
             } else {
                 if(stepId === 'homeMainView') { globalSearchBox.style.display = 'flex'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'flex'; }
                 else if(stepId === 'messagesView' || stepId === 'profileView') { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'none'; topHeaderBar.style.display = 'flex'; }
@@ -2127,7 +2200,10 @@
         // إطلاق غرفة جديدة وإنشاء معرف فريد مشترك Room ID
         function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
+            enterRoomSetup();
+        }
 
+        async function enterRoomSetup() {
             const roomContainer = document.getElementById('liveRoomBg');
             roomContainer.style.background = userData.roomBg;
             roomContainer.style.backgroundSize = 'cover';
@@ -2135,9 +2211,11 @@
             document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
             
             myTakenMicIndex = null;
-            updateOnlineCount();
+            
+            // تسجيل الدخول لحضور الغرفة
+            await joinRoomPresence();
+            
             initPeerJS();
-            listenToRoomSeats();
             goToStep('liveRoomView');
         }
 
@@ -2159,15 +2237,13 @@
             });
         }
 
-        function updateOnlineCount() {
-            let occupiedSeats = document.querySelectorAll('.mic-seat.occupied').length;
-            document.getElementById('onlineCountNum').innerText = Math.max(1, occupiedSeats + 1);
-        }
-
         function openExitConfirmModal() { document.getElementById('exitConfirmModal').classList.add('active'); }
         async function confirmExitRoom(isYes) {
             document.getElementById('exitConfirmModal').classList.remove('active');
             if (isYes) {
+                // إزالة المستخدم من المقاعد وحضور الغرفة عند الخروج
+                await leaveRoomPresence();
+
                 if (myTakenMicIndex !== null && userData.currentRoomId) {
                     await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", myTakenMicIndex.toString()), {
                         seatIndex: myTakenMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: false
@@ -2177,6 +2253,8 @@
                 if (peer) peer.destroy();
                 if (commentsUnsubscribe) commentsUnsubscribe();
                 if (seatsUnsubscribe) seatsUnsubscribe();
+                if (presenceUnsubscribe) presenceUnsubscribe();
+                
                 myTakenMicIndex = null;
                 userData.currentRoomId = '';
                 switchTab('home');
