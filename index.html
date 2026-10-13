@@ -691,10 +691,50 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .create-room-btn svg { width: 20px; height: 20px; stroke: #07090E; stroke-width: 2.2; fill: none; }
+
+        /* التبويبات الثلاثة تحت زر إنشاء الغرفة */
+        .home-tabs-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 5px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .home-tab-btn {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: #9CA3AF;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .home-tab-btn.active {
+            background: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        }
+
+        .rooms-tab-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
 
         .bg-grid {
             display: grid;
@@ -1358,10 +1398,23 @@
 
             <!-- STEP 7: Home Dashboard -->
             <div id="homeMainView" class="view-step hidden-view">
+                <!-- زر إنشاء غرفة -->
                 <button type="button" class="create-room-btn" onclick="goToStep('createRoomView')">
                     <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
                     <span>إنشاء غرفة دردشة صوتية</span>
                 </button>
+
+                <!-- أزرار التبويبات الثلاثة المطلوبة تحت زر الإنشاء -->
+                <div class="home-tabs-bar">
+                    <button type="button" class="home-tab-btn active" id="tabRecentBtn" onclick="switchHomeTab('recent')">مؤخراً</button>
+                    <button type="button" class="home-tab-btn" id="tabFollowBtn" onclick="switchHomeTab('follow')">المتابعة</button>
+                    <button type="button" class="home-tab-btn" id="tabMyRoomsBtn" onclick="switchHomeTab('myRooms')">الخاصة بي</button>
+                </div>
+
+                <!-- مساحة عرض القوائم الخاصة بـ الغرف -->
+                <div class="rooms-tab-content" id="roomsTabContainer">
+                    <div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف متاحة حالياً في هذه القائمة..</div>
+                </div>
             </div>
 
             <!-- SEARCH PROFILE MODAL -->
@@ -1622,6 +1675,23 @@
             for(let i=2026; i>=1950; i--) yearSel.innerHTML += `<option value="${i}">${i}</option>`;
             calculateAge();
         });
+
+        // التنقل بين الأزرار الثلاثة المضافة تحت زر الإنشاء
+        function switchHomeTab(tabType) {
+            document.querySelectorAll('.home-tab-btn').forEach(btn => btn.classList.remove('active'));
+            const container = document.getElementById('roomsTabContainer');
+
+            if (tabType === 'recent') {
+                document.getElementById('tabRecentBtn').classList.add('active');
+                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف تمت زيارتها مؤخراً..</div>`;
+            } else if (tabType === 'follow') {
+                document.getElementById('tabFollowBtn').classList.add('active');
+                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف للمتابعين حالياً..</div>`;
+            } else if (tabType === 'myRooms') {
+                document.getElementById('tabMyRoomsBtn').classList.add('active');
+                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لم تقم بإنشاء غرف خاصة بعد..</div>`;
+            }
+        }
 
         async function handleLoginSubmit(event) {
             event.preventDefault();
@@ -1928,7 +1998,6 @@
             openChatRoomUI();
         }
 
-        // إرسال التعليقات عبر Firestore بدقة عالية (مثل الرسائل الخاصة)
         async function sendRoomComment() {
             const input = document.getElementById('roomCommentInput');
             const commentText = input.value.trim();
@@ -1947,7 +2016,6 @@
             }
         }
 
-        // الاستماع المباشر الفوري لتعليقات الغرفة عبر Firestore
         function listenToRoomComments() {
             const container = document.getElementById('commentsListContainer');
             if (commentsUnsubscribe) commentsUnsubscribe();
@@ -1972,7 +2040,6 @@
             });
         }
 
-        // تسجيل الحضور بالغرفة ومزامنة الحاضرين والعدد الإجمالي
         async function joinRoomPresence() {
             if (!userData.currentRoomId || !userData.uid) return;
             const userPresenceRef = window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "members", userData.uid);
@@ -2016,7 +2083,6 @@
             });
         }
 
-        // الاستماع لمزامنة المقاعد عبر Firebase
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
