@@ -736,6 +736,53 @@
             overflow-y: auto;
         }
 
+        .room-list-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .room-list-card:hover {
+            border-color: #F59E0B;
+            background: rgba(245, 158, 11, 0.06);
+        }
+
+        .room-list-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #F59E0B;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .room-list-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .room-list-name {
+            font-size: 14px;
+            font-weight: 900;
+            color: #FFF;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .room-list-sub {
+            font-size: 11px;
+            color: #9CA3AF;
+            font-weight: 700;
+        }
+
         .bg-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1404,16 +1451,16 @@
                     <span>إنشاء غرفة دردشة صوتية</span>
                 </button>
 
-                <!-- أزرار التبويبات الثلاثة المطلوبة تحت زر الإنشاء -->
+                <!-- أزرار التبويبات الثلاثة تحت زر الإنشاء -->
                 <div class="home-tabs-bar">
                     <button type="button" class="home-tab-btn active" id="tabRecentBtn" onclick="switchHomeTab('recent')">مؤخراً</button>
                     <button type="button" class="home-tab-btn" id="tabFollowBtn" onclick="switchHomeTab('follow')">المتابعة</button>
                     <button type="button" class="home-tab-btn" id="tabMyRoomsBtn" onclick="switchHomeTab('myRooms')">الخاصة بي</button>
                 </div>
 
-                <!-- مساحة عرض القوائم الخاصة بـ الغرف -->
+                <!-- مساحة عرض الغرف المحفوظة حسب التبويب -->
                 <div class="rooms-tab-content" id="roomsTabContainer">
-                    <div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف متاحة حالياً في هذه القائمة..</div>
+                    <div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف تمت زيارتها مؤخراً..</div>
                 </div>
             </div>
 
@@ -1657,6 +1704,8 @@
         let inboxUnsubscribe = null;
         let seatsUnsubscribe = null;
         let presenceUnsubscribe = null;
+        
+        let activeHomeTab = 'recent';
 
         const micSvgHTML = `<svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>`;
         const lockSvgHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
@@ -1676,21 +1725,74 @@
             calculateAge();
         });
 
-        // التنقل بين الأزرار الثلاثة المضافة تحت زر الإنشاء
+        // إدارة التبويبات الثلاثة الرئيسية
         function switchHomeTab(tabType) {
+            activeHomeTab = tabType;
             document.querySelectorAll('.home-tab-btn').forEach(btn => btn.classList.remove('active'));
-            const container = document.getElementById('roomsTabContainer');
 
             if (tabType === 'recent') {
                 document.getElementById('tabRecentBtn').classList.add('active');
-                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف تمت زيارتها مؤخراً..</div>`;
+                renderRecentRooms();
             } else if (tabType === 'follow') {
                 document.getElementById('tabFollowBtn').classList.add('active');
-                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف للمتابعين حالياً..</div>`;
+                document.getElementById('roomsTabContainer').innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف للمتابعين حالياً..</div>`;
             } else if (tabType === 'myRooms') {
                 document.getElementById('tabMyRoomsBtn').classList.add('active');
-                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لم تقم بإنشاء غرف خاصة بعد..</div>`;
+                renderMyRooms();
             }
+        }
+
+        // حفظ الغرف التي زارها المستخدم في الذاكرة المحلية (مؤخراً)
+        function saveRoomToRecent(rId, rName, rAvatar, rBg) {
+            let recentList = JSON.parse(localStorage.getItem('simomi_recent_rooms') || '[]');
+            recentList = recentList.filter(r => r.roomId !== rId);
+            recentList.unshift({ roomId: rId, name: rName, avatar: rAvatar, bg: rBg, visitedAt: Date.now() });
+            if (recentList.length > 20) recentList.pop();
+            localStorage.setItem('simomi_recent_rooms', JSON.stringify(recentList));
+        }
+
+        function renderRecentRooms() {
+            const container = document.getElementById('roomsTabContainer');
+            const recentList = JSON.parse(localStorage.getItem('simomi_recent_rooms') || '[]');
+
+            if (recentList.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لا توجد غرف تمت زيارتها مؤخراً.. انقر على دعوة صديق أو انضم لغرفة لتظهر هنا.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            recentList.forEach(room => {
+                container.innerHTML += `
+                    <div class="room-list-card" onclick="joinRoomFromInvite('${room.name}', '${room.avatar}', '${room.bg}', '${room.roomId}')">
+                        <img src="${room.avatar}" class="room-list-avatar" alt="Room">
+                        <div class="room-list-info">
+                            <div class="room-list-name">🏛️ ${room.name}</div>
+                            <div class="room-list-sub">غرفه زرتها مؤخراً</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderMyRooms() {
+            const container = document.getElementById('roomsTabContainer');
+            const myRoom = localStorage.getItem('simomi_my_created_room');
+
+            if (!myRoom) {
+                container.innerHTML = `<div style="text-align:center; color:#6B7280; font-size:13px; margin-top:30px; font-weight:700;">لم تقم بإنشاء أي غرفة خاصة بعد.. أنشئ غرفتك الأولى الآن!</div>`;
+                return;
+            }
+
+            const room = JSON.parse(myRoom);
+            container.innerHTML = `
+                <div class="room-list-card" onclick="joinRoomFromInvite('${room.name}', '${room.avatar}', '${room.bg}', '${room.roomId}')">
+                    <img src="${room.avatar}" class="room-list-avatar" alt="Room">
+                    <div class="room-list-info">
+                        <div class="room-list-name">⭐ ${room.name}</div>
+                        <div class="room-list-sub">غرفتك الخاصة</div>
+                    </div>
+                </div>
+            `;
         }
 
         async function handleLoginSubmit(event) {
@@ -1908,6 +2010,9 @@
             userData.roomAvatarSrc = rAvatar;
             userData.roomBg = rBg;
             userData.currentRoomId = rId;
+
+            // حفظ الغرفة في القائمة الأخيرة عند الدخول إليها
+            saveRoomToRecent(rId, rName, rAvatar, rBg);
 
             enterRoomSetup();
         }
@@ -2134,7 +2239,12 @@
                 listenToRoomSeats();
                 listenToRoomPresence();
             } else {
-                if(stepId === 'homeMainView') { globalSearchBox.style.display = 'flex'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'flex'; }
+                if(stepId === 'homeMainView') { 
+                    globalSearchBox.style.display = 'flex'; 
+                    mainBrandHeader.style.display = 'block'; 
+                    topHeaderBar.style.display = 'flex'; 
+                    switchHomeTab(activeHomeTab); // تحديث القائمة المعروضة
+                }
                 else if(stepId === 'messagesView' || stepId === 'profileView') { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'none'; topHeaderBar.style.display = 'flex'; }
                 else { globalSearchBox.style.display = 'none'; mainBrandHeader.style.display = 'block'; topHeaderBar.style.display = 'none'; }
 
@@ -2274,6 +2384,16 @@
 
         function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
+            
+            // حفظ الغرفة الخاصة بي في الذاكرة المحلية لقسم "الخاصة بي"
+            const myRoomObj = {
+                roomId: userData.currentRoomId,
+                name: userData.roomName,
+                avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
+                bg: userData.roomBg
+            };
+            localStorage.setItem('simomi_my_created_room', JSON.stringify(myRoomObj));
+
             enterRoomSetup();
         }
 
