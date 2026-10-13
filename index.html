@@ -14,7 +14,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات Firebase الخاصة بك
+        // إعدادات Firebase الخاص بـ SIMOMi
         const firebaseConfig = {
             apiKey: "AIzaSyBWEpa0h9ahTeZB8jIknL9WmZqZLeN9k1U",
             authDomain: "fir-4339d.firebaseapp.com",
@@ -30,7 +30,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ربط الدوال بالواجهة العامة لتعمل مع الأزرار
+        // ربط الدوال بالواجهة العامة
         window.firebaseAuth = auth;
         window.firebaseDb = db;
         window.fbFns = { 
@@ -747,7 +747,7 @@
             padding: 5px 12px 5px 6px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            max-width: 200px;
+            max-width: 180px;
         }
 
         .live-room-info-badge img {
@@ -770,9 +770,8 @@
 
         .top-left-actions {
             display: flex;
-            flex-direction: column;
             gap: 8px;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .room-online-badge {
@@ -791,17 +790,28 @@
 
         .room-online-badge svg { width: 16px; height: 16px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
 
-        .leave-room-btn {
+        .share-room-top-btn, .leave-room-btn {
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(239, 68, 68, 0.25);
-            border: 1.5px solid rgba(239, 68, 68, 0.6);
-            color: #EF4444;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+        }
+
+        .share-room-top-btn {
+            background: rgba(245, 158, 11, 0.25);
+            border: 1.5px solid rgba(245, 158, 11, 0.6);
+            color: #F59E0B;
+        }
+
+        .share-room-top-btn svg { width: 18px; height: 18px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
+
+        .leave-room-btn {
+            background: rgba(239, 68, 68, 0.25);
+            border: 1.5px solid rgba(239, 68, 68, 0.6);
+            color: #EF4444;
         }
 
         .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
@@ -917,7 +927,7 @@
         }
         .send-comment-btn svg { width: 18px; height: 18px; stroke: #07090E; stroke-width: 2.2; fill: none; }
 
-        /* DIRECT MESSAGES STYLING */
+        /* DIRECT MESSAGES STYLING & ROOM CARDS */
         .dm-container {
             display: flex;
             flex-direction: column;
@@ -1049,6 +1059,39 @@
             border-bottom-left-radius: 4px;
         }
 
+        .room-invite-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+            border: 1.5px solid #F59E0B;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 4px 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 240px;
+        }
+
+        .room-invite-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: #F59E0B;
+        }
+
+        .room-invite-btn {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            border: none;
+            color: #07090E;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+
         .dm-no-chat-text {
             text-align: center;
             color: #6B7280;
@@ -1068,6 +1111,8 @@
             background: #131722; border-top-left-radius: 24px; border-top-right-radius: 24px;
             padding: 20px 20px 30px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; flex-direction: column; gap: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         .action-sheet-title { text-align: center; font-size: 15px; font-weight: 800; color: #F59E0B; margin-bottom: 6px; }
 
@@ -1350,6 +1395,10 @@
                             <span id="liveRoomInfoName">غرفة الصوت</span>
                         </div>
                         <div class="top-left-actions">
+                            <!-- زر مشاركة الغرفة الجديد -->
+                            <div class="share-room-top-btn" onclick="openShareRoomModal()" title="مشاركة الغرفة">
+                                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            </div>
                             <div class="leave-room-btn" onclick="openExitConfirmModal()" title="الخروج">
                                 <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                             </div>
@@ -1451,6 +1500,17 @@
                         <div class="data-row"><span class="data-label">حالة الحساب</span><span class="data-val" style="color: #10B981;">Firebase موثق ✓</span></div>
                     </div>
                     <button type="button" class="save-profile-btn" onclick="saveProfileChanges()">حفظ التغييرات 💾</button>
+                </div>
+            </div>
+
+            <!-- SHARE ROOM MODAL -->
+            <div class="modal-overlay" id="shareRoomModalOverlay">
+                <div class="action-sheet">
+                    <div class="action-sheet-title">مشاركة الغرفة في الرسائل الخاصة 🎙️</div>
+                    <div id="shareUsersListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+                        <div style="text-align:center; color:#9CA3AF; font-size:12px;">جاري تحميل أصدقائك...</div>
+                    </div>
+                    <button type="button" class="sheet-btn cancel" onclick="closeShareRoomModal()">إلغاء</button>
                 </div>
             </div>
 
@@ -1618,14 +1678,12 @@
             activeDMUser = searchedTargetUser;
             closeSearchModal();
 
-            // الانتقال المباشر لصفحة الرسائل مع فتح صندوق المحادثة للشخص المختار
             goToStep('messagesView');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('navMsgBtn').classList.add('active');
 
             openChatRoomUI();
             
-            // تركيز إدخال الرسائل للكتابة مباشرة
             setTimeout(() => {
                 document.getElementById('dmInputMsg').focus();
             }, 300);
@@ -1651,29 +1709,39 @@
         }
 
         // 4. إرسال الرسالة الخاصة وتحديث قائمة المحادثات (Inbox) للطرفين
-        async function sendDirectMessage() {
+        async function sendDirectMessage(customMsg = null, isRoomInvite = false, roomData = null) {
             const msgInput = document.getElementById('dmInputMsg');
-            const msgText = msgInput.value.trim();
+            const msgText = customMsg ? customMsg : msgInput.value.trim();
             if (!msgText || !activeDMUser) return;
 
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
 
             try {
-                // إضافة الرسالة لسجل المحادثة
-                await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), {
+                const msgPayload = {
                     senderId: userData.uid,
                     text: msgText,
                     createdAt: Date.now()
-                });
+                };
 
-                // تحديث أو إنشاء وثيقة المحادثة في صندوق البريد (Inbox) للطرفين
+                if (isRoomInvite && roomData) {
+                    msgPayload.isRoomInvite = true;
+                    msgPayload.roomName = roomData.name;
+                    msgPayload.roomAvatar = roomData.avatar;
+                    msgPayload.roomBg = roomData.bg;
+                    msgPayload.hostId = roomData.hostId;
+                }
+
+                await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), msgPayload);
+
+                const lastDisplayTxt = isRoomInvite ? '🎙️ دعوة للانضمام إلى غرفة صوتية' : msgText;
+
                 const inboxRefMe = window.fbFns.doc(window.firebaseDb, "users", userData.uid, "inbox", activeDMUser.uid);
                 await window.fbFns.setDoc(inboxRefMe, {
                     partnerUid: activeDMUser.uid,
                     partnerName: activeDMUser.name,
                     partnerAvatar: activeDMUser.avatarSrc || 'https://via.placeholder.com/150',
                     partnerId: activeDMUser.id,
-                    lastMessage: msgText,
+                    lastMessage: lastDisplayTxt,
                     updatedAt: Date.now()
                 }, { merge: true });
 
@@ -1683,17 +1751,17 @@
                     partnerName: userData.name,
                     partnerAvatar: userData.avatarSrc || 'https://via.placeholder.com/150',
                     partnerId: userData.id,
-                    lastMessage: msgText,
+                    lastMessage: lastDisplayTxt,
                     updatedAt: Date.now()
                 }, { merge: true });
 
-                msgInput.value = '';
+                if (!customMsg) msgInput.value = '';
             } catch(e) {
                 alert('فشل إرسال الرسالة: ' + e.message);
             }
         }
 
-        // 5. الاستماع للرسائل داخل المحادثة الحالية
+        // 5. الاستماع للرسائل وعرض كرت مشاركة الغرفة
         function listenToDirectMessages() {
             if (!activeDMUser || !userData.uid) return;
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
@@ -1712,13 +1780,98 @@
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     const isMe = data.senderId === userData.uid;
-                    chatBox.innerHTML += `<div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">${data.text}</div>`;
+                    
+                    if (data.isRoomInvite) {
+                        chatBox.innerHTML += `
+                            <div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">
+                                <div class="room-invite-card">
+                                    <div class="room-invite-title">🏛️ ${data.roomName}</div>
+                                    <button type="button" class="room-invite-btn" onclick="joinRoomFromInvite('${data.roomName}', '${data.roomAvatar}', '${data.roomBg}', '${data.hostId}')">
+                                        دخول البث المباشر 🚀
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        chatBox.innerHTML += `<div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">${data.text}</div>`;
+                    }
                 });
                 chatBox.scrollTop = chatBox.scrollHeight;
             });
         }
 
-        // 6. جلب وعرض صندوق الوارد (قائمة المحادثات النشطة) تلقائياً
+        // 6. الانضمام إلى الغرفة عند الضغط على كروت الدعوة في الميساجات
+        function joinRoomFromInvite(rName, rAvatar, rBg, hostId) {
+            userData.roomName = rName;
+            userData.roomAvatarSrc = rAvatar;
+            userData.roomBg = rBg;
+
+            const roomContainer = document.getElementById('liveRoomBg');
+            roomContainer.style.background = userData.roomBg;
+            roomContainer.style.backgroundSize = 'cover';
+            document.getElementById('liveRoomInfoName').innerText = userData.roomName || 'غرفة الصوت';
+            document.getElementById('liveRoomInfoImg').src = userData.roomAvatarSrc || 'https://via.placeholder.com/150';
+            
+            myTakenMicIndex = null;
+            updateOnlineCount();
+            initPeerJS();
+            goToStep('liveRoomView');
+        }
+
+        // 7. فتح وإدارة قائمة مشاركة الغرفة
+        async function openShareRoomModal() {
+            const container = document.getElementById('shareUsersListContainer');
+            container.innerHTML = `<div style="text-align:center; color:#9CA3AF; font-size:12px;">جاري تحميل المحادثات...</div>`;
+            document.getElementById('shareRoomModalOverlay').classList.add('active');
+
+            try {
+                const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "users", userData.uid, "inbox"), window.fbFns.orderBy("updatedAt", "desc"));
+                const querySnap = await window.fbFns.getDocs(q);
+
+                if (querySnap.empty) {
+                    container.innerHTML = `<div style="text-align:center; color:#9CA3AF; font-size:12px;">لا يوجد أصدقاء في القائمة لمشاركة الغرفة معهم!</div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                querySnap.forEach((docSnap) => {
+                    const chatData = docSnap.data();
+                    container.innerHTML += `
+                        <div class="chat-item-card" onclick="shareRoomWithPartner('${chatData.partnerUid}', '${chatData.partnerName}', '${chatData.partnerId}', '${chatData.partnerAvatar}')">
+                            <img src="${chatData.partnerAvatar}" class="chat-item-avatar" alt="Avatar">
+                            <div class="chat-item-info">
+                                <div class="chat-item-name">${chatData.partnerName}</div>
+                                <div class="chat-item-lastmsg">انقر لإرسال دعوة الغرفة 🎙️</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                container.innerHTML = `<div style="text-align:center; color:#EF4444; font-size:12px;">حدث خطأ: ${e.message}</div>`;
+            }
+        }
+
+        function closeShareRoomModal() { document.getElementById('shareRoomModalOverlay').classList.remove('active'); }
+
+        async function shareRoomWithPartner(partnerUid, partnerName, partnerId, partnerAvatar) {
+            const originalActive = activeDMUser;
+            activeDMUser = { uid: partnerUid, name: partnerName, id: partnerId, avatarSrc: partnerAvatar };
+
+            const roomData = {
+                name: userData.roomName || 'غرفة الصوت المباشرة',
+                avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
+                bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
+                hostId: userData.id
+            };
+
+            await sendDirectMessage("🎙️ ندعوك للانضمام إلى الغرفة الصوتية المباشرة!", true, roomData);
+            
+            activeDMUser = originalActive;
+            closeShareRoomModal();
+            alert(`تمت مشاركة الغرفة مع ${partnerName} بنجاح! ✨`);
+        }
+
+        // 8. جلب وعرض صندوق الوارد تلقائياً
         function loadInboxChatsList() {
             if (!userData.uid) return;
             const container = document.getElementById('chatsListContainer');
@@ -1822,7 +1975,6 @@
                 document.getElementById('navMsgBtn').classList.add('active'); 
                 goToStep('messagesView');
                 
-                // إظهار قائمة المحادثات وإخفاء غرفة الدردشة الفردية عند فتح تبويب الرسائل
                 if(!activeDMUser) {
                     document.getElementById('activeChatRoomView').style.display = 'none';
                     document.getElementById('chatsListView').style.display = 'flex';
