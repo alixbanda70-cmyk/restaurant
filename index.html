@@ -2053,7 +2053,7 @@
                 name: userData.roomName || 'غرفة الصوت المباشرة',
                 avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
                 bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
-                roomId: userData.currentRoomId
+                roomId: userData.currentRoomId // تمرير معرف الغرفة الحالي بنجاح
             };
 
             await sendDirectMessage("🎙️ ندعوك للانضمام إلى الغرفة الصوتية المباشرة!", true, roomData);
@@ -2182,7 +2182,7 @@
             });
         }
 
-        // الاستماع الفوري لتغيرات خلفية الغرفة عبر Firebase (Real-time Background Sync)
+        // الاستماع الفوري لتغيرات خلفية الغرفة واسمها عبر Firebase (Real-time Background Sync)
         function listenToRoomState() {
             if (roomStateUnsubscribe) roomStateUnsubscribe();
             if (!userData.currentRoomId) return;
