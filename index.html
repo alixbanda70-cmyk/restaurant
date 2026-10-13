@@ -7,14 +7,14 @@
     <!-- مكتبة PeerJS للصوت المباشر -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     
-    <!-- Firebase SDKs (CDN) بالمعلومات الجديدة -->
+    <!-- Firebase SDKs (CDN) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات Firebase الجديدة الخاصة بك
+        // إعدادات Firebase الخاصة بك
         const firebaseConfig = {
             apiKey: "AIzaSyBWEpa0h9ahTeZB8jIknL9WmZqZLeN9k1U",
             authDomain: "fir-4339d.firebaseapp.com",
@@ -1449,7 +1449,7 @@
             calculateAge();
         });
 
-        // 1. تسجيل الدخول أو إنشاء حساب عبر Firebase Auth الجديد
+        // 1. تسجيل الدخول أو إنشاء حساب عبر Firebase Auth
         async function handleLoginSubmit(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
@@ -1505,6 +1505,7 @@
             generateGoldCard();
         }
 
+        // 2. البحث عن مستخدم بـ ID عبر Firestore
         async function searchUserById() {
             const searchInput = document.getElementById('searchUserIdInput').value.trim();
             if (!searchInput) { alert('أدخل ID المكون من 7 أرقام'); return; }
@@ -1535,6 +1536,7 @@
 
         function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
 
+        // 3. فتح شاشة المراسلة الخاصة للمستخدم المختار
         function openDirectMessageFromProfile() {
             if (!searchedTargetUser) return;
             activeDMUser = searchedTargetUser;
@@ -1548,11 +1550,13 @@
             switchTab('messages');
         }
 
+        // 4. إرسال الرسائل الخاصة وحفظها فوريًا في Firestore
         async function sendDirectMessage() {
             const msgInput = document.getElementById('dmInputMsg');
             const msgText = msgInput.value.trim();
             if (!msgText || !activeDMUser) return;
 
+            // إنشاء معرّف محادثة موحد بين الطرفين
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
 
             try {
@@ -1567,14 +1571,16 @@
             }
         }
 
+        // 5. الاستماع للرسائل الخاصة المباشرة من Firestore
         function listenToDirectMessages() {
-            if (!activeDMUser) return;
+            if (!activeDMUser || !userData.uid) return;
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
             const chatBox = document.getElementById('dmChatBox');
 
             if (dmUnsubscribe) dmUnsubscribe();
 
             const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), window.fbFns.orderBy("createdAt", "asc"));
+            
             dmUnsubscribe = window.fbFns.onSnapshot(q, (snapshot) => {
                 chatBox.innerHTML = '';
                 if (snapshot.empty) {
@@ -1655,7 +1661,11 @@
         function switchTab(tab) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(tab === 'home') { document.getElementById('navHomeBtn').classList.add('active'); goToStep('homeMainView'); }
-            else if(tab === 'messages') { document.getElementById('navMsgBtn').classList.add('active'); goToStep('messagesView'); }
+            else if(tab === 'messages') { 
+                document.getElementById('navMsgBtn').classList.add('active'); 
+                goToStep('messagesView'); 
+                if(activeDMUser) listenToDirectMessages();
+            }
             else if(tab === 'profile') {
                 document.getElementById('navProfileBtn').classList.add('active');
                 document.getElementById('profileNameInput').value = userData.name || '';
@@ -1716,7 +1726,7 @@
 
         function calculateAge() {
             const d = document.getElementById('daySelect').value, m = document.getElementById('monthSelect').value, y = document.getElementById('yearSelect').value;
-            const birth = new Date(y, m - 1, d), today = new Date(2026, 9, 12);
+            const birth = new Date(y, m - 1, d), today = new Date(2026, 9, 13);
             let age = today.getFullYear() - birth.getFullYear();
             userData.age = age;
             const badge = document.getElementById('ageBadge');
