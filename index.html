@@ -14,7 +14,6 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, setDoc, doc, getDoc, getDocs, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات Firebase الخاص بـ SIMOMi
         const firebaseConfig = {
             apiKey: "AIzaSyBWEpa0h9ahTeZB8jIknL9WmZqZLeN9k1U",
             authDomain: "fir-4339d.firebaseapp.com",
@@ -30,7 +29,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ربط الدوال بالواجهة العامة
         window.firebaseAuth = auth;
         window.firebaseDb = db;
         window.fbFns = { 
@@ -40,1139 +38,165 @@
     </script>
 
     <style>
-        /* Base Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background-color: #07090E;
-            color: #FFFFFF;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .svg-icon {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .aurora-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            background: 
-                radial-gradient(circle at 15% 20%, rgba(239, 68, 68, 0.25) 0%, transparent 45%),
-                radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, #07090E 100%);
-            filter: blur(40px);
-        }
-
-        .card-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100vh;
-            max-width: 440px;
-            background: #0D1117;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
-        }
-
-        .card-container.clean-mode {
-            background: #07090E !important;
-        }
-
-        .glass-card {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(25px);
-            padding: 20px 16px 0px 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .top-header-actions-bar {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 5px;
-        }
-
-        .logout-small-btn {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #EF4444;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .logout-small-btn svg {
-            width: 16px;
-            height: 16px;
-            stroke: #FFFFFF;
-            stroke-width: 2.2;
-            fill: none;
-        }
-
-        .brand {
-            text-align: center;
-            margin-bottom: 15px;
-            margin-top: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .logo-title {
-            font-size: 36px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #9CA3AF;
-            margin-top: 4px;
-            font-weight: 700;
-        }
-
-        .view-step {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .hidden-view {
-            display: none !important;
-        }
-
-        .active-view {
-            display: flex;
-            animation: viewEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes viewEnter {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-box {
-            position: relative;
-            margin-bottom: 18px;
-        }
-
-        .input-box input {
-            width: 100%;
-            padding: 18px 16px 12px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1.5px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            color: #FFFFFF;
-            font-size: 15px;
-            outline: none;
-        }
-
-        .input-box label {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6B7280;
-            font-size: 14px;
-            pointer-events: none;
-            transition: all 0.3s;
-        }
-
-        .input-box input:focus,
-        .input-box input:not(:placeholder-shown) {
-            border-color: #EF4444;
-        }
-
-        .input-box input:focus ~ label,
-        .input-box input:not(:placeholder-shown) ~ label {
-            top: 10px;
-            font-size: 11px;
-            color: #F59E0B;
-            font-weight: 700;
-        }
-
-        .password-toggle {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 16px;
-            opacity: 0.6;
-        }
-
-        .auth-error {
-            color: #EF4444;
-            font-size: 12px;
-            text-align: center;
-            margin-bottom: 12px;
-            display: none;
-        }
-
-        .gender-title, .step-title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 800;
-            color: #FFFFFF;
-            margin-bottom: 6px;
-        }
-
-        .gender-subtitle, .step-subtitle {
-            text-align: center;
-            font-size: 13px;
-            color: #9CA3AF;
-            margin-bottom: 20px;
-        }
-
-        .gender-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .gender-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 24px 16px;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .gender-card .gender-symbol-icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 12px;
-            stroke-width: 2.5;
-            fill: none;
-            transition: all 0.3s ease;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: #07090E; color: #FFFFFF; width: 100vw; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; }
+        .svg-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; display: inline-block; vertical-align: middle; }
+        .aurora-bg { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; background: radial-gradient(circle at 15% 20%, rgba(239, 68, 68, 0.25) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, #07090E 100%); filter: blur(40px); }
+        .card-container { position: relative; z-index: 10; width: 100%; height: 100vh; max-width: 440px; background: #0D1117; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9); }
+        .card-container.clean-mode { background: #07090E !important; }
+        .glass-card { position: relative; z-index: 2; width: 100%; height: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(25px); padding: 20px 16px 0px 16px; overflow-y: auto; display: flex; flex-direction: column; }
+        .top-header-actions-bar { display: flex; justify-content: flex-end; align-items: center; width: 100%; margin-bottom: 5px; }
+        .logout-small-btn { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #EF4444; padding: 8px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .brand { text-align: center; margin-bottom: 15px; margin-top: 5px; }
+        .logo-title { font-size: 36px; font-weight: 900; letter-spacing: 4px; background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 14px; color: #9CA3AF; margin-top: 4px; font-weight: 700; }
+        .view-step { flex: 1; display: flex; flex-direction: column; }
+        .hidden-view { display: none !important; }
+        .active-view { display: flex; }
+        .input-box { position: relative; margin-bottom: 18px; }
+        .input-box input { width: 100%; padding: 18px 16px 12px 16px; background: rgba(255, 255, 255, 0.03); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: #FFFFFF; font-size: 15px; outline: none; }
+        .input-box label { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #6B7280; font-size: 14px; pointer-events: none; transition: all 0.3s; }
+        .input-box input:focus ~ label, .input-box input:not(:placeholder-shown) ~ label { top: 10px; font-size: 11px; color: #F59E0B; font-weight: 700; }
+        .password-toggle { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 16px; opacity: 0.6; }
+        .auth-error { color: #EF4444; font-size: 12px; text-align: center; margin-bottom: 12px; display: none; }
+        .gender-title, .step-title { text-align: center; font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; }
+        .gender-subtitle, .step-subtitle { text-align: center; font-size: 13px; color: #9CA3AF; margin-bottom: 20px; }
+        .gender-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .gender-card { position: relative; background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 24px 16px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .gender-card .gender-symbol-icon { width: 48px; height: 48px; margin-bottom: 12px; stroke-width: 2.5; fill: none; }
         .gender-card#cardMale .gender-symbol-icon { stroke: #3B82F6; }
         .gender-card#cardFemale .gender-symbol-icon { stroke: #EC4899; }
-
-        .gender-card.selected {
-            background: rgba(239, 68, 68, 0.12);
-            border-color: #EF4444;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-        }
-
-        .gender-card .checkmark {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #EF4444;
-            color: #FFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            opacity: 0;
-        }
-
+        .gender-card.selected { background: rgba(239, 68, 68, 0.12); border-color: #EF4444; }
+        .gender-card .checkmark { position: absolute; top: 12px; left: 12px; width: 22px; height: 22px; border-radius: 50%; background: #EF4444; color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0; }
         .gender-card.selected .checkmark { opacity: 1; }
-
-        .name-field-wrapper {
-            position: relative;
-            margin-bottom: 12px;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 20px 48px 20px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
-            color: #FFFFFF;
-            font-size: 17px;
-            font-weight: 700;
-            outline: none;
-        }
-
-        .name-icon {
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-            opacity: 0.6;
-        }
-
-        .status-check {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%) scale(0);
-            color: #10B981;
-            font-size: 20px;
-            transition: transform 0.3s;
-        }
-
-        .name-field-wrapper.valid .status-check {
-            transform: translateY(-50%) scale(1);
-        }
-
-        .counter-tag {
-            text-align: left;
-            font-size: 11px;
-            color: #6B7280;
-            margin-bottom: 20px;
-            padding-left: 6px;
-        }
-
-        .date-picker-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .date-select-wrapper select {
-            width: 100%;
-            padding: 14px 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            color: #FFFFFF;
-            font-size: 14px;
-            font-weight: 700;
-            outline: none;
-            text-align: center;
-        }
-
+        .name-field-wrapper { position: relative; margin-bottom: 12px; }
+        .name-input { width: 100%; padding: 20px 48px 20px 20px; background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.12); border-radius: 18px; color: #FFFFFF; font-size: 17px; font-weight: 700; outline: none; }
+        .name-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); opacity: 0.6; }
+        .status-check { position: absolute; left: 18px; top: 50%; transform: translateY(-50%) scale(0); color: #10B981; transition: transform 0.3s; }
+        .name-field-wrapper.valid .status-check { transform: translateY(-50%) scale(1); }
+        .counter-tag { text-align: left; font-size: 11px; color: #6B7280; margin-bottom: 20px; padding-left: 6px; }
+        .date-picker-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .date-select-wrapper select { width: 100%; padding: 14px 8px; background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #FFFFFF; font-size: 14px; font-weight: 700; outline: none; text-align: center; }
         .date-select-wrapper select option { background: #0D1117; color: #FFFFFF; }
-
-        .date-label {
-            display: block;
-            text-align: center;
-            font-size: 11px;
-            color: #F59E0B;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .age-badge {
-            text-align: center;
-            margin-bottom: 16px;
-            font-size: 12px;
-            color: #10B981;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
+        .date-label { display: block; text-align: center; font-size: 11px; color: #F59E0B; font-weight: 700; margin-bottom: 6px; }
+        .age-badge { text-align: center; margin-bottom: 16px; font-size: 12px; color: #10B981; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
         .age-badge.show { opacity: 1; }
-
-        .upload-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .avatar-upload-zone {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 2px dashed rgba(245, 158, 11, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .avatar-upload-zone img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none;
-        }
-
+        .upload-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .avatar-upload-zone { position: relative; width: 100px; height: 100px; border-radius: 50%; background: rgba(255, 255, 255, 0.04); border: 2px dashed rgba(245, 158, 11, 0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
+        .avatar-upload-zone img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; display: none; }
         .upload-placeholder-content { text-align: center; pointer-events: none; }
         .upload-icon { font-size: 26px; margin-bottom: 4px; display: block; }
         .upload-text { font-size: 11px; color: #9CA3AF; font-weight: 700; }
         #avatarInput, #roomAvatarInput, #roomBgInput, #profileAvatarInput { display: none; }
-
-        .gold-card-wrapper {
-            perspective: 1000px;
-            margin-bottom: 20px;
-        }
-
-        .gold-id-card {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-            padding: 18px;
-            box-shadow: 0 15px 35px rgba(170, 119, 28, 0.4);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .card-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .card-chip {
-            width: 34px;
-            height: 24px;
-            background: linear-gradient(135deg, #E6C687 0%, #99742B 100%);
-            border-radius: 5px;
-        }
-
-        .card-brand-tag {
-            font-size: 13px;
-            font-weight: 900;
-            color: #382506;
-            letter-spacing: 2px;
-        }
-
-        .card-body-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .card-avatar-box {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            border: 2px solid #FFF;
-            overflow: hidden;
-            background: #222;
-            flex-shrink: 0;
-        }
-
+        .gold-card-wrapper { perspective: 1000px; margin-bottom: 20px; }
+        .gold-id-card { position: relative; width: 100%; height: 200px; border-radius: 18px; background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%); padding: 18px; box-shadow: 0 15px 35px rgba(170, 119, 28, 0.4); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.6); }
+        .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .card-chip { width: 34px; height: 24px; background: linear-gradient(135deg, #E6C687 0%, #99742B 100%); border-radius: 5px; }
+        .card-brand-tag { font-size: 13px; font-weight: 900; color: #382506; letter-spacing: 2px; }
+        .card-body-row { display: flex; align-items: center; gap: 14px; }
+        .card-avatar-box { width: 58px; height: 58px; border-radius: 50%; border: 2px solid #FFF; overflow: hidden; background: #222; flex-shrink: 0; }
         .card-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .card-name {
-            font-size: 17px;
-            font-weight: 900;
-            color: #2b1c03;
-        }
-
-        .card-info-grid {
-            font-size: 11px;
-            color: #4a3307;
-            font-weight: 700;
-            margin-top: 3px;
-        }
-
-        .card-footer-row {
-            margin-top: 12px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 9px;
-            color: #5c4109;
-            font-weight: 800;
-            border-top: 1px solid rgba(110, 78, 13, 0.2);
-            padding-top: 6px;
-        }
-
+        .card-name { font-size: 17px; font-weight: 900; color: #2b1c03; }
+        .card-info-grid { font-size: 11px; color: #4a3307; font-weight: 700; margin-top: 3px; }
+        .card-footer-row { margin-top: 12px; display: flex; justify-content: space-between; font-size: 9px; color: #5c4109; font-weight: 800; border-top: 1px solid rgba(110, 78, 13, 0.2); padding-top: 6px; }
         .btn-wrapper { position: relative; margin-top: 10px; width: 100%; }
-
-        .magnetic-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            color: #FFFFFF;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-        }
-
+        .magnetic-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: #FFFFFF; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); }
         .footer-tag { text-align: center; margin-top: auto; padding: 12px 0; font-size: 11px; color: #4B5563; }
-
-        .top-global-search-box {
-            display: none;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 15px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 10px;
-            border-radius: 16px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-
-        .id-search-input-wrapper {
-            position: relative;
-            flex: 1;
-        }
-
-        .id-search-input {
-            width: 100%;
-            padding: 12px 40px 12px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px;
-            color: #FFFFFF;
-            font-size: 13px;
-            font-weight: 700;
-            outline: none;
-        }
-
-        .search-icon-inside {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #F59E0B;
-        }
-
-        .id-search-btn {
-            padding: 12px 16px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: none;
-            color: #07090E;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .user-profile-modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 250;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
+        .top-global-search-box { display: none; gap: 8px; align-items: center; margin-bottom: 15px; width: 100%; background: rgba(255, 255, 255, 0.02); padding: 10px; border-radius: 16px; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .id-search-input-wrapper { position: relative; flex: 1; }
+        .id-search-input { width: 100%; padding: 12px 40px 12px 12px; background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: 12px; color: #FFFFFF; font-size: 13px; font-weight: 700; outline: none; }
+        .search-icon-inside { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #F59E0B; }
+        .id-search-btn { padding: 12px 16px; border-radius: 12px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #07090E; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+        .user-profile-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 250; display: none; justify-content: center; align-items: center; padding: 20px; }
         .user-profile-modal-overlay.active { display: flex; }
-
-        .searched-profile-card {
-            background: #131722;
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: 20px;
-            padding: 24px 20px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-        }
-
-        .searched-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid #F59E0B;
-            object-fit: cover;
-            margin-bottom: 12px;
-        }
-
+        .searched-profile-card { background: #131722; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px; text-align: center; }
+        .searched-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #F59E0B; object-fit: cover; margin-bottom: 12px; }
         .searched-name { font-size: 18px; font-weight: 900; color: #FFF; margin-bottom: 4px; }
         .searched-id-tag { font-size: 13px; color: #F59E0B; font-weight: 800; margin-bottom: 14px; }
-
-        .searched-details-box {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 13px;
-            color: #9CA3AF;
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 14px;
-        }
-
-        .profile-action-btns {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .send-direct-msg-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            border: none;
-            border-radius: 12px;
-            color: #FFF;
-            font-weight: 800;
-            font-size: 13px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .close-searched-btn {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: #FFF;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .create-room-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            color: #07090E;
-            font-size: 15px;
-            font-weight: 900;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .create-room-btn svg { width: 20px; height: 20px; stroke: #07090E; stroke-width: 2.2; fill: none; }
-
-        .bg-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .bg-option {
-            height: 80px;
-            border-radius: 12px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            background-size: cover;
-            background-position: center;
-        }
-
+        .searched-details-box { background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 12px; font-size: 13px; color: #9CA3AF; display: flex; justify-content: space-around; margin-bottom: 14px; }
+        .profile-action-btns { display: flex; flex-direction: column; gap: 10px; }
+        .send-direct-msg-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; border-radius: 12px; color: #FFF; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .close-searched-btn { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #FFF; font-weight: 800; cursor: pointer; }
+        .create-room-btn { width: 100%; padding: 16px; border-radius: 16px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #07090E; font-size: 15px; font-weight: 900; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .bg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .bg-option { height: 80px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; background-size: cover; background-position: center; }
         .bg-option.selected { border-color: #F59E0B; }
-
-        .live-room-container {
-            position: relative;
-            width: 100%;
-            flex: 1;
-            border-radius: 20px;
-            padding: 16px 12px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            box-sizing: border-box;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .live-room-top-bar {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        .live-room-info-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(10px);
-            padding: 5px 12px 5px 6px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            max-width: 180px;
-        }
-
-        .live-room-info-badge img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid #F59E0B;
-            flex-shrink: 0;
-        }
-
-        .live-room-info-badge span {
-            font-size: 12px;
-            font-weight: 800;
-            color: #FFFFFF;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .top-left-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .room-online-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #FFF;
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .room-online-badge svg { width: 16px; height: 16px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
-
-        .share-room-top-btn, .leave-room-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .share-room-top-btn {
-            background: rgba(245, 158, 11, 0.25);
-            border: 1.5px solid rgba(245, 158, 11, 0.6);
-            color: #F59E0B;
-        }
-
-        .share-room-top-btn svg { width: 18px; height: 18px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
-
-        .leave-room-btn {
-            background: rgba(239, 68, 68, 0.25);
-            border: 1.5px solid rgba(239, 68, 68, 0.6);
-            color: #EF4444;
-        }
-
-        .leave-room-btn svg { width: 18px; height: 18px; stroke: #FFFFFF; stroke-width: 2.2; fill: none; }
-
-        .mics-grid-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            width: 100%;
-            margin-top: 35px;
-            flex-shrink: 0;
-        }
-
-        .mics-row {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 100%;
-        }
-
-        .mic-seat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            width: 60px;
-        }
-
-        .mic-circle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #FFF;
-            border: 1.5px solid rgba(255, 255, 255, 0.35);
-            position: relative;
-            overflow: hidden;
-        }
-
+        .live-room-container { position: relative; width: 100%; flex: 1; border-radius: 20px; padding: 16px 12px; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-start; overflow: hidden; margin-bottom: 10px; }
+        .live-room-top-bar { display: flex; align-items: flex-start; justify-content: space-between; width: 100%; flex-shrink: 0; }
+        .live-room-info-badge { display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(10px); padding: 5px 12px 5px 6px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 180px; }
+        .live-room-info-badge img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.5px solid #F59E0B; flex-shrink: 0; }
+        .live-room-info-badge span { font-size: 12px; font-weight: 800; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .top-left-actions { display: flex; gap: 8px; align-items: center; }
+        .room-online-badge { display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); color: #FFF; font-size: 13px; font-weight: 800; }
+        .share-room-top-btn, .leave-room-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .share-room-top-btn { background: rgba(245, 158, 11, 0.25); border: 1.5px solid rgba(245, 158, 11, 0.6); color: #F59E0B; }
+        .leave-room-btn { background: rgba(239, 68, 68, 0.25); border: 1.5px solid rgba(239, 68, 68, 0.6); color: #EF4444; }
+        .mics-grid-container { display: flex; flex-direction: column; gap: 16px; width: 100%; margin-top: 35px; flex-shrink: 0; }
+        .mics-row { display: flex; justify-content: space-around; align-items: center; width: 100%; }
+        .mic-seat { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; width: 60px; }
+        .mic-circle { width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #FFF; border: 1.5px solid rgba(255, 255, 255, 0.35); position: relative; overflow: hidden; }
         .mic-circle svg { width: 20px; height: 20px; stroke: #FFFFFF; stroke-width: 2; fill: none; }
         .mic-circle img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
-
         .mic-seat.occupied .mic-circle { border-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
         .mic-seat.locked .mic-circle { background: rgba(239, 68, 68, 0.25); border-color: #EF4444; }
-
-        .mic-number {
-            font-size: 10px;
-            font-weight: 800;
-            color: #E5E7EB;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 58px;
-            text-align: center;
-        }
-
-        .room-comments-section {
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
-            padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: auto;
-            margin-bottom: 5px;
-        }
-
-        .comments-toggle-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 800;
-            color: #F59E0B;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .comments-toggle-bar svg { width: 18px; height: 18px; stroke: #F59E0B; stroke-width: 2.2; fill: none; }
-
-        .comments-body {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            height: 170px;
-            overflow: hidden;
-        }
-
+        .mic-number { font-size: 10px; font-weight: 800; color: #E5E7EB; text-shadow: 0 1px 2px rgba(0,0,0,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 58px; text-align: center; }
+        .room-comments-section { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; margin-top: auto; margin-bottom: 5px; }
+        .comments-toggle-bar { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: 800; color: #F59E0B; padding-bottom: 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .comments-body { display: flex; flex-direction: column; gap: 8px; height: 170px; overflow: hidden; }
         .room-comments-section.collapsed .comments-body { height: 0; opacity: 0; margin-top: 0; pointer-events: none; }
-        .room-comments-section.collapsed .comments-toggle-bar svg { transform: rotate(180deg); }
-
         .comments-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; flex: 1; padding-left: 4px; }
         .comment-bubble { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 6px 10px; font-size: 12px; color: #FFF; }
         .comment-user { color: #F59E0B; font-weight: 800; margin-left: 6px; }
-
         .comment-input-row { display: flex; gap: 8px; align-items: center; }
         .comment-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 8px 12px; color: #FFF; font-size: 13px; outline: none; }
-
-        .send-comment-btn {
-            width: 36px; height: 36px; border-radius: 12px;
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: none; color: #07090E; display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
-        .send-comment-btn svg { width: 18px; height: 18px; stroke: #07090E; stroke-width: 2.2; fill: none; }
-
-        /* DIRECT MESSAGES STYLING & ROOM CARDS */
-        .dm-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            gap: 12px;
-        }
-
-        .chats-list-view {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .chat-item-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .chat-item-card:hover {
-            background: rgba(245, 158, 11, 0.08);
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .chat-item-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 2px solid #F59E0B;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .chat-item-info {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .chat-item-name {
-            font-size: 14px;
-            font-weight: 800;
-            color: #FFF;
-            margin-bottom: 2px;
-        }
-
-        .chat-item-lastmsg {
-            font-size: 12px;
-            color: #9CA3AF;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .dm-header-badge {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 14px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .dm-header-user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .dm-header-badge img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #F59E0B;
-            object-fit: cover;
-        }
-
-        .back-to-chats-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: none;
-            color: #F59E0B;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 6px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .dm-chat-box {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 12px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .dm-msg-bubble {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 13px;
-            word-break: break-word;
-        }
-
-        .dm-msg-bubble.me {
-            align-self: flex-start;
-            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-            color: #FFF;
-            border-bottom-right-radius: 4px;
-        }
-
-        .dm-msg-bubble.other {
-            align-self: flex-end;
-            background: rgba(255, 255, 255, 0.1);
-            color: #FFF;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-bottom-left-radius: 4px;
-        }
-
-        .room-invite-card {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
-            border: 1.5px solid #F59E0B;
-            border-radius: 16px;
-            padding: 12px;
-            margin: 4px 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            max-width: 240px;
-        }
-
-        .room-invite-title {
-            font-size: 13px;
-            font-weight: 900;
-            color: #F59E0B;
-        }
-
-        .room-invite-btn {
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: none;
-            color: #07090E;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
-        }
-
-        .dm-no-chat-text {
-            text-align: center;
-            color: #6B7280;
-            font-size: 13px;
-            margin: auto;
-            font-weight: 700;
-        }
-
-        .modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 100;
-            display: none; justify-content: flex-end; flex-direction: column;
-        }
+        .send-comment-btn { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #07090E; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .dm-container { display: flex; flex-direction: column; height: 100%; gap: 12px; }
+        .chats-list-view { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; }
+        .chat-item-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .chat-item-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #F59E0B; object-fit: cover; flex-shrink: 0; }
+        .chat-item-info { flex: 1; overflow: hidden; }
+        .chat-item-name { font-size: 14px; font-weight: 800; color: #FFF; margin-bottom: 2px; }
+        .chat-item-lastmsg { font-size: 12px; color: #9CA3AF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .dm-header-badge { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+        .dm-header-user-info { display: flex; align-items: center; gap: 12px; }
+        .dm-header-badge img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #F59E0B; object-fit: cover; }
+        .back-to-chats-btn { background: rgba(255, 255, 255, 0.08); border: none; color: #F59E0B; font-size: 12px; font-weight: 800; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
+        .dm-chat-box { flex: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .dm-msg-bubble { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 13px; word-break: break-word; }
+        .dm-msg-bubble.me { align-self: flex-start; background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); color: #FFF; border-bottom-right-radius: 4px; }
+        .dm-msg-bubble.other { align-self: flex-end; background: rgba(255, 255, 255, 0.1); color: #FFF; border: 1px solid rgba(255, 255, 255, 0.15); border-bottom-left-radius: 4px; }
+        .room-invite-card { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2)); border: 1.5px solid #F59E0B; border-radius: 16px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 240px; }
+        .room-invite-title { font-size: 13px; font-weight: 900; color: #F59E0B; }
+        .room-invite-btn { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #07090E; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
+        .dm-no-chat-text { text-align: center; color: #6B7280; font-size: 13px; margin: auto; font-weight: 700; }
+        .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 100; display: none; justify-content: flex-end; flex-direction: column; }
         .modal-overlay.active { display: flex; }
-
-        .action-sheet {
-            background: #131722; border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 20px 20px 30px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex; flex-direction: column; gap: 12px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
+        .action-sheet { background: #131722; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 20px 20px 30px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 12px; max-height: 80vh; overflow-y: auto; }
         .action-sheet-title { text-align: center; font-size: 15px; font-weight: 800; color: #F59E0B; margin-bottom: 6px; }
-
-        .sheet-btn {
-            width: 100%; padding: 14px; border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.04);
-            color: #FFF; font-size: 14px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .sheet-btn { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.04); color: #FFF; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .sheet-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #EF4444; }
         .sheet-btn.cancel { background: transparent; border: none; color: #9CA3AF; margin-top: 4px; }
-
-        .confirm-modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 200;
-            display: none; justify-content: center; align-items: center; padding: 20px;
-        }
+        .confirm-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 200; display: none; justify-content: center; align-items: center; padding: 20px; }
         .confirm-modal-overlay.active { display: flex; }
-
-        .confirm-dialog {
-            background: #131722; border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px; text-align: center;
-        }
+        .confirm-dialog { background: #131722; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px; text-align: center; }
         .confirm-dialog-title { font-size: 17px; font-weight: 900; color: #FFFFFF; margin-bottom: 8px; }
         .confirm-dialog-text { font-size: 13px; color: #9CA3AF; margin-bottom: 20px; }
         .confirm-dialog-buttons { display: flex; gap: 12px; }
-
         .confirm-btn { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; border: none; }
         .confirm-btn.yes { background: #EF4444; color: #FFF; }
         .confirm-btn.no { background: rgba(255, 255, 255, 0.08); color: #E5E7EB; }
-
         .profile-card { display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 20px; }
-        .profile-img-large {
-            position: relative; width: 90px; height: 90px; border-radius: 50%;
-            border: 3px solid #F59E0B; overflow: hidden; margin-bottom: 12px; background: #222; cursor: pointer;
-        }
+        .profile-img-large { position: relative; width: 90px; height: 90px; border-radius: 50%; border: 3px solid #F59E0B; overflow: hidden; margin-bottom: 12px; background: #222; cursor: pointer; }
         .profile-img-large img { width: 100%; height: 100%; object-fit: cover; }
         .profile-img-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.6); color: #FFF; font-size: 10px; text-align: center; padding: 3px 0; font-weight: bold; }
-
-        .profile-edit-name-input {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: 12px; color: #FFF; font-size: 18px; font-weight: 800; text-align: center; padding: 8px 12px; width: 80%; margin-bottom: 18px; outline: none;
-        }
-
-        .profile-data-box {
-            width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px;
-        }
+        .profile-edit-name-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 12px; color: #FFF; font-size: 18px; font-weight: 800; text-align: center; padding: 8px 12px; width: 80%; margin-bottom: 18px; outline: none; }
+        .profile-data-box { width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
         .data-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px; }
         .data-label { color: #9CA3AF; font-weight: 700; }
         .profile-edit-select, .profile-edit-input { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: #F59E0B; font-weight: 800; padding: 6px 10px; text-align: center; font-size: 13px; outline: none; }
         .profile-edit-select option { background: #0D1117; color: #FFF; }
-
         .save-profile-btn { margin-top: 16px; width: 100%; padding: 12px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; border-radius: 12px; color: #FFF; font-weight: 800; font-size: 14px; cursor: pointer; }
-
-        .bottom-nav-bar {
-            width: calc(100% + 32px); margin-left: -16px; margin-right: -16px; height: 65px;
-            background: rgba(13, 17, 23, 0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex; justify-content: space-around; align-items: center; z-index: 20; margin-top: auto; flex-shrink: 0;
-        }
+        .bottom-nav-bar { width: calc(100% + 32px); margin-left: -16px; margin-right: -16px; height: 65px; background: rgba(13, 17, 23, 0.98); backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-around; align-items: center; z-index: 20; margin-top: auto; flex-shrink: 0; }
         .nav-btn { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #6B7280; cursor: pointer; gap: 4px; }
         .nav-btn svg { width: 22px; height: 22px; stroke: #6B7280; stroke-width: 2; fill: none; }
         .nav-btn.active { color: #F59E0B; font-weight: 800; }
@@ -1188,11 +212,7 @@
             
             <div class="top-header-actions-bar" id="topHeaderBar" style="display: none;">
                 <button type="button" class="logout-small-btn" onclick="handleFullLogout()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"></path>
-                        <polyline points="21 12 11 12"></polyline>
-                        <polyline points="18 9 21 12 18 15"></polyline>
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"></path><polyline points="21 12 11 12"></polyline><polyline points="18 9 21 12 18 15"></polyline></svg>
                     <span>تسجيل الخروج</span>
                 </button>
             </div>
@@ -1205,10 +225,7 @@
             <div class="top-global-search-box" id="globalSearchBox">
                 <div class="id-search-input-wrapper">
                     <input type="number" id="searchUserIdInput" class="id-search-input" placeholder="بحث بـ ID المستخدم (7 أرقام)..." autocomplete="off">
-                    <svg class="svg-icon search-icon-inside" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
+                    <svg class="svg-icon search-icon-inside" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <button type="button" class="id-search-btn" onclick="searchUserById()">بحث 🔍</button>
             </div>
@@ -1340,9 +357,7 @@
                         <span>العمر: <strong id="searchedAgeTxt" style="color: #FFF;">-</strong></span>
                     </div>
                     <div class="profile-action-btns">
-                        <button type="button" class="send-direct-msg-btn" onclick="openDirectMessageFromProfile()">
-                            💬 إرسال رسالة خاصة
-                        </button>
+                        <button type="button" class="send-direct-msg-btn" onclick="openDirectMessageFromProfile()">💬 إرسال رسالة خاصة</button>
                         <button type="button" class="close-searched-btn" onclick="closeSearchModal()">إغلاق</button>
                     </div>
                 </div>
@@ -1425,7 +440,7 @@
                         </div>
                     </div>
 
-                    <audio id="remoteAudio" autoplay style="display:none;"></audio>
+                    <audio id="remoteAudio" autoplay controls style="display:none;"></audio>
 
                     <div class="room-comments-section" id="roomCommentsSection">
                         <div class="comments-toggle-bar" onclick="toggleCommentsSection()">
@@ -1434,7 +449,7 @@
                         </div>
                         <div class="comments-body">
                             <div class="comments-list" id="commentsListContainer">
-                                <div class="comment-bubble"><span class="comment-user">النظام:</span> أهلاً بك! تم ربط الغرفة ومزامنة المقاعد وصوت PeerJS عبر Firebase.</div>
+                                <div class="comment-bubble"><span class="comment-user">النظام:</span> تم دمج خوادم STUN بنجاح لضمان تمرير الصوت بين الأجهزة.</div>
                             </div>
                             <div class="comment-input-row">
                                 <input type="text" id="roomCommentInput" class="comment-input" placeholder="اكتب تعليقاً..." autocomplete="off">
@@ -1445,7 +460,7 @@
                 </div>
             </div>
 
-            <!-- STEP 11: Messages (Chats List & Direct Chat View) -->
+            <!-- STEP 11: Messages -->
             <div id="messagesView" class="view-step hidden-view">
                 <div class="dm-container">
                     <div id="chatsListView" style="display: flex; flex-direction: column; height: 100%;">
@@ -1626,12 +641,7 @@
         async function saveUserToFirestoreAndCard() {
             if (userData.uid) {
                 await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", userData.uid), {
-                    uid: userData.uid,
-                    id: userData.id,
-                    name: userData.name,
-                    gender: userData.gender,
-                    age: userData.age,
-                    avatarSrc: userData.avatarSrc
+                    uid: userData.uid, id: userData.id, name: userData.name, gender: userData.gender, age: userData.age, avatarSrc: userData.avatarSrc
                 });
             }
             generateGoldCard();
@@ -1645,14 +655,9 @@
                 const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "users"), window.fbFns.where("id", "==", searchInput));
                 const querySnapshot = await window.fbFns.getDocs(q);
                 
-                if (querySnapshot.empty) {
-                    alert('لم يتم العثور على أي مستخدم بهذا الـ ID!');
-                    return;
-                }
+                if (querySnapshot.empty) { alert('لم يتم العثور على أي مستخدم بهذا الـ ID!'); return; }
 
-                querySnapshot.forEach((doc) => {
-                    searchedTargetUser = doc.data();
-                });
+                querySnapshot.forEach((doc) => { searchedTargetUser = doc.data(); });
 
                 document.getElementById('searchedNameTxt').innerText = searchedTargetUser.name;
                 document.getElementById('searchedIdTxt').innerText = 'ID: ' + searchedTargetUser.id;
@@ -1660,9 +665,7 @@
                 document.getElementById('searchedAgeTxt').innerText = searchedTargetUser.age + ' سنة';
                 document.getElementById('searchedAvatarImg').src = searchedTargetUser.avatarSrc || 'https://via.placeholder.com/150';
                 document.getElementById('searchProfileModal').classList.add('active');
-            } catch(e) {
-                alert('حدث خطأ أثناء البحث: ' + e.message);
-            }
+            } catch(e) { alert('حدث خطأ أثناء البحث: ' + e.message); }
         }
 
         function closeSearchModal() { document.getElementById('searchProfileModal').classList.remove('active'); }
@@ -1671,26 +674,19 @@
             if (!searchedTargetUser) return;
             activeDMUser = searchedTargetUser;
             closeSearchModal();
-
             goToStep('messagesView');
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('navMsgBtn').classList.add('active');
-
             openChatRoomUI();
-            
-            setTimeout(() => {
-                document.getElementById('dmInputMsg').focus();
-            }, 300);
+            setTimeout(() => { document.getElementById('dmInputMsg').focus(); }, 300);
         }
 
         function openChatRoomUI() {
             document.getElementById('chatsListView').style.display = 'none';
             document.getElementById('activeChatRoomView').style.display = 'flex';
-
             document.getElementById('dmUserName').innerText = activeDMUser.name;
             document.getElementById('dmUserId').innerText = 'ID: ' + activeDMUser.id;
             document.getElementById('dmUserAvatar').src = activeDMUser.avatarSrc || 'https://via.placeholder.com/150';
-            
             listenToDirectMessages();
         }
 
@@ -1706,16 +702,10 @@
             const msgInput = document.getElementById('dmInputMsg');
             const msgText = customMsg ? customMsg : msgInput.value.trim();
             if (!msgText || !activeDMUser) return;
-
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
 
             try {
-                const msgPayload = {
-                    senderId: userData.uid,
-                    text: msgText,
-                    createdAt: Date.now()
-                };
-
+                const msgPayload = { senderId: userData.uid, text: msgText, createdAt: Date.now() };
                 if (isRoomInvite && roomData) {
                     msgPayload.isRoomInvite = true;
                     msgPayload.roomName = roomData.name;
@@ -1725,65 +715,41 @@
                 }
 
                 await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), msgPayload);
-
                 const lastDisplayTxt = isRoomInvite ? '🎙️ دعوة للانضمام إلى غرفة صوتية' : msgText;
 
-                const inboxRefMe = window.fbFns.doc(window.firebaseDb, "users", userData.uid, "inbox", activeDMUser.uid);
-                await window.fbFns.setDoc(inboxRefMe, {
-                    partnerUid: activeDMUser.uid,
-                    partnerName: activeDMUser.name,
-                    partnerAvatar: activeDMUser.avatarSrc || 'https://via.placeholder.com/150',
-                    partnerId: activeDMUser.id,
-                    lastMessage: lastDisplayTxt,
-                    updatedAt: Date.now()
+                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", userData.uid, "inbox", activeDMUser.uid), {
+                    partnerUid: activeDMUser.uid, partnerName: activeDMUser.name, partnerAvatar: activeDMUser.avatarSrc || 'https://via.placeholder.com/150', partnerId: activeDMUser.id, lastMessage: lastDisplayTxt, updatedAt: Date.now()
                 }, { merge: true });
 
-                const inboxRefOther = window.fbFns.doc(window.firebaseDb, "users", activeDMUser.uid, "inbox", userData.uid);
-                await window.fbFns.setDoc(inboxRefOther, {
-                    partnerUid: userData.uid,
-                    partnerName: userData.name,
-                    partnerAvatar: userData.avatarSrc || 'https://via.placeholder.com/150',
-                    partnerId: userData.id,
-                    lastMessage: lastDisplayTxt,
-                    updatedAt: Date.now()
+                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", activeDMUser.uid, "inbox", userData.uid), {
+                    partnerUid: userData.uid, partnerName: userData.name, partnerAvatar: userData.avatarSrc || 'https://via.placeholder.com/150', partnerId: userData.id, lastMessage: lastDisplayTxt, updatedAt: Date.now()
                 }, { merge: true });
 
                 if (!customMsg) msgInput.value = '';
-            } catch(e) {
-                alert('فشل إرسال الرسالة: ' + e.message);
-            }
+            } catch(e) { alert('فشل إرسال الرسالة: ' + e.message); }
         }
 
         function listenToDirectMessages() {
             if (!activeDMUser || !userData.uid) return;
             const chatId = [userData.uid, activeDMUser.uid].sort().join('_');
             const chatBox = document.getElementById('dmChatBox');
-
             if (dmUnsubscribe) dmUnsubscribe();
 
             const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "chats", chatId, "messages"), window.fbFns.orderBy("createdAt", "asc"));
-            
             dmUnsubscribe = window.fbFns.onSnapshot(q, (snapshot) => {
                 chatBox.innerHTML = '';
-                if (snapshot.empty) {
-                    chatBox.innerHTML = `<div class="dm-no-chat-text">لا توجد رسائل بعد.. ابدأ المحادثة الآن!</div>`;
-                    return;
-                }
+                if (snapshot.empty) { chatBox.innerHTML = `<div class="dm-no-chat-text">لا توجد رسائل بعد.. ابدأ المحادثة الآن!</div>`; return; }
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     const isMe = data.senderId === userData.uid;
-                    
                     if (data.isRoomInvite) {
                         chatBox.innerHTML += `
                             <div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">
                                 <div class="room-invite-card">
                                     <div class="room-invite-title">🏛️ ${data.roomName}</div>
-                                    <button type="button" class="room-invite-btn" onclick="joinRoomFromInvite('${data.roomName}', '${data.roomAvatar}', '${data.roomBg}', '${data.roomId}')">
-                                        دخول البث المباشر 🚀
-                                    </button>
+                                    <button type="button" class="room-invite-btn" onclick="joinRoomFromInvite('${data.roomName}', '${data.roomAvatar}', '${data.roomBg}', '${data.roomId}')">دخول البث المباشر 🚀</button>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     } else {
                         chatBox.innerHTML += `<div class="dm-msg-bubble ${isMe ? 'me' : 'other'}">${data.text}</div>`;
                     }
@@ -1792,7 +758,6 @@
             });
         }
 
-        // الانضمام عبر الدعوة مع توحيد Room ID
         function joinRoomFromInvite(rName, rAvatar, rBg, rId) {
             userData.roomName = rName;
             userData.roomAvatarSrc = rAvatar;
@@ -1821,10 +786,7 @@
                 const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "users", userData.uid, "inbox"), window.fbFns.orderBy("updatedAt", "desc"));
                 const querySnap = await window.fbFns.getDocs(q);
 
-                if (querySnap.empty) {
-                    container.innerHTML = `<div style="text-align:center; color:#9CA3AF; font-size:12px;">لا يوجد أصدقاء في القائمة لمشاركة الغرفة معهم!</div>`;
-                    return;
-                }
+                if (querySnap.empty) { container.innerHTML = `<div style="text-align:center; color:#9CA3AF; font-size:12px;">لا يوجد أصدقاء في القائمة لمشاركة الغرفة معهم!</div>`; return; }
 
                 container.innerHTML = '';
                 querySnap.forEach((docSnap) => {
@@ -1836,12 +798,9 @@
                                 <div class="chat-item-name">${chatData.partnerName}</div>
                                 <div class="chat-item-lastmsg">انقر لإرسال دعوة الغرفة 🎙️</div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
-            } catch(e) {
-                container.innerHTML = `<div style="text-align:center; color:#EF4444; font-size:12px;">حدث خطأ: ${e.message}</div>`;
-            }
+            } catch(e) { container.innerHTML = `<div style="text-align:center; color:#EF4444; font-size:12px;">حدث خطأ: ${e.message}</div>`; }
         }
 
         function closeShareRoomModal() { document.getElementById('shareRoomModalOverlay').classList.remove('active'); }
@@ -1849,16 +808,8 @@
         async function shareRoomWithPartner(partnerUid, partnerName, partnerId, partnerAvatar) {
             const originalActive = activeDMUser;
             activeDMUser = { uid: partnerUid, name: partnerName, id: partnerId, avatarSrc: partnerAvatar };
-
-            const roomData = {
-                name: userData.roomName || 'غرفة الصوت المباشرة',
-                avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
-                bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
-                roomId: userData.currentRoomId
-            };
-
+            const roomData = { name: userData.roomName || 'غرفة الصوت', avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150', bg: userData.roomBg, roomId: userData.currentRoomId };
             await sendDirectMessage("🎙️ ندعوك للانضمام إلى الغرفة الصوتية المباشرة!", true, roomData);
-            
             activeDMUser = originalActive;
             closeShareRoomModal();
             alert(`تمت مشاركة الغرفة مع ${partnerName} بنجاح! ✨`);
@@ -1867,17 +818,12 @@
         function loadInboxChatsList() {
             if (!userData.uid) return;
             const container = document.getElementById('chatsListContainer');
-            
             if (inboxUnsubscribe) inboxUnsubscribe();
 
             const q = window.fbFns.query(window.fbFns.collection(window.firebaseDb, "users", userData.uid, "inbox"), window.fbFns.orderBy("updatedAt", "desc"));
-            
             inboxUnsubscribe = window.fbFns.onSnapshot(q, (snapshot) => {
                 container.innerHTML = '';
-                if (snapshot.empty) {
-                    container.innerHTML = `<div class="dm-no-chat-text">لا توجد محادثات حالياً.. ابحث عن مستخدم بـ ID وبدء المراسلة!</div>`;
-                    return;
-                }
+                if (snapshot.empty) { container.innerHTML = `<div class="dm-no-chat-text">لا توجد محادثات حالياً.. ابحث عن مستخدم بـ ID وبدء المراسلة!</div>`; return; }
                 snapshot.forEach((docSnap) => {
                     const chatData = docSnap.data();
                     container.innerHTML += `
@@ -1887,8 +833,7 @@
                                 <div class="chat-item-name">${chatData.partnerName} (ID: ${chatData.partnerId})</div>
                                 <div class="chat-item-lastmsg">${chatData.lastMessage}</div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
             });
         }
@@ -1901,17 +846,10 @@
         async function sendRoomComment() {
             const input = document.getElementById('roomCommentInput');
             if (!input.value.trim() || !userData.currentRoomId) return;
-
             try {
-                await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "comments"), {
-                    userName: userData.name || 'زائر',
-                    text: input.value.trim(),
-                    createdAt: Date.now()
-                });
+                await window.fbFns.addDoc(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "comments"), { userName: userData.name || 'زائر', text: input.value.trim(), createdAt: Date.now() });
                 input.value = '';
-            } catch(e) {
-                alert('فشل إرسال التعليق: ' + e.message);
-            }
+            } catch(e) { alert('فشل إرسال التعليق: ' + e.message); }
         }
 
         function listenToRoomComments() {
@@ -1930,13 +868,11 @@
             });
         }
 
-        // الاستماع لمزامنة المقاعد في الغرفة الحالية عبر Firebase
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
 
             seatsUnsubscribe = window.fbFns.onSnapshot(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "seats"), (snapshot) => {
-                // إعادة تعيين جميع المقاعد أولاً
                 for(let i=1; i<=10; i++) {
                     const seatEl = document.getElementById(`seat-${i}`);
                     seatEl.classList.remove('occupied', 'locked');
@@ -2002,7 +938,6 @@
             else if(tab === 'messages') { 
                 document.getElementById('navMsgBtn').classList.add('active'); 
                 goToStep('messagesView');
-                
                 if(!activeDMUser) {
                     document.getElementById('activeChatRoomView').style.display = 'none';
                     document.getElementById('chatsListView').style.display = 'flex';
@@ -2033,14 +968,8 @@
             userData.name = document.getElementById('profileNameInput').value.trim();
             userData.gender = document.getElementById('profileGenderSelect').value;
             userData.age = parseInt(document.getElementById('profileAgeInput').value) || 0;
-            
             if (userData.uid) {
-                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", userData.uid), {
-                    name: userData.name,
-                    gender: userData.gender,
-                    age: userData.age,
-                    avatarSrc: userData.avatarSrc
-                }, { merge: true });
+                await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "users", userData.uid), { name: userData.name, gender: userData.gender, age: userData.age, avatarSrc: userData.avatarSrc }, { merge: true });
             }
             alert('تم حفظ التغييرات في Firebase بنجاح! ✨');
         }
@@ -2061,16 +990,13 @@
 
         function saveNameAndNext() {
             const input = document.getElementById('userNameInput');
-            if (input.value.trim().length >= 3) {
-                userData.name = input.value.trim();
-                goToStep('dobView');
-            } else { alert('أدخل 3 أحرف على الأقل'); }
+            if (input.value.trim().length >= 3) { userData.name = input.value.trim(); goToStep('dobView'); } else { alert('أدخل 3 أحرف على الأقل'); }
         }
 
         function calculateAge() {
             const d = document.getElementById('daySelect').value, m = document.getElementById('monthSelect').value, y = document.getElementById('yearSelect').value;
-            const birth = new Date(y, m - 1, d), today = new Date(2026, 9, 13);
-            let age = today.getFullYear() - birth.getFullYear();
+            const birth = new Date(y, m - 1, d);
+            let age = 2026 - birth.getFullYear();
             userData.age = age;
             const badge = document.getElementById('ageBadge');
             badge.innerText = `العمر: ${age} سنة`;
@@ -2122,10 +1048,8 @@
             }
         }
 
-        // إطلاق غرفة جديدة وإنشاء معرف فريد مشترك Room ID
         function launchLiveRoom() {
             userData.currentRoomId = 'room_' + generate7DigitId();
-
             const roomContainer = document.getElementById('liveRoomBg');
             roomContainer.style.background = userData.roomBg;
             roomContainer.style.backgroundSize = 'cover';
@@ -2139,9 +1063,18 @@
             goToStep('liveRoomView');
         }
 
+        // هنا تم إضافة خوادم STUN المجانية الخاصة بـ Google لتجاوز مشاكل الشبكات والصوت
         function initPeerJS() {
             if (peer) peer.destroy();
-            peer = new Peer('simomi-user-' + userData.id);
+            
+            peer = new Peer('simomi-user-' + userData.id, {
+                config: {
+                    'iceServers': [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' }
+                    ]
+                }
+            });
 
             peer.on('call', async (call) => {
                 try {
@@ -2149,10 +1082,12 @@
                     localStream = stream;
                     call.answer(stream);
                     call.on('stream', remoteStream => {
-                        document.getElementById('remoteAudio').srcObject = remoteStream;
+                        const remoteAudio = document.getElementById('remoteAudio');
+                        remoteAudio.srcObject = remoteStream;
+                        remoteAudio.play().catch(e => console.log("تطلب تفاعل لتشغيل الصوت:", e));
                     });
                 } catch(err) {
-                    console.error("Mic access error: ", err);
+                    console.error("خطأ في الميكروفون:", err);
                 }
             });
         }
@@ -2190,10 +1125,7 @@
 
             if (myTakenMicIndex !== null) {
                 if (myTakenMicIndex === index) { takeBtn.style.display = 'none'; leaveBtn.style.display = 'flex'; }
-                else {
-                    takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none';
-                    leaveBtn.style.display = 'none';
-                }
+                else { takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none'; leaveBtn.style.display = 'none'; }
             } else {
                 takeBtn.style.display = (!isOcc && !isLock) ? 'flex' : 'none';
                 leaveBtn.style.display = isOcc ? 'flex' : 'none';
@@ -2217,18 +1149,12 @@
                 }
 
                 await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", selectedMicIndex.toString()), {
-                    seatIndex: selectedMicIndex,
-                    userId: userData.uid,
-                    userName: userData.name,
-                    avatarSrc: userData.avatarSrc,
-                    isLocked: false
+                    seatIndex: selectedMicIndex, userId: userData.uid, userName: userData.name, avatarSrc: userData.avatarSrc, isLocked: false
                 });
 
                 myTakenMicIndex = selectedMicIndex;
                 closeMicMenu();
-            } catch(e) {
-                alert('الرجاء السماح بالوصول إلى الميكروفون للبث المباشر!');
-            }
+            } catch(e) { alert('الرجاء السماح بالوصول إلى الميكروفون للبث المباشر!'); }
         }
 
         async function actionLeaveMic() {
@@ -2249,11 +1175,7 @@
             const isCurrentlyLocked = seatEl.classList.contains('locked');
 
             await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId, "seats", selectedMicIndex.toString()), {
-                seatIndex: selectedMicIndex,
-                userId: null,
-                userName: null,
-                avatarSrc: null,
-                isLocked: !isCurrentlyLocked
+                seatIndex: selectedMicIndex, userId: null, userName: null, avatarSrc: null, isLocked: !isCurrentlyLocked
             });
 
             if (myTakenMicIndex === selectedMicIndex) myTakenMicIndex = null;
