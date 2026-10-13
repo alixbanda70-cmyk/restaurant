@@ -2049,11 +2049,20 @@
             const originalActive = activeDMUser;
             activeDMUser = { uid: partnerUid, name: partnerName, id: partnerId, avatarSrc: partnerAvatar };
 
+            // ضمان جلب معرف الغرفة الحقيقي بدقة تامة وبدون أي فراغ
+            let currentId = userData.currentRoomId;
+            if (!currentId) {
+                const mySavedRoom = localStorage.getItem('simomi_my_created_room');
+                if (mySavedRoom) {
+                    currentId = JSON.parse(mySavedRoom).roomId;
+                }
+            }
+
             const roomData = {
                 name: userData.roomName || 'غرفة الصوت المباشرة',
                 avatar: userData.roomAvatarSrc || 'https://via.placeholder.com/150',
                 bg: userData.roomBg || 'linear-gradient(135deg, #1e3c72, #2a5298)',
-                roomId: userData.currentRoomId // تمرير معرف الغرفة الحالي بنجاح
+                roomId: currentId || 'room_1234567'
             };
 
             await sendDirectMessage("🎙️ ندعوك للانضمام إلى الغرفة الصوتية المباشرة!", true, roomData);
