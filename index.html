@@ -1930,13 +1930,12 @@
             });
         }
 
-        // الاستماع لمزامنة المقاعد في الغرفة الحالية عبر Firebase
+        // الاستماع لمزامنة المقاعد وتحديث العداد تلقائياً عبر Firebase
         function listenToRoomSeats() {
             if (seatsUnsubscribe) seatsUnsubscribe();
             if (!userData.currentRoomId) return;
 
             seatsUnsubscribe = window.fbFns.onSnapshot(window.fbFns.collection(window.firebaseDb, "rooms", userData.currentRoomId, "seats"), (snapshot) => {
-                // إعادة تعيين جميع المقاعد أولاً
                 for(let i=1; i<=10; i++) {
                     const seatEl = document.getElementById(`seat-${i}`);
                     seatEl.classList.remove('occupied', 'locked');
@@ -1944,6 +1943,7 @@
                     document.getElementById(`micTag-${i}`).innerText = i;
                 }
 
+                let occupiedCount = 0;
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     const sIndex = data.seatIndex;
@@ -1953,14 +1953,16 @@
                     if (data.isLocked) {
                         seatEl.classList.add('locked');
                         circle.innerHTML = lockSvgHTML;
-                        document.getElementById(`micTag-${sIndex}`).innerText = sIndex;
                     } else if (data.userId) {
                         seatEl.classList.add('occupied');
                         circle.innerHTML = `<img src="${data.avatarSrc || 'https://via.placeholder.com/150'}" alt="Avatar">`;
                         document.getElementById(`micTag-${sIndex}`).innerText = data.userName || 'مستخدم';
+                        occupiedCount++;
                     }
                 });
-                updateOnlineCount();
+                
+                // تحديث العدد في الأعلى تلقائياً بناءً على الأشخاص الموجودين بالمقاعد
+                document.getElementById('onlineCountNum').innerText = Math.max(1, occupiedCount);
             });
         }
 
