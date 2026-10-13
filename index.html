@@ -2182,7 +2182,7 @@
             });
         }
 
-        // الاستماع لتغيرات خلفية الغرفة واسمها فـ الحين واللحظة لكافة الحاضرين (Real-time Sync)
+        // الاستماع الفوري لتغيرات خلفية الغرفة عبر Firebase (Real-time Background Sync)
         function listenToRoomState() {
             if (roomStateUnsubscribe) roomStateUnsubscribe();
             if (!userData.currentRoomId) return;
@@ -2194,9 +2194,11 @@
                     if (rData.bg) {
                         userData.roomBg = rData.bg;
                         const roomContainer = document.getElementById('liveRoomBg');
-                        roomContainer.style.background = rData.bg;
-                        roomContainer.style.backgroundSize = 'cover';
-                        roomContainer.style.backgroundPosition = 'center';
+                        if (roomContainer) {
+                            roomContainer.style.background = rData.bg;
+                            roomContainer.style.backgroundSize = 'cover';
+                            roomContainer.style.backgroundPosition = 'center';
+                        }
                     }
                 }
             });
@@ -2392,7 +2394,7 @@
             el.classList.add('selected'); 
             userData.roomBg = bg; 
 
-            // تحديث خلفية الغرفة فـ الحين فـ Firebase إذا كانت الغرفة مفتوحة
+            // تحديث خلفية الغرفة فـ Firebase لتحديثها عند الجميع
             if (userData.currentRoomId) {
                 await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
                     bg: userData.roomBg
@@ -2400,7 +2402,7 @@
             }
         }
         
-        // دالة رفع خلفية الغرفة عبر API ImgBB للحصول على رابط خفيف وتحديثه عند الجميع فوراً
+        // رفع خلفية الغرفة وتحديثها مباشرة عبر Firebase للجميع
         async function previewRoomBg(e) {
             const file = e.target.files[0];
             if (file) {
@@ -2420,13 +2422,15 @@
                         const directUrl = result.data.url;
                         userData.roomBg = `url('${directUrl}')`;
                         
-                        // تحديث الخلفية محلياً عندك فوراً
+                        // تحديث الخلفية محلياً فوراً
                         const roomContainer = document.getElementById('liveRoomBg');
-                        roomContainer.style.background = userData.roomBg;
-                        roomContainer.style.backgroundSize = 'cover';
-                        roomContainer.style.backgroundPosition = 'center';
+                        if (roomContainer) {
+                            roomContainer.style.background = userData.roomBg;
+                            roomContainer.style.backgroundSize = 'cover';
+                            roomContainer.style.backgroundPosition = 'center';
+                        }
 
-                        // حفظها فـ Firebase باش تتزامن وتطلع عند أي واحد دخل معالكم للغرفة فوراً
+                        // حفظها في Firebase لتتزامن فوراً عند كل الحاضرين
                         if (userData.currentRoomId) {
                             await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
                                 bg: userData.roomBg
@@ -2454,7 +2458,7 @@
             };
             localStorage.setItem('simomi_my_created_room', JSON.stringify(myRoomObj));
 
-            // حفظ بيانات الغرفة الأساسية فـ Firebase
+            // حفظ بيانات الغرفة في Firebase
             await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
                 roomId: userData.currentRoomId,
                 name: userData.roomName,
