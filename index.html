@@ -2417,17 +2417,23 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        const imgUrl = result.data.url;
-                        userData.roomBg = `url('${imgUrl}')`;
+                        const directUrl = result.data.url;
+                        userData.roomBg = `url('${directUrl}')`;
                         
-                        // تحديث خلفية الغرفة فـ Firebase فوراً لتغير عند الـ 10 الحاضرين
+                        // تحديث الخلفية محلياً عندك فوراً
+                        const roomContainer = document.getElementById('liveRoomBg');
+                        roomContainer.style.background = userData.roomBg;
+                        roomContainer.style.backgroundSize = 'cover';
+                        roomContainer.style.backgroundPosition = 'center';
+
+                        // حفظها فـ Firebase باش تتزامن وتطلع عند أي واحد دخل معالكم للغرفة فوراً
                         if (userData.currentRoomId) {
                             await window.fbFns.setDoc(window.fbFns.doc(window.firebaseDb, "rooms", userData.currentRoomId), {
                                 bg: userData.roomBg
                             }, { merge: true });
                         }
 
-                        alert('تم اختيار ورفع الخلفية بنجاح! 📷✨');
+                        alert('تم رفع وتحديث خلفية الغرفة بنجاح عند الجميع! 📷✨');
                     } else {
                         alert('حدث خطأ أثناء رفع الصورة، حاول مرة أخرى.');
                     }
